@@ -1,0 +1,11 @@
+sort1 uses: bubble sort
+
+How do you know?: it takes the longest time to sort the reversed50000.txt, and we know that this is the hardest problem for the bubble sort. At the same time it handles sorted50000.txt in approximately 1 sec, which is the easiest problem for bubble sort and it should be solved much faster than the reversed since for bubble sort Big Omega(n) and Big O(n^2).
+
+sort2 uses: merge sort
+
+How do you know?: it sorts the numbers the fastest and the order of numbers doesn't make any difference in running time. Both of these are the characterictics of merge sort which has a running time of Big Theta(n lon n)
+
+sort3 uses: selection sort
+
+How do you know?: the running time is the same for all 3 lists (about 4 sec for 50k)so it must be the selection sort since it has Big Theta of n^2 and takes longer than sort2.
