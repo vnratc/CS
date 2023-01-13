@@ -1,0 +1,58 @@
+h1 {
+    font-weight: 800;
+    font-family: monospace;
+    color: blue;
+    background-color: #e6f2fe;
+    font-size: 30px;
+}
+
+main {
+    padding: 15px;
+}
+
+footer {
+    background-color: lightgrey;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    padding: 5px;
+}
+
+#floatingTextarea2 {
+    background-color: #e6f2ff;
+    border: 2px solid blue;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    rotate: -1deg;
+}
+
+.form-check-label {
+    font-size:
+    margin-top: 30px;
+    margin-bottom: 30px;
+    scale: 1.1;
+    font-size: 15px;
+}
+
+input[type="color"] {
+    margin-left: 10px;
+    border: 5px solid red;
+    border-width: thin;
+    outline: 5px dotted green;
+    opacity: 0.5;
+}
+
+a:hover {
+    font-size: 20px;
+    border: 1px dotted blue;
+    font-weight: bold;
+    font-style: italic;
+    letter-spacing: 3px;
+}
+
+a::first-letter {
+    font-size: 25px;
+    border: 1px solid grey;
+    border-radius: 25px;
+    margin-right: 5px;
+    padding: 7px;
+}
