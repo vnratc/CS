@@ -1,4 +1,0 @@
-// Ask height until answer is within 1 to 8 inclusive //
-// Repeat print n lines //
-// Repeat print n-1 amount of spaces for every line (every iteration of a parent loop) //
-// Repeat print # for every line (every iteration of a parent loop) //
