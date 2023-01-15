@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Stock Information.
+{% endblock %}
+
+{% block main %}
+<h1>Stock Information</h1>
+<table class="table align-middle">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ info.name }}</td>
+            <td>{{ info.price }}</td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

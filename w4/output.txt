@@ -1,0 +1,6 @@
+Vlad is
+learning
+to
+code
+in
+C
