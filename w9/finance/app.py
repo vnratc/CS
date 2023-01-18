@@ -26,6 +26,8 @@ db = SQL("sqlite:///finance.db")
 # Make sure API key is set
 if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
+# os.environ = "export API_KEY=pk_493d1434759d45e88ccd69ceea9d87fe"
+
 
 now = datetime.now()
 date_time = now.strftime("%Y-%m-%d %H:%M:%S")
