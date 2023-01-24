@@ -13,3 +13,7 @@ li {
     background-color: red;
     color: white;
 }
+
+.test a {
+    color: blueviolet;
+}
