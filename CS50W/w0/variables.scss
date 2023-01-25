@@ -1,0 +1,15 @@
+$color: orange;
+$text-align: right;
+
+
+ul {
+    font-size: 14px;
+    color: $color;
+    text-align: $text-align;
+}
+
+ol {
+    font-size: 18px;
+    color: $color;
+    text-align: $text-align;
+}

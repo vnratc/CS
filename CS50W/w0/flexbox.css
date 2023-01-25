@@ -1,0 +1,21 @@
+.pink, .beige {
+  font-weight: bold;
+  text-align: center;
+  text-decoration: underline dotted;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 5px;
+  border: 1px solid red;
+  padding: 5px;
+  width: 100px;
+}
+
+.beige {
+  background-color: beige;
+}
+
+.pink {
+  background-color: pink;
+}
+
+/*# sourceMappingURL=flexbox.css.map */
