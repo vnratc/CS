@@ -1,3 +1,7 @@
+.center {
+    text-align: center;
+}
+
 /* Pseudo elements */
 h1::first-letter {
     font-size: 50px;

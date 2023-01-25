@@ -1,204 +1,215 @@
 <!DOCTYPE html>
 
 <html lang="en">
-    <head>
-        <title>WDB</title>
-        <link rel="stylesheet" href="style.css">
+
+<head>
+    <title>WDB</title>
+    <link rel="stylesheet" href="style.css">
 
 
-            <!-- style element BAD -->
-            <!-- <style>
+    <!-- style element BAD -->
+    <!-- <style>
                 h1 {
                    color: blue;
                    text-align: center;
                 }
             </style> -->
 
-        <script>
+    <script>
 
-        </script>
-    </head>
-    <body>
-<!-- nav -->
-        <nav>
-            <h1>Navigation section element</h1>
-            <ul>
-                <li><a class="tag" href="wdb.html">Home</a></li>
-                <li>About</li>
-                <li>Contact</li>
-            </ul>
-            <a href="hello.html">hello.html</a>
-        </nav>
-<!-- header -->
-        <header>
-            <hr>
-            <p><h1>HEADER</h1></p>
-            <hr>
-        </header>
-<!-- main -->
-        <main>
+    </script>
+</head>
+
+<body>
+    <!-- nav -->
+    <nav>
+        <h1>Navigation section element</h1>
+        <ul>
+            <li><a class="tag" href="wdb.html">Home</a></li>
+            <li>About</li>
+            <li>Contact</li>
+        </ul>
+        <a href="hello.html">hello.html</a>
+    </nav>
+    <!-- header -->
+    <header>
+        <hr>
+        <p>
+        <h1>HEADER</h1>
+        </p>
+        <hr>
+    </header>
+    <!-- main -->
+    <main>
+        <p>
+            Lorem ipsum dolor sit amet consectetur <a href="nowhere">link</a> adipisicing elit. Nemo, vel cupiditate
+            nulla ea architecto consectetur incidunt? Error odio incidunt quas exercitationem magnam perferendis rem
+            pariatur, debitis mollitia tempora architecto distinctio!
+        </p>
+        <!-- Inline style BAD -->
+        <!-- <h1 style="color: red">Form validation</h1> -->
+        <h1>Form validation</h1>
+        <form action="/dummy">
             <p>
-                Lorem ipsum dolor sit amet consectetur <a href="nowhere">link</a> adipisicing elit. Nemo, vel cupiditate nulla ea architecto consectetur incidunt? Error odio incidunt quas exercitationem magnam perferendis rem pariatur, debitis mollitia tempora architecto distinctio!
+                <label for="first">Enter First Name</label>
+                <input type="text" name="first_name" id="fn" required>
             </p>
-            <!-- Inline style BAD -->
-            <!-- <h1 style="color: red">Form validation</h1> -->
-            <h1>Form validation</h1>
-            <form action="/dummy">
-                <p>
-                    <label for="first">Enter First Name</label>
-                    <input type="text" name="first_name" id="fn" required>
-                </p>
-                <p>
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" minlength="1" maxlength="10" required pattern="[0-9]{3}" placeholder="only numbers">
-                </p>
-                <p>
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="@ and . required">
-                </p>
-                <p>
-                    <label>url</label>
-                    <input type="url" id="url" name="url" placeholder="http:// required">
-                    <!-- Inline style BAD -->
-                    <!-- <button style="background-color: lightgreen">Send</button> -->
-                    <button>Send</button>
-                </p>
-            </form>
-            <hr>
-            <h1>Text area</h1>
             <p>
-                <form action="text">
-                    <label for="comments">Comments</label>
-                    <br>
-                    <textarea id="comments" name="comments" placeholder="Leave a comment" rows="5" cols="90"></textarea>
-                    <button>Send text</button><br>
-                </form>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" minlength="1" maxlength="10" required
+                    pattern="[0-9]{3}" placeholder="only numbers">
             </p>
-
-<!-- Forms and buttons -->
-            <h1>Forms and buttons</h1>
-            <h2>Range</h2>
             <p>
-                <form action="saturation">
-                    <label for="sat">Saturation</label>
-                    <input type="range" if="sat" name="sat" min="0" max="10" step="2" value="2">
-                    <button id="submit0">Submit</button>
-                </form>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="@ and . required">
             </p>
-            <h2>Select element</h2>
             <p>
-                <form action="meal">
-                    <label for="meal">Select meal</label>
-                    <select name="meal" id="meal">
-                        <option value="" selected>Select meal</option>
-                        <option value="fish">Fish</option>
-                        <option value="pork">Pork</option>
-                        <option value="salad">Salad</option>
-                    </select>
-                    <button>Submit</button>
-                </form>
+                <label>url</label>
+                <input type="url" id="url" name="url" placeholder="http:// required">
+                <!-- Inline style BAD -->
+                <!-- <button style="background-color: lightgreen">Send</button> -->
+                <button>Send</button>
             </p>
-
-            <h2>Radio, Checkbox</h2>
-            <form action="bike">
-                <input type="checkbox" name="agree_tos0" id="agree0">
-                <label for="agree0">I agree</label>
-                <input type="checkbox" name="agree_tos1" id="agree1" checked>
-                <label for="agree1">I agree</label>
-                <button class="tag">Submit</button>
-
-                <p>
-                    <label for="xs">XS</label>
-                    <input type="radio" name="size" id="xs" value="xs">
-                    <label for="s">S</label>
-                    <input type="radio" name="size" id="s" value="s">
-                    <label for="m">M</label>
-                    <input type="radio" name="size" id="m" value="m">
-                    <!-- NESTING input inside label - alternativer way of adding buttnos and lables. -->
-                    <!-- NO NEED FOR ID,except for css -->
-                    <label>
-                        Nested input example
-                        <input type="text"  >
-                    </label>
-                </p>
-            </form>
-
-
-            <hr>
-
-
-            <h2>Using search engines on my page</h2>
-            <h3>Search reddit</h3>
-            <form action="https://www.reddit.com/search/">
-                <input type="text" name="q">
-                <button>Search reddit</button>
-            </form>
+        </form>
+        <hr>
+        <h1>Text area</h1>
+        <p>
+        <form action="text">
+            <label for="comments">Comments</label>
             <br>
-            <h3>Search Google</h3>
-            <form action="https://www.google.com/search">
-                <input class="tag" type="text" name="q">
-                <button>Search Google</button>
-            </form>
+            <textarea id="comments" name="comments" placeholder="Leave a comment" rows="5" cols="90"></textarea>
+            <button>Send text</button><br>
+        </form>
+        </p>
+
+        <!-- Forms and buttons -->
+        <h1>Forms and buttons</h1>
+        <h2>Range</h2>
+        <p>
+        <form action="saturation">
+            <label for="sat">Saturation</label>
+            <input type="range" if="sat" name="sat" min="0" max="10" step="2" value="2">
+            <button id="submit0">Submit</button>
+        </form>
+        </p>
+        <h2>Select element</h2>
+        <p>
+        <form action="meal">
+            <label for="meal">Select meal</label>
+            <select name="meal" id="meal">
+                <option value="" selected>Select meal</option>
+                <option value="fish">Fish</option>
+                <option value="pork">Pork</option>
+                <option value="salad">Salad</option>
+            </select>
+            <button>Submit</button>
+        </form>
+        </p>
+
+        <h2>Radio, Checkbox</h2>
+        <form action="bike">
+            <input type="checkbox" name="agree_tos0" id="agree0">
+            <label for="agree0">I agree</label>
+            <input type="checkbox" name="agree_tos1" id="agree1" checked>
+            <label for="agree1">I agree</label>
+            <button class="tag">Submit</button>
+
+            <p>
+                <label for="xs">XS</label>
+                <input type="radio" name="size" id="xs" value="xs">
+                <label for="s">S</label>
+                <input type="radio" name="size" id="s" value="s">
+                <label for="m">M</label>
+                <input type="radio" name="size" id="m" value="m">
+                <!-- NESTING input inside label - alternativer way of adding buttnos and lables. -->
+                <!-- NO NEED FOR ID,except for css -->
+                <label>
+                    Nested input example
+                    <input type="text">
+                </label>
+            </p>
+        </form>
+
+
+        <hr>
+
+
+        <h2>Using search engines on my page</h2>
+        <h3>Search reddit</h3>
+        <form action="https://www.reddit.com/search/">
+            <input type="text" name="q">
+            <button>Search reddit</button>
+        </form>
+        <br>
+        <h3>Search Google</h3>
+        <form action="https://www.google.com/search">
+            <input class="tag" type="text" name="q">
+            <button>Search Google</button>
+        </form>
+        <br>
+        <h3>Search Youtube</h3>
+        <form action="https://www.youtube.com/results">
+            <input type="text" name="search_query">
+            <button>Search Youtube</button>
+        </form>
+        <hr>
+        <h2>Common input types</h2>
+        <form action="folder/">
+            <p>
+                <label for="username">Enter a <span class="tag">Username</span></label>
+                <input id="username" type="text" placeholder="Username" name="username">
+            </p>
+            <p>
+                <label for="password">Enter <span class="tag">password</span></label>
+                <input id="password" type="password" placeholder="Password" name="password"><br>
+            </p>
+            <p>
+                <label for="color">Pick a <span class="tag">color</span></label>
+                <input id="color" type="color" name="color">
+            </p>
+            <p>
+                <label for="number">Enter a number</label>
+                <input id="number" type="number" placeholder="Enter a number" name="number" min="5" max="55" step="5">
+            </p>
+            <button>Submit</button> The default button behaviour is to always submit.<br>
             <br>
-            <h3>Search Youtube</h3>
-            <form action="https://www.youtube.com/results">
-                <input type="text" name="search_query">
-                <button>Search Youtube</button>
-            </form>
-            <hr>
-            <h2>Common input types</h2>
-            <form action="folder/">
-                <p>
-                    <label for="username">Enter a <span class="tag">Username</span></label>
-                    <input id="username" type="text" placeholder="Username" name="username">
-                </p>
-                <p>
-                    <label for="password">Enter <span class="tag">password</span></label>
-                    <input id="password" type="password" placeholder="Password" name="password"><br>
-                </p>
-                <p>
-                    <label for="color">Pick a <span class="tag">color</span></label>
-                    <input id="color" type="color" name="color">
-                </p>
-                <p>
-                    <label for="number">Enter a number</label>
-                    <input id="number" type="number" placeholder="Enter a number" name="number" min="5" max="55" step="5">
-                </p>
-                <button>Submit</button> The default button behaviour is to always submit.<br>
-                <br>
-                <button type="button">Submit</button> This button will not submit because type set to button, which is the same as being outside of the form.<br>
-                <br>
-                <input type="button" value="Click me!"> This button is made using &lt;input&gt; tag with type=button and value=Click me!
-                <p>
-                    <input type="file"><br>
-                    <input type="time">
-                    <input type="date">
-                </p>
-            </form>
-            <button>Not inside a form</button>This button will not submit anything because it is outside of any form, so there is nothing to submit.
-            <hr>
+            <button type="button">Submit</button> This button will not submit because type set to button, which is the
+            same as being outside of the form.<br>
+            <br>
+            <input type="button" value="Click me!"> This button is made using &lt;input&gt; tag with type=button and
+            value=Click me!
+            <p>
+                <input type="file"><br>
+                <input type="time">
+                <input type="date">
+            </p>
+        </form>
+        <button>Not inside a form</button>This button will not submit anything because it is outside of any form, so
+        there is nothing to submit.
+        <hr>
 
 
-<!-- Tables AGAIN -->
-            <h1>Tables AGAIN</h1>
-            <table>
+        <!-- Tables AGAIN -->
+        <h1>Tables AGAIN</h1>
+        <div class="center">
+            <table class="center">
                 <h2>Heviest birds</h2>
-                    <thead>
-                        <tr>
-                            <th>Animal</th>
-                            <th>Average mass kg(lb)</th>
-                            <th>Maximum mass kg(lb)</th>
-                            <th>Flighted</th>
-                        </tr>
-                    </thead>
+                <thead>
+                    <tr>
+                        <th>Animal</th>
+                        <th>Average mass kg(lb)</th>
+                        <th>Maximum mass kg(lb)</th>
+                        <th>Flighted</th>
+                    </tr>
+                </thead>
                 <tbody>
-                        <tr>
-                            <td>Ostrich</td>
-                            <td>104 (230)</td>
-                            <td>156.8 (346)</td>
-                            <td>No</td>
-                        </tr>
-                        <tr>
+                    <tr>
+                        <td>Ostrich</td>
+                        <td>104 (230)</td>
+                        <td>156.8 (346)</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
                         <td>Somali Ostrich</td>
                         <td>90 (200)</td>
                         <td>130 (287)</td>
@@ -212,209 +223,218 @@
                     </tr>
                 </tbody>
             </table>
-            <hr>
+        </div>
+        <hr>
 
 
-<!-- Similar table with wider and taller rows and columns -->
-            <table>
-                <h2>Heviest birds</h2>
-                    <thead>
-                        <tr>
-                            <!-- A row that spans for 2 rows -->
-                            <th rowspan="2">Animal</th>
-                            <!-- A colums that spans for 2 columns -->
-                            <th colspan="2">Average mass</th>
-                            <th rowspan="2">Flighted</th>
-                        </tr>
-                        <tr>
-                            <th>kg</th>
-                            <th>lb</th>
-                        </tr>
-                    </thead>
-                <tbody>
-                        <tr>
-                            <td>Ostrich</td>
-                            <td>104</td>
-                            <td>230</td>
-                            <td>No</td>
-                        </tr>
-                        <tr>
-                        <td>Somali Ostrich</td>
-                        <td>90</td>
-                        <td>200</td>
+        <!-- Similar table with wider and taller rows and columns -->
+        <table>
+            <h2>Heviest birds</h2>
+            <thead>
+                <tr>
+                    <!-- A row that spans for 2 rows -->
+                    <th rowspan="2">Animal</th>
+                    <!-- A colums that spans for 2 columns -->
+                    <th colspan="2">Average mass</th>
+                    <th rowspan="2">Flighted</th>
+                </tr>
+                <tr>
+                    <th>kg</th>
+                    <th>lb</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ostrich</td>
+                    <td>104</td>
+                    <td>230</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>Somali Ostrich</td>
+                    <td>90</td>
+                    <td>200</td>
 
-                        <td>No</td>
-                    </tr>
-                    <tr>
-                        <td>Wild Turkey</td>
-                        <td>13.5</td>
-                        <td>29.8</td>
-                        <td>Yes</td>
-                    </tr>
-                </tbody>
-            </table>
-            <hr>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>Wild Turkey</td>
+                    <td>13.5</td>
+                    <td>29.8</td>
+                    <td>Yes</td>
+                </tr>
+            </tbody>
+        </table>
+        <hr>
 
 
-<!-- Semantic markup -->
-            <h1>Semantic markup</h1>
-            &lt;main&gt; &lt;nav&gt; &lt;header&gt; &lt;footer&gt; &lt;section&gt; &lt;article&gt; &lt;aside&gt; &lt;summary&gt; &lt;details&gt;
-            <nav>
+        <!-- Semantic markup -->
+        <h1>Semantic markup</h1>
+        &lt;main&gt; &lt;nav&gt; &lt;header&gt; &lt;footer&gt; &lt;section&gt; &lt;article&gt; &lt;aside&gt;
+        &lt;summary&gt; &lt;details&gt;
+        <nav>
 
-            </nav>
+        </nav>
+        <section>
+
+        </section>
+        <!-- May have other articles and sections inside -->
+        <article>
+            <h1></h1>
             <section>
 
             </section>
-<!-- May have other articles and sections inside -->
             <article>
-                <h1></h1>
-                <section>
 
-                </section>
-                <article>
-
-                </article>
-                <h6></h6>
             </article>
+            <h6></h6>
+        </article>
 
-            <asisde>
-                <h2>&lt;aside&gt;</h2>
-                <i>blue text is aside</i><br>
-                <img width="150" src="aside.png">
-            </asisde>
+        <asisde>
+            <h2>&lt;aside&gt;</h2>
+            <i>blue text is aside</i><br>
+            <img width="150" src="aside.png">
+        </asisde>
+        <hr>
+
+
+        <!-- HTML Entities -->
+        <section>
+            <h1>HTML Entities</h1>
+            5 &lt; 10<br>
+            6 &gt; 5<br>
+            &amp; &copy; &reg; &quot; &trade; &#36;
             <hr>
+        </section>
 
 
-<!-- HTML Entities -->
-            <section>
-                <h1>HTML Entities</h1>
-                5 &lt; 10<br>
-                6 &gt; 5<br>
-                &amp; &copy; &reg; &quot; &trade; &#36;
-                <hr>
-            </section>
+        <!-- Superscript <sup> and subscript <sub> tags -->
+        <h1><sup>S</sup>uperscripts and <sub>s</sub>ubscripts in a table of 1 row and 3 columns</h1>
+        <table>
+            <tbody>
+                <tr>
+                    <td>2<sup>2</sup> = 4;</td>
+                    <td>3<sup>3</sup> = 27;</td>
+                    <td>H<sub>2</sub>O</td>
+                </tr>
+            </tbody>
+        </table>
+        <hr> <!--  Horizontal line <hr>-->
 
 
-<!-- Superscript <sup> and subscript <sub> tags -->
-            <h1><sup>S</sup>uperscripts and <sub>s</sub>ubscripts in a table of 1 row and 3 columns</h1>
-            <table>
-                <tbody>
-                    <tr>
-                        <td>2<sup>2</sup> = 4;</td>
-                        <td>3<sup>3</sup> = 27;</td>
-                        <td>H<sub>2</sub>O</td>
-                    </tr>
-                </tbody>
-            </table>
-            <hr> <!--  Horizontal line <hr>-->
+        <!-- Images -->
+        <h1>Images <sup>in</sup> <sub>a</sub> table</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Internal image</th>
+                    <th>External image</th>
+                </tr>
+            </thead>
+            <tbody>
+                <td><img width="300" src="000.jpg"></td>
+                <td><img width="300" alt="B787 picture"
+                        src="https://www.corporatecrimereporter.com/wp-content/uploads/2019/11/boeing.jpg"></td>
+            </tbody>
+        </table>
+        <h2></h2>
 
 
-<!-- Images -->
-            <h1>Images <sup>in</sup> <sub>a</sub> table</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Internal image</th>
-                        <th>External image</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <td><img width="300" src="000.jpg"></td>
-                    <td><img width="300" alt="B787 picture" src="https://www.corporatecrimereporter.com/wp-content/uploads/2019/11/boeing.jpg"></td>
-                </tbody>
-            </table>
-            <h2></h2>
+        <!-- Links -->
+        <hr>
+        <h1>Links</h1>
+        <p>
+            <a href="hello.html">Internal link to <br> a file in the <br>same folder:<br>hello.html</a>
+        </p>
+        <p>
+            <a href="http://www.google.com">External link Google</a>
+        </p>
 
 
-<!-- Links -->
-            <hr>
-            <h1>Links</h1>
-            <p>
-                <a href="hello.html">Internal link to <br> a file in the <br>same  folder:<br>hello.html</a>
-            </p>
-            <p>
-                <a href="http://www.google.com">External link Google</a>
-            </p>
+        <!-- Lists -->
+        <hr>
+        <h1>Lists inside a table</h1>
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <ul>
+                            <li>First element</li>
+                            <li>Second thing</li>
+                            <li>Third idea</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ol>
+                            <li>Number one</li>
+                            <li>Two</li>
+                            <li>Three</li>
+                        </ol>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
 
-<!-- Lists -->
-            <hr>
-            <h1>Lists inside a table</h1>
-            <table>
-                <tbody>
-                    <tr>
-                        <td>
-                            <ul>
-                                <li>First element</li>
-                                <li>Second thing</li>
-                                <li>Third idea</li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ol>
-                                <li>Number one</li>
-                                <li>Two</li>
-                                <li>Three</li>
-                            </ol>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- Tables -->
+        <hr>
+        <h1>Tables</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Maria</th>
+                    <th>Vlad</th>
+                    <th>Vlad Jr</th>
+                    <th>Sasha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>vsp</td>
+                    <td>vnr</td>
+                    <td>vjr</td>
+                    <td>sashka</td>
+                </tr>
+            </tbody>
+        </table>
 
 
-<!-- Tables -->
-            <hr>
-            <h1>Tables</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Maria</th>
-                        <th>Vlad</th>
-                        <th>Vlad Jr</th>
-                        <th>Sasha</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>vsp</td>
-                        <td>vnr</td>
-                        <td>vjr</td>
-                        <td>sashka</td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- Text -->
+        <hr>
+        <h1>Paragraphs & text styling</h1>
+        <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquam laborum corrupti, corporis ipsa magni
+            incidunt pariatur? Dolores sequi deleniti assumenda sapiente, error reiciendis culpa fugit voluptate, itaque
+            fugiat sed exercitationem.
+        </p>
+        <p>
+            NORMAL TEXT Perspiciatis sint suscipit AND HERE IS THE <a href="hello.html">LINK</a> TO "hello.html" FILE
+            porro reprehenderit enim dolor minus, quae sequi unde, quisquam itaque recusandae!
+        </p>
+        <p>
+            <b>BOLD TEXT Lorem ipsum dolor sit amet consectetur,</b>
+        <p>
+            <i>ITALIC TEXT adipisicingi elit. Id quasi veniam dolor amet,</i> magnam ipsa debitis?
+        </p>
+        </p>
+        <h2>Paragraph 0</h2>
+        <p>
+            <u>UNDERLINED TEXT Lorem ipsum dolor sit amet consectetur adipisicing elit.</u>
+        </p>
+        <p>
+            NORMAL TEXT AGAIN Error veniam repudiandae nemo autem ad sapiente, cupiditate, nulla blanditiis debitis
+            excepturi maiores hic magnam? Iure consectetur commodi obcaecati ullam, mollitia laborum.
+        </p>
+    </main>
+    <!-- Footer -->
+    <footer>
+        <hr>
+        <p>
+        <h1>FOOTER</h1>
+        </p>
 
+        <hr>
+    </footer>
+</body>
 
-<!-- Text -->
-            <hr>
-            <h1>Paragraphs & text styling</h1>
-            <p>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquam laborum corrupti, corporis ipsa magni incidunt pariatur? Dolores sequi deleniti assumenda sapiente, error reiciendis culpa fugit voluptate, itaque fugiat sed exercitationem.
-            </p>
-            <p>
-                NORMAL TEXT Perspiciatis sint suscipit AND HERE IS THE <a href="hello.html">LINK</a> TO "hello.html" FILE porro reprehenderit enim dolor minus, quae sequi unde, quisquam itaque recusandae!
-            </p>
-            <p>
-                <b>BOLD TEXT Lorem ipsum dolor sit amet consectetur,</b>
-            <p>
-                <i>ITALIC TEXT adipisicingi elit. Id quasi veniam dolor amet,</i> magnam ipsa debitis?
-            </p>
-            </p>
-            <h2>Paragraph 0</h2>
-            <p>
-                <u>UNDERLINED TEXT Lorem ipsum dolor sit amet consectetur adipisicing elit.</u>
-            </p>
-            <p>
-                NORMAL TEXT AGAIN Error veniam repudiandae nemo autem ad sapiente, cupiditate, nulla blanditiis debitis excepturi maiores hic magnam? Iure consectetur commodi obcaecati ullam, mollitia laborum.
-            </p>
-        </main>
-<!-- Footer -->
-        <footer>
-            <hr>
-            <p><h1>FOOTER</h1></p>
-
-            <hr>
-        </footer>
-    </body>
 </html>
-
