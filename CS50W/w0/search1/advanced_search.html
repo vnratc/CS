@@ -10,68 +10,58 @@
 </head>
 
 <body>
-    <nav id="nav-grid">
-        <div class="nav-grid-item">
-            <span id="google-as">Google</span>
+    <nav class="flexbox-container nav">
+        <div class="flexbox-item text-start">
+            <img class="google-logo small"
+                src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_light_color_272x92dp.png"
+                alt="google">
+            <div id="as">Advanced Search</div>
         </div>
-        <div class="nav-grid-item"></div>
-        <div class="nav-grid-item text-end">
+        <div class="flexbox-item"></div>
+        <div class="flexbox-item">
             <a class="nav-a" href="index.html">Google Search</a>
         </div>
-        <div class="nav-grid-item">
-            <span id="as">Advanced Search</span>
-        </div>
-        <div class="nav-grid-item"></div>
-        <div class="nav-grid-item"></div>
     </nav>
-    <section class="hr"></section>
-    <form action="https://www.google.com/search">
-        <main id="main-grid-as" class="format-as">
-            <div class="main-grid-item-as">
-                <section>Find pages with...</section>
-            </div>
-            <div class="main-grid-item-as"></div>
-            <div class="main-grid-item-as"></div>
-
-            <div class="main-grid-item-as">
+    <div style="height: 2%;"></div>
+    <div class="hr"></div>
+    <div class="as">Find Pages with...</div>
+    <main class="flexbox-container main as">
+        <div class="flexbox-item">
+            <div class="text-start label-input">
                 <label for="atw">all these words:</label>
             </div>
-            <div class="main-grid-item-as">
-                <input type="text" id="atw" class="input-as" name="as_q">
-            </div>
-            <div class="main-grid-item-as"></div>
-
-            <div class="main-grid-item-as">
+            <div class="text-start label-input">
                 <label for="tewp">this exact word or phrase:</label>
             </div>
-            <div class="main-grid-item-as">
-                <input type="text" id="tewp" class="input-as" name="as_epq">
-            </div>
-            <div class="main-grid-item-as"></div>
-
-            <div class="main-grid-item-as">
+            <div class="text-start label-input">
                 <label for="aotw">any of these words:</label>
             </div>
-            <div class="main-grid-item-as">
-                <input type="text" id="aotw" class="input-as" name="as_oq">
-            </div>
-            <div class="main-grid-item-as"></div>
-
-            <div class="main-grid-item-as">
+            <div class="text-start label-input">
                 <label for="ntw">none of these words:</label>
             </div>
-            <div class="main-grid-item-as">
+        </div>
+
+        <form class="flexbox-item" action="https://www.google.com/search">
+            <div class="text-start">
+                <input type="text" id="atw" class="input-as" name="as_q">
+            </div>
+            <div class="text-start">
+                <input type="text" id="tewp" class="input-as" name="as_epq">
+            </div>
+            <div class="text-start">
+                <input type="text" id="aotw" class="input-as" name="as_oq">
+            </div>
+            <div class="text-start">
                 <input type="text" id="ntw" class="input-as" name="as_eq">
             </div>
-            <div class="main-grid-item-as"></div>
 
-            <div class="main-grid-item-as"></div>
-            <div class="main-grid-item-as text-end">
+            <div class="flexbox-item text-end">
                 <input type="submit" id="button-as" value="Advanced Search"></input>
             </div>
-            <div class="main-grid-item-as"></div>
-        </main>
-    </form>
+        </form>
+        <div class="flexbox-item"></div>
+    </main>
+    <footer class="flexbox-container footer"></footer>
 </body>
 
 </html>

@@ -8,31 +8,20 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <nav id="nav-flex">
-        <div class="nav-flex-item">
+    <nav class="flexbox-container nav">
+        <div class="flexbox-item"></div>
+        <div class="flexbox-item"></div>
+        <div class="flexbox-item">
             <a class="nav-a" href="index.html">Google Search</a>
         </div>
-        </div>
     </nav>
-    <main id="main-grid">
-        <div class="main-grid-item"></div>
-        <div class="main-grid-item"></div>
-        <div class="main-grid-item"></div>
-        <div class="main-grid-item"></div>
-        <div class="main-grid-item"></div>
-        <div class="main-grid-item"></div>
-        <div class="main-grid-item"></div>
-        <div class="main-grid-item" style="position: relative;">
-            <h1 class="google">Google</h1>
-            <span id="images">
+    <main class="flexbox-container main">
+        <div class="flexbox-item"></div>
+        <div class="flexbox-item relative">
+            <img class="google-logo" src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_light_color_272x92dp.png" alt="google">
+            <section id="images">
                 images
-            </span>
-        </div>
-        <div class="main-grid-item"></div>
-        <div class="main-grid-item"></div>
-        <div class="main-grid-item"></div>
-        <div class="main-grid-item"></div>
-        <div class="main-grid-item">
+            </section>
             <form action="https://www.google.com/images">
                 <div>
                     <input class="search-bar" type="text" name="q" autofocus autocomplete="off">
@@ -42,15 +31,8 @@
                 </div>
             </form>
         </div>
-        <div class="main-grid-item"></div>
-        <div class="main-grid-item"></div>
-        <div class="main-grid-item"></div>
-        <div class="main-grid-item"></div>
-        <div class="main-grid-item">
-        </div>
-        <div class="main-grid-item"></div>
-        <div class="main-grid-item"></div>
+        <div class="flexbox-item"></div>
     </main>
-
+    <footer class="flexbox-container footer"></footer>
 </body>
 </html>
