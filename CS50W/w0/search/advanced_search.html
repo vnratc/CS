@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Search</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <nav id="nav-grid">
+        <div class="nav-grid-item">
+            <span id="google-as">Google</span>
+        </div>
+        <div class="nav-grid-item"></div>
+        <div class="nav-grid-item text-end">
+            <a class="nav-a" href="index.html">Google Search</a>
+        </div>
+        <div class="nav-grid-item">
+            <span id="as">Advanced Search</span>
+        </div>
+        <div class="nav-grid-item"></div>
+        <div class="nav-grid-item"></div>
+    </nav>
+    <section class="hr"></section>
+    <form action="https://www.google.com/search">
+        <main id="main-grid-as" class="format-as">
+            <div class="main-grid-item-as">
+                <section>Find pages with...</section>
+            </div>
+            <div class="main-grid-item-as"></div>
+            <div class="main-grid-item-as"></div>
+
+            <div class="main-grid-item-as">
+                <label for="atw">all these words:</label>
+            </div>
+            <div class="main-grid-item-as">
+                <input type="text" id="atw" class="input-as" name="as_q">
+            </div>
+            <div class="main-grid-item-as"></div>
+
+            <div class="main-grid-item-as">
+                <label for="tewp">this exact word or phrase:</label>
+            </div>
+            <div class="main-grid-item-as">
+                <input type="text" id="tewp" class="input-as" name="as_epq">
+            </div>
+            <div class="main-grid-item-as"></div>
+
+            <div class="main-grid-item-as">
+                <label for="aotw">any of these words:</label>
+            </div>
+            <div class="main-grid-item-as">
+                <input type="text" id="aotw" class="input-as" name="as_oq">
+            </div>
+            <div class="main-grid-item-as"></div>
+
+            <div class="main-grid-item-as">
+                <label for="ntw">none of these words:</label>
+            </div>
+            <div class="main-grid-item-as">
+                <input type="text" id="ntw" class="input-as" name="as_eq">
+            </div>
+            <div class="main-grid-item-as"></div>
+
+            <div class="main-grid-item-as"></div>
+            <div class="main-grid-item-as text-end">
+                <input type="submit" id="button-as" value="Advanced Search"></input>
+            </div>
+            <div class="main-grid-item-as"></div>
+        </main>
+    </form>
+</body>
+
+</html>

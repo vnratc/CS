@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search</title>
+    <title>Image Search</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
     <nav id="nav-flex">
         <div class="nav-flex-item">
-            <a class="nav-a" href="image_search.html">Image Search</a>
-            <a class="nav-a" href="advanced_search.html">Advanced Search</a>
+            <a class="nav-a" href="index.html">Google Search</a>
         </div>
         </div>
     </nav>
@@ -25,21 +22,23 @@
         <div class="main-grid-item"></div>
         <div class="main-grid-item"></div>
         <div class="main-grid-item"></div>
-        <div class="main-grid-item">
+        <div class="main-grid-item" style="position: relative;">
             <h1 class="google">Google</h1>
+            <span id="images">
+                images
+            </span>
         </div>
         <div class="main-grid-item"></div>
         <div class="main-grid-item"></div>
         <div class="main-grid-item"></div>
         <div class="main-grid-item"></div>
         <div class="main-grid-item">
-            <form action="https://www.google.com/search">
+            <form action="https://www.google.com/images">
                 <div>
                     <input class="search-bar" type="text" name="q" autofocus autocomplete="off">
                 </div>
                 <div>
-                    <input class="button" type="submit" value="Google Search">
-                    <input class="button" type="submit" name="btnI" value="I'm Feeling Lucky">
+                    <input class="button hidden" type="submit" value="Google Search">
                 </div>
             </form>
         </div>
@@ -52,6 +51,6 @@
         <div class="main-grid-item"></div>
         <div class="main-grid-item"></div>
     </main>
-</body>
 
+</body>
 </html>

@@ -1,0 +1,165 @@
+@media (max-width: 390px) {
+  #nav-grid {
+    width: 100vw;
+  }
+}
+body {
+  font-family: arial, sans-serif;
+  margin: 0px;
+  background-color: #202124;
+}
+
+#nav-grid {
+  display: grid;
+  row-gap: 1rem;
+  grid-template-columns: auto auto auto;
+}
+
+.nav-grid-item {
+  margin: 1rem;
+}
+
+#nav-flex {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.nav-flex-item {
+  display: flex;
+  margin: 1rem;
+}
+
+.nav-a {
+  font-size: 0.875rem;
+  margin: 0 0.5rem;
+  text-decoration: none;
+  color: white;
+}
+
+.nav-a:active {
+  border: none;
+}
+
+.text-end {
+  text-align: end;
+}
+
+.text-start {
+  text-align: start;
+}
+
+#main-grid-as {
+  display: grid;
+  grid-template-columns: 200px 25.5rem auto;
+}
+
+.main-grid-item-as {
+  height: 3rem;
+}
+
+#main-grid {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+}
+
+.main-grid-item {
+  height: 9rem;
+  text-align: center;
+}
+
+.google {
+  color: white;
+  font-size: 6rem;
+  font-weight: 500;
+  margin-top: 3rem;
+}
+
+.search-bar {
+  margin: 2.5rem;
+  width: 35rem;
+  background-color: #202124;
+  border: 1px solid #5f6368;
+  border-radius: 3rem;
+  font-size: 1rem;
+  color: #e8eaed;
+  line-height: normal;
+  padding: 0.8rem;
+}
+
+.search-bar:hover, :focus {
+  border: 1px solid #303134;
+  background-color: #303134;
+}
+
+.button {
+  background-color: #303134;
+  border: 1px solid #303134;
+  border-radius: 0.2rem;
+  color: #e8eaed;
+  padding: 0.6rem;
+  padding-left: 0.4rem;
+  font-size: 0.875rem;
+  margin: 0 0.2rem;
+  width: 125px;
+  text-align: center;
+}
+
+.button:hover {
+  border: 1px solid #5f6368;
+}
+
+.hidden {
+  display: none;
+}
+
+#images {
+  color: #4487f6;
+  position: relative;
+  text-align: start;
+  top: -5.1rem;
+  bottom: 0;
+  left: 7.4rem;
+  right: 0;
+}
+
+#google-as {
+  color: white;
+  font-size: 1.5rem;
+}
+
+#as {
+  color: #f28b82;
+  font-weight: lighter;
+  font-size: 1.25rem;
+  margin: 2rem;
+}
+
+.hr {
+  border-bottom: 1px solid rgba(235, 235, 235, 0.1882352941);
+}
+
+.format-as {
+  color: #e8eaed;
+  margin: 2rem;
+  padding: 0.5rem;
+}
+
+.input-as {
+  background-color: #202124;
+  border: 1px solid #5f6368;
+  width: 25rem;
+  font-size: 1rem;
+  color: white;
+}
+
+#button-as {
+  background: #8ab4f8;
+  border-color: #8ab4f8;
+  color: #202124;
+  border-radius: 0.2em;
+  padding: 0.5em;
+  margin: 0.5em;
+  font-weight: 700;
+}
+
+/*# sourceMappingURL=styles.css.map */
