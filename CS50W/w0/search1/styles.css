@@ -1,8 +1,20 @@
+.grid {
+  display: grid;
+  grid-template-columns: min-content max-content;
+  align-items: center;
+}
+
+.grid-item {
+  /* background-color:#303134; */
+  margin: 0 1rem;
+  min-width: 190px;
+}
+
 .flexbox-container {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
   align-content: flex-start;
+  align-items: flex-start;
 }
 
 .flexbox-item {
@@ -114,6 +126,7 @@
   background-color: #202124;
   border: 1px solid #5f6368;
   min-width: 25rem;
+  max-width: auto;
   font-size: 1rem;
   color: white;
   margin: 0.6rem;
@@ -159,87 +172,6 @@ body {
 .label-input {
   margin: 1.6rem;
 }
-
-  /* .item-1 {
-    min-height: 100px;
-    flex-shrink: 0;
-    align-self: flex-end;
-  }
-  
-  .item-2 {
-    min-height: 200px;
-    flex-grow: 2;
-    flex-basis: 0;
-    align-self: center;
-  }
-  
-  .item-3 {
-    min-height: 300px;
-    flex-grow: 1;
-    flex-basis: 0;
-  } */
-
-/*
-#nav-grid {
-  display: grid;
-  row-gap: 1rem;
-  grid-template-columns: auto auto auto;
-}
-
-.nav-grid-item {
-  margin: 1rem;
-}
-
-#nav-flex {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.nav-flex-item {
-  display: flex;
-  margin: 1rem;
-}
-
-.nav-a {
-  font-size: 0.875rem;
-  margin: 0 0.5rem;
-  text-decoration: none;
-  color: white;
-}
-
-.nav-a:active {
-  border: none;
-}
-
-
-
-
-
-#main-grid-as {
-  display: grid;
-  grid-template-columns: 200px 25.5rem auto;
-}
-
-.main-grid-item-as {
-  height: 3rem;
-}
-
-#main-grid {
-  display: grid;
-  grid-template-columns: auto auto auto auto auto;
-}
-
-.main-grid-item {
-  height: 9rem;
-  text-align: center;
-}
-
-
-
-
-
-
-
 
 
 #google-as {

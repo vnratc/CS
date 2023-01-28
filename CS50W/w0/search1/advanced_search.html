@@ -25,42 +25,45 @@
     <div style="height: 2%;"></div>
     <div class="hr"></div>
     <div class="as">Find Pages with...</div>
-    <main class="flexbox-container main as">
-        <div class="flexbox-item">
-            <div class="text-start label-input">
+    <form class="flexbox-container main as" action="https://www.google.com/search">
+        <div class="grid">
+            <div class="grid-item">
                 <label for="atw">all these words:</label>
             </div>
-            <div class="text-start label-input">
+            <div class="grid-item">
+                <input type="text" id="atw" class="grid-item input-as" name="as_q">
+            </div>
+
+            <div class="grid-item">
                 <label for="tewp">this exact word or phrase:</label>
             </div>
-            <div class="text-start label-input">
-                <label for="aotw">any of these words:</label>
-            </div>
-            <div class="text-start label-input">
-                <label for="ntw">none of these words:</label>
-            </div>
-        </div>
-
-        <form class="flexbox-item" action="https://www.google.com/search">
-            <div class="text-start">
-                <input type="text" id="atw" class="input-as" name="as_q">
-            </div>
-            <div class="text-start">
+            <div class="grid-item">
                 <input type="text" id="tewp" class="input-as" name="as_epq">
             </div>
-            <div class="text-start">
-                <input type="text" id="aotw" class="input-as" name="as_oq">
-            </div>
-            <div class="text-start">
-                <input type="text" id="ntw" class="input-as" name="as_eq">
+
+            <div class="grid-item">
+                <label for="aotw">any of these words:</label>
             </div>
 
-            <div class="flexbox-item text-end">
+            <div class="grid-item">
+                <input type="text" id="aotw" class="input-as" name="as_oq">
+            </div>
+
+            <div class="grid-item">
+                <label for="ntw">none of these words:</label>
+            </div>
+
+            <div class="grid-item">
+                <input type="text" id="ntw" class="input-as" name="as_eq">
+            </div>
+            <div class="grid-item"></div>
+
+            <div class="grid-item text-end">
                 <input type="submit" id="button-as" value="Advanced Search"></input>
             </div>
-        </form>
-        <div class="flexbox-item"></div>
-    </main>
+        </div>
+    </form>
+    <div class="flexbox-item"></div>
     <footer class="flexbox-container footer"></footer>
 </body>
 
