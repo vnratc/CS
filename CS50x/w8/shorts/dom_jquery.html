@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            height: 5rem;
+            width: auto;
+            margin: 1rem;
+            /* background-color: aquamarine; */
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+    <script src="dom_jquery.js">
+        // document.getElementById('three').style.backgroundColor = 'red';
+        // $('#three').css('background-color', 'red');
+        
+    </script>
+    <div id="colorDiv"></div>
+</head>
+<body>
+    <div>
+        <h3>Individual Functions for Background Color</h3>
+        <button onclick="turnPurple();">Purple</button>
+        <button onclick="turnGreen();">Green</button>
+    </div>
+    <div>
+        <h3>One Single Function for Background Color</h3>
+        <button onclick="changeColor('purple');">Purple</button>
+        <button onclick="changeColor('green');">Green</button>
+    </div>
+    <div>
+        <h3>Event Handler for Background Color</h3>
+        <button onclick="changeColorEvent(event);">Purple</button>
+        <button onclick="changeColorEvent(event);">Green</button>
+        <button onclick="changeColorEvent(event);">Orange</button>
+        <button onclick="changeColorEvent(event);">Red</button>
+    </div>
+    <div>
+        <h3>Using jQuery</h3>
+        <button class="jQButton">Purple</button>
+        <button class="jQButton">Green</button>
+        <button class="jQButton">Orange</button>
+        <button class="jQButton">Red</button>
+    </div>
+    
+    <h1>Hello</h1>
+    <div></div>
+    <div></div>
+    <div id="three"></div>
+    <div></div>
+</body>
+</html>

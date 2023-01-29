@@ -1,20 +1,20 @@
-function cs50Info(name) {
+function myfunc(name) {
     // create a new AJAX object
-    var ajax = new XMLHttpRequest();
+    var myvar = new XMLHttpRequest();
     // If nothing is chosed
     // when page is loaded, have a callback function pre-fill our div
-    ajax.onreadystatechange = function() {
-        if (ajax.readyState == 4 && ajax.status == 200) {
-            $('#infodiv').html(ajax.responseText);
-        }
+    myvar.onreadystatechange = function() {
+        // if (myvar.readyState == 4 && myvar.status == 200) {
+        $('#infodiv').html(myvar.responseText);
+        // }
     };
-    if(name == 'blank') {
-        ajax.open('GET', name + '.html', true)
-        ajax.send
+    if(name == '') {
+        myvar.open('GET', 'blank.html', true)
+        myvar.send
         // return;
     }
     else {  // open the requested file and transmit data
-        ajax.open('GET', name + '.html', true);
-        ajax.send();
+        myvar.open('GET', name + '.html', true);
+        myvar.send();
     };
 }
