@@ -1,0 +1,23 @@
+section {
+    width: 80%;
+    height: 800px;
+    /* Setting properties one at a time */
+    background-image: url("https://www.aerotime.aero/images/airbus_a350_aircraft.jpg");
+    background-position: center;
+    background-size: cover;
+    /* A shorthand for setting multiple properties at a time. position and size MUST GO TOGERTHER and be saparated with a forward slash / */
+    background: bottom / cover url("https://www.aerotime.aero/images/airbus_a350_aircraft.jpg") ;
+    
+    background: bottom / contain no-repeat url("https://www.aerotime.aero/images/airbus_a350_aircraft.jpg") ;
+    
+    background: bottom / 40% no-repeat url("https://www.aerotime.aero/images/airbus_a350_aircraft.jpg") burlywood;
+    
+
+    margin:  0 auto;
+}   
+
+h1 {
+    font-size: 50px;
+    color: white;
+    text-align: end;
+}
