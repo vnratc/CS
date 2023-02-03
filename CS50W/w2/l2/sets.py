@@ -15,6 +15,7 @@ print(f"Before s.remove the set has {len(s)} elements")
 
 s.remove(2)
 print(s)
+print(type(s))
 
 # print("After s.remove the set has " + str(len(s)) + " elements")
 print(f"After s.remove the set has {len(s)} elements")
