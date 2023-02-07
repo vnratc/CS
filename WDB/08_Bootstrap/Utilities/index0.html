@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Utilities</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <style>
+        body {
+            font-family: 'Caveat', cursive;
+        }
+    </style>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9AT KxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+        integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <main class="container">
+        <h1 class="display-1 text-center text-primary mb-5">Bootstrap Utilities</h1>
+        <div class="row">
+            <div class="col-md-4 border border-danger rounded-4 shadow">
+                <button class="btn btn-warning shadow mt-1">Warning</button>
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illo sit laborum ea obcaecati modi laudantium explicabo iusto doloremque tenetur placeat? Aspernatur est, doloribus eum assumenda laboriosam cupiditate provident enim illo!
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-lg btn-primary p-0 shadow">Padding 0 &#8211; xs &#40;&#60;576px&#41;</button>
+            <button class="btn btn-lg btn-primary p-1 shadow d-none d-sm-inline">Padding 1 &#8211; d-none d-sm-inline &#40;&#62;&#61;576px&#41;</button>
+            <button class="btn btn-lg btn-primary p-2 shadow d-none d-md-inline">Padding 2 &#8211; d-none d-md-inline &#40;&#62;&#61;768px&#41;</button>
+            <button class="btn btn-lg btn-primary p-3 shadow d-none d-lg-inline">Padding 3 &#8211; d-none d-lg-inline &#40;&#62;&#61;992px&#41;</button>
+            <button class="btn btn-lg btn-primary p-4 shadow d-none d-xl-inline">Padding 4 &#8211; d-none d-xl-inline &#40;&#62;&#61;1200px&#41;</button>
+            <button class="btn btn-lg btn-primary p-5 shadow d-none d-xxl-inline">Padding 5 &#8211; d-none d-xxl-inline &#40;&#62;&#61;1400px&#41;</button>
+        </div>
+        <div class="my-5">
+            <button class="btn btn-secondary p-0 pt-5">Padding Top</button>
+            <button class="btn btn-secondary p-0 ps-5">Padding Start</button>
+            <button class="btn btn-secondary p-0 pb-5">Padding Bottom</button>
+            <button class="btn btn-secondary p-0 pe-5">Padding End</button>
+            <button class="btn btn-secondary p-0 px-5">Padding X</button>
+            <button class="btn btn-secondary p-0 py-5">Padding Y</button>
+        </div>
+
+        <button class="btn btn-danger p-0 p-sm-1 p-md-2 p-lg-3 p-xl-5 d-none d-sm-block">I CHANGE!</button>
+    </main>
+</body>
+
+</html>
