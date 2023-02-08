@@ -1,4 +1,4 @@
-# Function __init__ that creates a template for a new data type called Point by storing 2 inputs inside of the object (property called x and y).
+# Function __init__ that creates a template for a new object type called Point by storing 2 inputs inside of the object (properties called x and y).
 class Point():
   def __init__(self, input1, input2):
     self.x = input1
@@ -7,6 +7,7 @@ class Point():
 p = Point(2, 8)
 # print(p.x)
 # print(p.y)
+
 
 class Flight():
   def __init__(self, capacity):
