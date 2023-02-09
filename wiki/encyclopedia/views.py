@@ -1,29 +1,54 @@
 from django import forms
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 
 from . import util
 
 class SearchForm(forms.Form):
-    query = forms.CharField()
+#     # Use widget=forms.TextInput(attrs={}) to give atributes to the <form> html element
+    q = forms.CharField(label="", widget=forms.TextInput(attrs={'placeholder':'Search Encyclopedia', 'class':'search'}))
+    
+entries = util.list_entries()
 
 def index(request):
     
     return render(request, "encyclopedia/index.html", {
-        "entries": util.list_entries()
+        "entries": entries,
+        "form": SearchForm
     })
 
 def display_contents(request, title):
-    if not util.get_entry(title):   # if util.get_entry(title) == None:
-        return render(request, 'encyclopedia/not_found.html')
-    else:
+    if util.get_entry(title):   # if util.get_entry(title) != None:
+        for t in entries:
+            if t.lower() == title: title = t
         contents = util.get_entry(title)
         return render(request, "encyclopedia/contents.html", {
             "contents": contents,
-            "title": title.capitalize()
+            "form": SearchForm,
+            "title": title
+        })
+    else:
+        return render(request, 'encyclopedia/not_found.html', {
+            "form": SearchForm,
         })
 
 def search(request):
-    
-    return render(request)
+    if request.method == "POST":
+        # Take in data from the submitted form
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            # Isolate value of form input named "q" from the 'cleaned' version of form data
+            q = form.cleaned_data["q"]
+            # Get all entries and convert to lowercase
+            # entries = [i for i in util.list_entries()]
+            entries_l = [j.lower() for j in entries]
+            if q.lower() in entries_l:
+                return display_contents(request, q)
+            else:
+                matches = [k for k in entries_l if q.lower() in k]
+                return render(request, "encyclopedia/search_results.html", {
+                    "matches": matches,
+                    "form": SearchForm
+                })
+

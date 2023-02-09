@@ -4,7 +4,8 @@ from django.shortcuts import render
 from django.urls import reverse
 
 class NewTaskForm(forms.Form):
-    task = forms.CharField(label="New Task")
+    task = forms.CharField(label="New Task", widget=forms.TextInput(attrs={'placeholder':'New Task'}))
+    
     # priority = forms.IntegerField(label="Priority", min_value=1, max_value=5)
 
 # tasks = []
@@ -14,7 +15,7 @@ def index(request):
         request.session["tasks"] = []
     
     return render(request, "tasks/index.html", {
-    # html var   py var
+        # html var   py var
         # "tasks": tasks
         "tasks": request.session["tasks"]
     })
