@@ -52,3 +52,11 @@ def search(request):
                     "form": SearchForm
                 })
 
+class NewPage(forms.Form):
+    page_title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'aria-label': 'Title'}))
+    page_content = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'aria-label': 'Markdown Content'}))
+
+def new_page(request):
+    return render(request, "encyclopedia/new_page.html", {
+        "new_page_form": NewPage
+    })
