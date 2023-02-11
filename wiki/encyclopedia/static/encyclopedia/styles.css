@@ -36,3 +36,9 @@ textarea {
 .sidebar h2 {
     margin-top: 5px;
 }
+
+/* To prevent row from overflowing html */
+.row {
+    --bs-gutter-x: 0;
+}
+

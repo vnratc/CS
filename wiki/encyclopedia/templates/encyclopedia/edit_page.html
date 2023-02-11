@@ -6,14 +6,13 @@
 
 {% block body %}
     
-    <h1>Add New Page</h1>
-    <form action="{% url 'new_page' %}" method="post">
+    <h1>Edit Content</h1>
+    <h2>{{ title_e }}</h2>
+    <form action="{% url 'save_edit' %}" method="post">
         {% csrf_token %}
+        {{ form_e.edit_title }}
         <div class="input-group mb-3">
-            {{ new_page_form.page_title }}
-        </div>
-        <div class="input-group mb-3">
-            {{ new_page_form.page_content }}
+            {{ form_e.edit_content}}
         </div>
         <div class="input-group mb-3">
             <button type="submit" class="btn btn-info">Save</button>
