@@ -1,0 +1,14 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    {{ title_session }}
+{% endblock %}
+
+{% block body %}
+
+    <!-- <h1>{{ title_session }}</h1> -->
+    <p>{{ contents | safe }}</p>
+
+    <a href="{% url 'edit_page' %}" class="btn btn-secondary">Edit Content</a>
+
+{% endblock %}
