@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -5,11 +6,14 @@ from django.urls import reverse
 from .models import Flight, Passenger
 
 # Create your views here.
+@login_required()
 def index(request):
     return render(request, "flights/index.html", {
         "flights": Flight.objects.all()
     })
 
+
+@login_required()
 def details(request, flight_id):
     try:
         flight = Flight.objects.get(id=flight_id)    # Also could use get.pk=flight_id   # where pk stands for "primary key"
@@ -21,6 +25,8 @@ def details(request, flight_id):
     except Flight.DoesNotExist:
         return HttpResponse('Invalid URL')
 
+
+@login_required()
 def book(request, flight_id):
     if request.method == "POST":
         flight = Flight.objects.get(pk=flight_id)
