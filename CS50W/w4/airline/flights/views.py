@@ -36,3 +36,5 @@ def book(request, flight_id):
         # reverse takes the name from urls.py, that corresponds to a particular view(function) and whatever arguments that it requires
         return HttpResponseRedirect(reverse("details", args=(flight.id,)))
         
+# def test(request, test):
+#     return HttpResponse(test)

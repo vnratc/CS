@@ -9,10 +9,13 @@ class Airport(models.Model):
         return f"{self.city} ({self.code})"
 
 class Flight(models.Model):
-    #                          Airport here relates to the class(table) "Airport" for which "origin" is the FOREIGN KEY
+    #                          Airport here relates to the class(model,table) "Airport" for which "origin" is the FOREIGN KEY
     origin = models.ForeignKey(Airport, on_delete=models.CASCADE, related_name="departures")
     destination = models.ForeignKey(Airport, on_delete=models.CASCADE, related_name="arrivals")
     duration = models.IntegerField()
+
+    # Looks like models.ForeignKey(Airport means that inside "origin" of Flight there is actually a whole other model Airport, i.e. Flight table in its 1st column has Airport table.
+    # ForeignKey is used form many-to-one relationships. Many flights to one airport in this case.
 
     def __str__(self):
         return f"{self.id}: {self.origin} to {self.destination}"
