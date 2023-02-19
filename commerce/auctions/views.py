@@ -1,14 +1,17 @@
+from django import forms
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, Listing
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html", {
+        "listings": Listing.objects.all()
+    })
 
 
 def login_view(request):
@@ -61,3 +64,29 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+
+class LForm(forms.Form):
+    title = forms.CharField(label="Title")
+    descr = forms.CharField(label="Description", widget=forms.Textarea)
+    s_bid = forms.IntegerField(label="Starting Bid")
+    url = forms.URLField(label="URL for an image", required=False)
+    cat = forms.CharField(label="Category", required=False)
+
+def new(request):
+    if request.method == "POST":
+        form = LForm(request.POST)
+        if form.is_valid():
+            t = form.cleaned_data["title"]
+            d = form.cleaned_data["descr"]
+            s_b = form.cleaned_data["s_bid"]
+            u = form.cleaned_data["url"]
+            c = form.cleaned_data["cat"]
+            Listing(title=t, descr=d, s_bid=s_b, url=u, cat=c).save()
+            # Later change redirect to this new Listing Page
+            return HttpResponseRedirect(reverse("index"))
+    else:
+        return render(request, "auctions/new.html", {
+            "form": LForm
+    })
+
