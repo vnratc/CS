@@ -1,0 +1,17 @@
+{% extends "flights/layout.html" %}
+
+{% block body %}
+<h1>Flights:</h1>
+<ul>
+    {% for flight in flights %}
+    <li>
+                    <!--'details' in single quotes here is the name in urls.py (function in views with the same name)  -->
+        <a href="{% url 'flights:details' flight.id %}">
+                            <!--  flight.id is the argument that details(request, flight_id) view requires -->
+            Flight {{ flight.id }}: {{ flight.origin }} to {{ flight.destination }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'users:index' %}">User Page</a>
+{% endblock %}
