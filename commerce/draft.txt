@@ -1,6 +1,8 @@
 from auctions.models import *
-Listing(title="A350", descr="The A350 offers the ultimate passenger experience even on the longest of flights.", s_bid=308000000, url="https://images.unsplash.com/photo-1561460651-6373ffda5a37?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8YTM1MHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=900&q=60", cat="Airplanes", price=308000000).save()
-Listing(title="B787", descr="The Boeing 787 Dreamliner is an American wide-body jet airliner.", s_bid=189000000, url="https://images.unsplash.com/photo-1620059409361-37e0047f829e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Qm9laW5nJTIwNzg3fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=900&q=60", cat="Airplanes", price=189000000).save()
+Listing(title="A350", descr="The A350 offers the ultimate passenger experience even on the longest of flights.", s_bid=308, url="https://images.unsplash.com/photo-1561460651-6373ffda5a37?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8YTM1MHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=900&q=60", cat="Airplanes", price=308).save()
+Listing(title="B787", descr="The Boeing 787 Dreamliner is an American wide-body jet airliner.", s_bid=189, url="https://images.unsplash.com/photo-1620059409361-37e0047f829e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Qm9laW5nJTIwNzg3fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=900&q=60", cat="Airplanes", price=189).save()
+Listing(title="A320", descr="The Airbus A320neo family is a development of the A320 family of narrow-body airliners produced by Airbus. The A320neo family is based on the previous A319, A320 and A321, which was then renamed A320ceo, for current engine option", s_bid=101, url="https://images.unsplash.com/photo-1559711469-7fe39ee8842e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8YWlyYnVzJTIwMzIwfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60", cat="Airplanes", price=101).save()
+Listing(title="B737", descr="The Boeing 737 is a narrow-body aircraft produced by Boeing at its Renton Factory in Washington. Developed to supplement the Boeing 727 on short and thin routes, the twinjet retains the 707 fuselage width and six abreast seating with two underwing turbofans.", s_bid=90, url="https://images.unsplash.com/photo-1569629743817-70d8db6c323b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Ym9laW5nJTIwNzM3fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60", cat="Airplanes", price=90).save()
 
 u = User.objects.first()
 l = Listing.objects.all()
@@ -37,31 +39,7 @@ watchlist.get(pk=2).remove()
 >>> 
 
 
-
-def add_to_watchlist(request, listing_id):
-    if request.method == "POST":
-        try:
-            listing = Listing.objects.get(pk=listing_id)
-            watchlist = User.objects.get(pk=request.user.id).watchlist.all()
-        # except KeyError:
-        #     return HttpResponseBadRequest("Bad Request: no lisitng chosen")
-        except Listing.DoesNotExist:
-            return HttpResponseBadRequest("Bad Request: listing does not exist")
-        except User.DoesNotExist:
-            return HttpResponseBadRequest("Bad Request: user does not exist")
-        watchlist.add(listing)
-        return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
-
-def delete_from_watchlist(request, listing_id):
-    if request.method == "POST":
-        try:
-            listing = Listing.objects.get(pk=listing_id)
-            watchlist = User.objects.get(pk=request.user.id).watchlist.all()
-        # except KeyError:
-            # return HttpResponseBadRequest("Bad Request: no lisitng chosen")
-        except Listing.DoesNotExist:
-            return HttpResponseBadRequest("Bad Request: listing does not exist")
-        except User.DoesNotExist:
-            return HttpResponseBadRequest("Bad Request: user does not exist")
-        watchlist.get(pk=listing.id).delete()
-        return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+listing_instance = Listing.objects.get(pk=4)
+new_bid = Bid(bid=200, listing_b=listing)
+new_bid.save()
+user = User.objects.get(pk=1)

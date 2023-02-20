@@ -6,11 +6,14 @@
         {% for listing in listings %}
             <li>
                 <a href="{% url 'listing' listing.id %}">
-                    <!-- TODO current price -->
                     {{ listing.title }}: {{ listing.descr }}
                     <img src="{{ listing.url }}" alt="Listing Picture">
                 </a>
-                <p>Current Price: ${{ listing.price }}. Starting Bid: ${{ listing.s_bid }}</p>
+                {% if listing.price < listing.s_bid %}
+                    <p>Starting Bid: ${{ listing.s_bid }} million</p>
+                {% else %}
+                    <p>Current Price: ${{ listing.price }} million.</p>
+                {% endif %}
             </li>
         {% empty %}
             No Listings
