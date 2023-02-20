@@ -1,0 +1,67 @@
+from auctions.models import *
+Listing(title="A350", descr="The A350 offers the ultimate passenger experience even on the longest of flights.", s_bid=308000000, url="https://images.unsplash.com/photo-1561460651-6373ffda5a37?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8YTM1MHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=900&q=60", cat="Airplanes", price=308000000).save()
+Listing(title="B787", descr="The Boeing 787 Dreamliner is an American wide-body jet airliner.", s_bid=189000000, url="https://images.unsplash.com/photo-1620059409361-37e0047f829e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Qm9laW5nJTIwNzg3fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=900&q=60", cat="Airplanes", price=189000000).save()
+
+u = User.objects.first()
+l = Listing.objects.all()
+User.watchlist.delete(listing_id=2)
+
+if l[0].watchlisted in watchlist:
+    print("True")
+else:
+    print("False")
+
+
+watchlist = User.objects.get(pk=1).watchlist.all()
+listing = Listing.objects.get(pk=2)
+if listing in watchlist:
+    print("True")
+else:
+    print("False")
+
+watchlist.get(pk=1)
+watchlist.get(pk=2).remove()
+
+>>> from auctions.models import *
+>>> u = User.objects.first()
+>>> u
+<User: vlad, watchlisted: auctions.Listing.None>
+>>> l = Listing.objects.get(pk=2)
+>>> l
+<Listing: B787>
+>>> u.watchlist.all()
+<QuerySet [<Listing: B787>]>
+>>> u.watchlist.remove(l)
+>>> u.watchlist.all()
+<QuerySet []>
+>>> 
+
+
+
+def add_to_watchlist(request, listing_id):
+    if request.method == "POST":
+        try:
+            listing = Listing.objects.get(pk=listing_id)
+            watchlist = User.objects.get(pk=request.user.id).watchlist.all()
+        # except KeyError:
+        #     return HttpResponseBadRequest("Bad Request: no lisitng chosen")
+        except Listing.DoesNotExist:
+            return HttpResponseBadRequest("Bad Request: listing does not exist")
+        except User.DoesNotExist:
+            return HttpResponseBadRequest("Bad Request: user does not exist")
+        watchlist.add(listing)
+        return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+
+def delete_from_watchlist(request, listing_id):
+    if request.method == "POST":
+        try:
+            listing = Listing.objects.get(pk=listing_id)
+            watchlist = User.objects.get(pk=request.user.id).watchlist.all()
+        # except KeyError:
+            # return HttpResponseBadRequest("Bad Request: no lisitng chosen")
+        except Listing.DoesNotExist:
+            return HttpResponseBadRequest("Bad Request: listing does not exist")
+        except User.DoesNotExist:
+            return HttpResponseBadRequest("Bad Request: user does not exist")
+        watchlist.get(pk=listing.id).delete()
+        return HttpResponseRedirect(reverse("listing", args=(listing_id,)))

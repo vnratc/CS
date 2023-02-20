@@ -5,12 +5,15 @@
     <ul>
         {% for listing in listings %}
             <li>
-                <a href="">
-                    <!-- TODO current price and photo -->
+                <a href="{% url 'listing' listing.id %}">
+                    <!-- TODO current price -->
                     {{ listing.title }}: {{ listing.descr }}
+                    <img src="{{ listing.url }}" alt="Listing Picture">
                 </a>
-                <img src="{{ listing.url }}" alt="Picture of a listing">
+                <p>Current Price: ${{ listing.price }}. Starting Bid: ${{ listing.s_bid }}</p>
             </li>
+        {% empty %}
+            No Listings
         {% endfor %}
     </ul>
     <a href="{% url 'new' %}">Create New Listing</a>

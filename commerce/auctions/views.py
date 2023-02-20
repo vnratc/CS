@@ -1,11 +1,11 @@
 from django import forms
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseBadRequest
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Listing
+from .models import User, Listing, Bid, Comment
 
 
 def index(request):
@@ -82,7 +82,8 @@ def new(request):
             s_b = form.cleaned_data["s_bid"]
             u = form.cleaned_data["url"]
             c = form.cleaned_data["cat"]
-            Listing(title=t, descr=d, s_bid=s_b, url=u, cat=c).save()
+            # Later add change to created_listing field of User model
+            Listing(title=t, descr=d, s_bid=s_b, url=u, cat=c, price=s_b).save()
             # Later change redirect to this new Listing Page
             return HttpResponseRedirect(reverse("index"))
     else:
@@ -90,3 +91,46 @@ def new(request):
             "form": LForm
     })
 
+
+def listing(request, listing_id):
+    try:
+        listing = Listing.objects.get(id=listing_id)
+    except Listing.DoesNotExist:
+        raise Http404("Listing Not Found")
+    watchlist = User.objects.get(pk=request.user.id).watchlist.all()
+    
+    
+    return render(request, "auctions/listing.html", {
+        "listing": listing,
+        "watchlist": watchlist
+        # Add list of watchlisted listings or check if this listing is in the watchlist of current user. This is to display "Add" OR "Remove" from watchlist on "listing" page.
+    })
+
+
+def add_to_watchlist(request, listing_id):
+    if request.method == "POST":
+        try:
+            listing = Listing.objects.get(pk=listing_id)
+            user = User.objects.get(pk=request.user.id)
+        # except KeyError:
+        #     return HttpResponseBadRequest("Bad Request: no lisitng chosen")
+        except Listing.DoesNotExist:
+            return HttpResponseBadRequest("Bad Request: listing does not exist")
+        except User.DoesNotExist:
+            return HttpResponseBadRequest("Bad Request: user does not exist")
+        user.watchlist.add(listing)
+        return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+
+def delete_from_watchlist(request, listing_id):
+    if request.method == "POST":
+        try:
+            listing = Listing.objects.get(pk=listing_id)
+            user = User.objects.get(pk=request.user.id)
+        # except KeyError:
+            # return HttpResponseBadRequest("Bad Request: no lisitng chosen")
+        except Listing.DoesNotExist:
+            return HttpResponseBadRequest("Bad Request: listing does not exist")
+        except User.DoesNotExist:
+            return HttpResponseBadRequest("Bad Request: user does not exist")
+        user.watchlist.remove(listing)
+        return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
