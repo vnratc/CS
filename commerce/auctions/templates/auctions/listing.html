@@ -5,32 +5,46 @@
     <h2>Listing Details</h2>
     <h3>{{ listing.title }}</h3>
     <p>Category: {{ listing.cat }}</p>
-    <img src="{{ listing.url }}" alt="Listing Picture">
     <p>{{ listing.descr }}</p>
+    <img src="{{ listing.url }}" alt="Listing Picture">
     
-    {% if listing.price < listing.s_bid %}
-        <p>Starting Bid: ${{ listing.s_bid }} million</p>
-    {% else %}
-        <p>Current Price: ${{ listing.price }} million.</p>
-    {% endif %}
-    
-    {% if user.is_authenticated %}
-        {% if listing in watchlist %}
-        <form action="{% url 'remove_from_watchlist' listing.id %}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Remove From Watchlist">
-        </form>
+    {% if user.is_authenticated and listing.active %}
+        {% if listing.price < listing.s_bid %}
+            <h5>Starting Bid: ${{ listing.s_bid }} million</h5>
         {% else %}
-        <form action="{% url 'add_to_watchlist' listing.id %}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Add To Watchlist">
-        </form>
+            <h5>Current Price: ${{ listing.price }} million.</h5>
         {% endif %}
+    
+        {% if listing in watchlist %}
+            <form action="{% url 'remove_from_watchlist' listing.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Remove From Watchlist">
+            </form>
+        {% else %}
+            <form action="{% url 'add_to_watchlist' listing.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Add To Watchlist">
+            </form>
+        {% endif %}
+
         <form action="{% url 'place_bid' listing.id %}" method="POST">
             {% csrf_token %}
             {{ bidform }}
             <input type="submit" value="Place Bid">
         </form>
+
+        {% if user == creator %}
+            <form action="{% url 'close' listing.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Close Listing">
+            </form>
+        {% endif %}
     {% endif %}
+    
+    {% if user.is_authenticated and not listing.active and user == winner %}
+            <h5>You won this auction</h5>
+    {% endif %}
+    
+
 
 {% endblock %}

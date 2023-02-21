@@ -1,23 +1,41 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+    <a href="{% url 'new' %}">Create New Listing</a>
     <h2>Active Listings</h2>
     <ul>
         {% for listing in listings %}
             <li>
                 <a href="{% url 'listing' listing.id %}">
-                    {{ listing.title }}: {{ listing.descr }}
+                    <h3>{{ listing.title }}</h3>
+                    <!-- <p>Category: {{ listing.cat }}</p> -->
+                    <p>{{ listing.descr }}</p>
                     <img src="{{ listing.url }}" alt="Listing Picture">
+                    {% if listing.price < listing.s_bid %}
+                    <h5>Starting Bid: ${{ listing.s_bid }} million</h5>
+                    {% else %}
+                    <h5>Current Price: ${{ listing.price }} million.</h5>
+                    {% endif %}
                 </a>
-                {% if listing.price < listing.s_bid %}
-                    <p>Starting Bid: ${{ listing.s_bid }} million</p>
-                {% else %}
-                    <p>Current Price: ${{ listing.price }} million.</p>
-                {% endif %}
             </li>
         {% empty %}
-            No Listings
+            No Active Listings
         {% endfor %}
     </ul>
-    <a href="{% url 'new' %}">Create New Listing</a>
+    <h2>Closed Listings</h2>
+    <ul>
+        {% for closed_listing in closed_listings %}
+        <li>
+            <a href="{% url 'listing' closed_listing.id %}">
+            <h3>{{ closed_listing.title }}</h3>
+            <!-- <p>Category: {{ closed_listing.cat }}</p> -->
+            <p>{{ closed_listing.descr }}</p>
+            <img src="{{ closed_listing.url }}" alt="Listing Picture">
+            </a>
+            <h5>Highest Bid: ${{ closed_listing.price }} million</h5>
+        </li>
+        {% empty %}
+            No Closed Listings
+        {% endfor %}
+    </ul>
 {% endblock %}

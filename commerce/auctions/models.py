@@ -8,8 +8,7 @@ class Listing(models.Model):
     s_bid = models.IntegerField()
     url = models.URLField()
     cat = models.CharField(max_length=64)
-    price = models.IntegerField()
-    # price = models.ManyToManyField(Bid)
+    price = models.IntegerField(default=0)
     active = models.BooleanField(default=False)
 
 
@@ -35,7 +34,7 @@ class User(AbstractUser):
     bids = models.ManyToManyField(Bid, related_name="bidders", blank=True)
     comments = models.ManyToManyField(Comment, related_name="commenters", blank=True)
     watchlist = models.ManyToManyField(Listing, related_name="watchlisted", blank=True)
-    # Add listings which won by bidding the highest
+    won_listings = models.ManyToManyField(Listing, related_name="winners", blank=True)
 
     def __str__(self):
         return f"{self.username}"

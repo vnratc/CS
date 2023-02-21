@@ -10,7 +10,8 @@ from .models import User, Listing, Bid, Comment
 
 def index(request):
     return render(request, "auctions/index.html", {
-        "listings": Listing.objects.exclude(active=False).all()
+        "listings": Listing.objects.filter(active=True).all(),
+        "closed_listings": Listing.objects.filter(active=False).all()
     })
 
 
@@ -76,7 +77,7 @@ class LForm(forms.Form):
     title = forms.CharField(label="Title")
     descr = forms.CharField(label="Description", widget=forms.Textarea)
     s_bid = forms.IntegerField(label="Starting Bid")
-    url = forms.URLField(label="URL for an image", required=False)
+    url = forms.URLField(label="URL image", required=False)
     cat = forms.CharField(label="Category", required=False)
 
 
@@ -108,14 +109,23 @@ def listing(request, listing_id):
     try:
         listing = Listing.objects.get(id=listing_id)
     except Listing.DoesNotExist:
-        raise Http404("Listing Not Found")    
+        raise Http404("Listing Not Found")
     if request.user.id:
         watchlist = User.objects.get(pk=request.user.id).watchlist.all()
-        return render(request, "auctions/listing.html", {
-            "listing": listing,
-            "watchlist": watchlist,
-            "bidform": BidForm
-        })
+        creator = User.objects.get(created_listings=listing.id)
+         # filter the last bid for this listing
+        last_bid = Bid.objects.filter(listing_b=listing_id).last()
+        # If bids were placed
+        if last_bid:
+            # filter User with last Bid for this listing
+            winner = User.objects.filter(bids=last_bid)[0]
+            return render(request, "auctions/listing.html", {
+                "listing": listing,
+                "watchlist": watchlist,
+                "bidform": BidForm,
+                "creator": creator,
+                "winner": winner
+            })
     else:
         return render(request, "auctions/listing.html", {
             "listing": listing
@@ -164,8 +174,7 @@ def place_bid(request, listing_id):
         except ValueError:
             return HttpResponse("Invalid amount")
         if placed_bid < listing.s_bid or placed_bid <= listing.price:
-            m = "New bid must be greater than the current price or at least as large as the starting bid"
-            return show_error(request, m)
+            return show_error(request, "New bid must be greater than the current price or at least as large as the starting bid")
         else:
             listing.price = placed_bid
             listing.save()
@@ -177,15 +186,23 @@ def place_bid(request, listing_id):
     else:
         return HttpResponse("GET method is not allowed")
 
-# class ActiveForm(forms.Form):
-#     active = forms.BooleanField()
 
-# @login_required()
-# def close(request, listing_id):
-#     if request.method == "POST":
-#         listing = Listing.objects.get(pk=listing_id)
-#         listing.active = False
-#         listing.save()
-#         return HttpResponse("close")
-#     else:
-#         return HttpResponse("GET method is not allowed")
+@login_required()
+def close(request, listing_id):
+    if request.method == "POST":
+        listing = Listing.objects.get(pk=listing_id)
+        listing.active = False
+        listing.save()
+        # filter the last bid for this listing
+        last_bid = Bid.objects.filter(listing_b=listing_id).last()
+        # If bids were placed
+        if last_bid:
+            # filter User with last Bid for this listing
+            highest_bidder = User.objects.filter(bids=last_bid)[0]
+            highest_bidder.won_listings.add(listing)
+            return HttpResponseRedirect(reverse("index"))
+        # If no bids
+        else:
+            return HttpResponseRedirect(reverse("index"))
+    else:
+        return HttpResponse("GET method is not allowed")
