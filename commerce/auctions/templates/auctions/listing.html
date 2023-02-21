@@ -8,50 +8,56 @@
     <p>{{ listing.descr }}</p>
     <img src="{{ listing.url }}" alt="Listing Picture">
     
-    {% if user.is_authenticated and listing.active %}
-        {% if listing.price < listing.s_bid %}
-            <h5>Starting Bid: ${{ listing.s_bid }} million</h5>
-        {% else %}
-            <h5>Current Price: ${{ listing.price }} million.</h5>
-        {% endif %}
-    
-        {% if listing in watchlist %}
-            <form action="{% url 'remove_from_watchlist' listing.id %}" method="post">
+    {% if user.is_authenticated %}
+
+            {% if listing in watchlist %}
+                <form action="{% url 'remove_from_watchlist' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Remove From Watchlist">
+                </form>
+            {% elif not listing.active %}
+
+            {% else %}
+                <form action="{% url 'add_to_watchlist' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Add To Watchlist">
+                </form>
+            {% endif %}
+
+        {% if listing.active %}    
+            {% if listing.price < listing.s_bid %}
+                <h5>Starting Bid: ${{ listing.s_bid }} million</h5>
+            {% else %}
+                <h5>Current Price: ${{ listing.price }} million.</h5>
+            {% endif %}
+        
+            <form action="{% url 'place_bid' listing.id %}" method="POST">
                 {% csrf_token %}
-                <input type="submit" value="Remove From Watchlist">
+                {{ bidform }}
+                <input type="submit" value="Place Bid">
             </form>
-        {% else %}
-            <form action="{% url 'add_to_watchlist' listing.id %}" method="post">
+
+            <ul>
+                {% for comment in comments %}
+                    <li>{{ comment }}</li>
+                {% empty %}
+                    <h6>No Comments Yet</h6>
+                {% endfor %}
+            </ul>
+
+            <form action="{% url 'add_comment' listing.id %}" method="post">
                 {% csrf_token %}
-                <input type="submit" value="Add To Watchlist">
+                {{ comment_form }}
+                <input type="submit" value="Add Comment">
             </form>
-        {% endif %}
 
-        <form action="{% url 'place_bid' listing.id %}" method="POST">
-            {% csrf_token %}
-            {{ bidform }}
-            <input type="submit" value="Place Bid">
-        </form>
+            {% if user == creator %}
+                <form action="{% url 'close' listing.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="Close Listing">
+                </form>
+            {% endif %}
 
-        <ul>
-            {% for comment in comments %}
-                <li>{{ comment }}</li>
-            {% empty %}
-                <h6>No Comments Yet</h6>
-            {% endfor %}
-        </ul>
-
-        <form action="{% url 'add_comment' listing.id %}" method="post">
-            {% csrf_token %}
-            {{ comment_form }}
-            <input type="submit" value="Add Comment">
-        </form>
-
-        {% if user == creator %}
-            <form action="{% url 'close' listing.id %}" method="POST">
-                {% csrf_token %}
-                <input type="submit" value="Close Listing">
-            </form>
         {% endif %}
     {% endif %}
     

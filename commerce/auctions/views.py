@@ -10,7 +10,11 @@ from .models import User, Listing, Bid, Comment
 
 def index(request):
     return render(request, "auctions/index.html", {
-        "listings": Listing.objects.filter(active=True).all(),
+        "listings": Listing.objects.filter(active=True).all()
+    })
+
+def closed_listings(request):
+    return render(request, "auctions/closed_listings.html", {
         "closed_listings": Listing.objects.filter(active=False).all()
     })
 
@@ -228,3 +232,11 @@ def add_comment(request, listing_id):
             return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
     else:
         return HttpResponse("GET method is not allowed")
+
+@login_required()
+def watchlist(request):
+    user = User.objects.get(pk=request.user.id)
+    user_watchlist = user.watchlist.all()
+    return render(request, "auctions/watchlist.html", {
+        "user_watchlist": user_watchlist
+    })
