@@ -1,0 +1,21 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <a href="{% url 'new' %}">Create New Listing</a>
+    <h2>Closed Listings</h2>
+    <ul>
+        {% for closed_listing in closed_listings %}
+        <li>
+            <a href="{% url 'listing' closed_listing.id %}">
+            <h3>{{ closed_listing.title }}</h3>
+            <!-- <p>Category: {{ closed_listing.cat }}</p> -->
+            <p>{{ closed_listing.descr }}</p>
+            <img src="{{ closed_listing.url }}" alt="Listing Picture">
+            </a>
+            <h5>Highest Bid: ${{ closed_listing.price }} million</h5>
+        </li>
+        {% empty %}
+            No Closed Listings
+        {% endfor %}
+    </ul>
+{% endblock %}
