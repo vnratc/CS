@@ -104,6 +104,9 @@ def new(request):
 class BidForm(forms.Form):
     bid = forms.IntegerField(label="Bid amount")
 
+class CommentForm(forms.Form):
+    comment = forms.CharField(label="Comment", widget=forms.Textarea)
+
 
 def listing(request, listing_id):
     try:
@@ -113,19 +116,24 @@ def listing(request, listing_id):
     if request.user.id:
         watchlist = User.objects.get(pk=request.user.id).watchlist.all()
         creator = User.objects.get(created_listings=listing.id)
-         # filter the last bid for this listing
+        comments = Comment.objects.filter(listing_c=listing_id)
+         # Select the last bid for this listing
         last_bid = Bid.objects.filter(listing_b=listing_id).last()
         # If bids were placed
         if last_bid:
             # filter User with last Bid for this listing
             winner = User.objects.filter(bids=last_bid)[0]
-            return render(request, "auctions/listing.html", {
-                "listing": listing,
-                "watchlist": watchlist,
-                "bidform": BidForm,
-                "creator": creator,
-                "winner": winner
-            })
+        else:
+            winner = None
+        return render(request, "auctions/listing.html", {
+            "listing": listing,
+            "watchlist": watchlist,
+            "bidform": BidForm,
+            "creator": creator,
+            "winner": winner,
+            "comment_form": CommentForm,
+            "comments": comments
+        })
     else:
         return render(request, "auctions/listing.html", {
             "listing": listing
@@ -204,5 +212,19 @@ def close(request, listing_id):
         # If no bids
         else:
             return HttpResponseRedirect(reverse("index"))
+    else:
+        return HttpResponse("GET method is not allowed")
+    
+
+@login_required()
+def add_comment(request, listing_id):
+    if request.method == "POST":
+        listing = Listing.objects.get(pk=listing_id)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            added_comment = form.cleaned_data["comment"]
+            comment_instance = Comment(comment=added_comment, listing_c=listing)
+            comment_instance.save()
+            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
     else:
         return HttpResponse("GET method is not allowed")
