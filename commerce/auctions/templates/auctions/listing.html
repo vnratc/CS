@@ -16,7 +16,7 @@
                     <input type="submit" value="Remove From Watchlist">
                 </form>
             {% elif not listing.active %}
-
+                Can't add to watchlist
             {% else %}
                 <form action="{% url 'add_to_watchlist' listing.id %}" method="post">
                     {% csrf_token %}

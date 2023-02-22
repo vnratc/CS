@@ -64,3 +64,82 @@ user.bids.filter(listing_b=1).last()
 # Filter creator
 listing = Listing.objects.get(pk=1)
 User.objects.get(created_listings=listing.id)
+
+# Filter unique categories
+active_listings = Listing.objects.filter(active=True).all()
+cat_list = [i.cat for i in active_listings]
+cats_unique = list(set(cat_list))
+
+
+
+# LISTING.html
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <h2>Listing Details</h2>
+    <h3>{{ listing.title }}</h3>
+    <p>Category: {{ listing.cat }}</p>
+    <p>{{ listing.descr }}</p>
+    <img src="{{ listing.url }}" alt="Listing Picture">
+    
+    {% if user.is_authenticated %}
+
+            {% if listing in watchlist %}
+                <form action="{% url 'remove_from_watchlist' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Remove From Watchlist">
+                </form>
+            {% elif not listing.active %}
+
+            {% else %}
+                <form action="{% url 'add_to_watchlist' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Add To Watchlist">
+                </form>
+            {% endif %}
+
+        {% if listing.active %}    
+            {% if listing.price < listing.s_bid %}
+                <h5>Starting Bid: ${{ listing.s_bid }} million</h5>
+            {% else %}
+                <h5>Current Price: ${{ listing.price }} million.</h5>
+            {% endif %}
+        
+            <form action="{% url 'place_bid' listing.id %}" method="POST">
+                {% csrf_token %}
+                {{ bidform }}
+                <input type="submit" value="Place Bid">
+            </form>
+
+            <ul>
+                {% for comment in comments %}
+                    <li>{{ comment }}</li>
+                {% empty %}
+                    <h6>No Comments Yet</h6>
+                {% endfor %}
+            </ul>
+
+            <form action="{% url 'add_comment' listing.id %}" method="post">
+                {% csrf_token %}
+                {{ comment_form }}
+                <input type="submit" value="Add Comment">
+            </form>
+
+            {% if user == creator %}
+                <form action="{% url 'close' listing.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="Close Listing">
+                </form>
+            {% endif %}
+
+        {% endif %}
+    {% endif %}
+    
+    {% if user.is_authenticated and not listing.active and user == winner %}
+            <h5>You won this auction</h5>
+    {% endif %}
+    
+
+
+{% endblock %}

@@ -10,14 +10,35 @@ from .models import User, Listing, Bid, Comment
 
 def index(request):
     return render(request, "auctions/index.html", {
-        "listings": Listing.objects.filter(active=True).all()
+        "listings": Listing.objects.filter(active=True)
     })
 
 def closed_listings(request):
     return render(request, "auctions/closed_listings.html", {
-        "closed_listings": Listing.objects.filter(active=False).all()
+        "closed_listings": Listing.objects.filter(active=False)
     })
 
+def filter_cats():
+    active_listings = Listing.objects.filter(active=True)
+    categories = list(set([i.cat for i in active_listings]))
+    return categories
+
+def categories(request):
+    categories = filter_cats()
+    return render(request, "auctions/categories.html", {
+        "categories": categories
+    })
+
+def active_in_cat(request, category):
+    categories = filter_cats()
+    if category in categories:
+        active_in_cat = Listing.objects.filter(active=True, cat=category)
+        return render(request, "auctions/active_in_cat.html", {
+            "active_in_cat": active_in_cat,
+            "category": category
+        })
+    else:
+        return show_error(request, "Invalid Category")
 
 def login_view(request):
     if request.method == "POST":
@@ -68,7 +89,10 @@ def register(request):
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
     else:
-        return render(request, "auctions/register.html")
+        logout(request)
+        return render(request, "auctions/register.html", {
+            "message": "You were logged out"
+        })
 
 
 def show_error(request, message):
@@ -176,7 +200,6 @@ def remove_from_watchlist(request, listing_id):
         return HttpResponse("GET method is not allowed")
 
 
-
 @login_required()
 def place_bid(request, listing_id):
     if request.method == "POST":
@@ -212,10 +235,10 @@ def close(request, listing_id):
             # filter User with last Bid for this listing
             highest_bidder = User.objects.filter(bids=last_bid)[0]
             highest_bidder.won_listings.add(listing)
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("closed_listings"))
         # If no bids
         else:
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("closed_listings"))
     else:
         return HttpResponse("GET method is not allowed")
     
@@ -240,3 +263,4 @@ def watchlist(request):
     return render(request, "auctions/watchlist.html", {
         "user_watchlist": user_watchlist
     })
+
