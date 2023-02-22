@@ -79,13 +79,13 @@ def register(request):
             })
 
         # Attempt to create new user
-        # try:
-        user = User.objects.create_user(username, email, password)
-        user.save()
-        # except IntegrityError:
-        #     return render(request, "auctions/register.html", {
-        #         "message": "Username already taken."
-        #     })
+        try:
+            user = User.objects.create_user(username, email, password)
+            user.save()
+        except IntegrityError:
+            return render(request, "auctions/register.html", {
+                "message": "Username already taken."
+            })
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
     else:
@@ -140,7 +140,8 @@ def listing(request, listing_id):
     try:
         listing = Listing.objects.get(id=listing_id)
     except Listing.DoesNotExist:
-        raise Http404("Listing Not Found")
+        return show_error(request, "Listing Not Found")
+        # raise Http404("Listing Not Found")
     if request.user.id:
         watchlist = User.objects.get(pk=request.user.id).watchlist.all()
         creator = User.objects.get(created_listings=listing.id)
@@ -181,7 +182,7 @@ def add_to_watchlist(request, listing_id):
         user.watchlist.add(listing)
         return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
     else:
-        return HttpResponse("GET method is not allowed")
+        return show_error(request, "\"GET\" method is not allowed")
 
 
 @login_required()
@@ -197,7 +198,7 @@ def remove_from_watchlist(request, listing_id):
         user.watchlist.remove(listing)
         return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
     else:
-        return HttpResponse("GET method is not allowed")
+        return show_error(request, "\"GET\" method is not allowed")
 
 
 @login_required()
@@ -219,7 +220,7 @@ def place_bid(request, listing_id):
             user.bids.add(new_bid)
             return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
     else:
-        return HttpResponse("GET method is not allowed")
+        return show_error(request, "\"GET\" method is not allowed")
 
 
 @login_required()
@@ -240,7 +241,7 @@ def close(request, listing_id):
         else:
             return HttpResponseRedirect(reverse("closed_listings"))
     else:
-        return HttpResponse("GET method is not allowed")
+        return show_error(request, "\"GET\" method is not allowed")
     
 
 @login_required()
@@ -254,7 +255,7 @@ def add_comment(request, listing_id):
             comment_instance.save()
             return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
     else:
-        return HttpResponse("GET method is not allowed")
+        return show_error(request, "\"GET\" method is not allowed")
 
 @login_required()
 def watchlist(request):
