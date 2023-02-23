@@ -90,9 +90,7 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         logout(request)
-        return render(request, "auctions/register.html", {
-            "message": "You were logged out"
-        })
+        return render(request, "auctions/register.html")
 
 
 def show_error(request, message):
@@ -102,11 +100,11 @@ def show_error(request, message):
 
 
 class LForm(forms.Form):
-    title = forms.CharField(label="Title")
-    descr = forms.CharField(label="Description", widget=forms.Textarea)
-    s_bid = forms.IntegerField(label="Starting Bid")
-    url = forms.URLField(label="URL image", required=False)
-    cat = forms.CharField(label="Category", required=False)
+    title = forms.CharField(label='Title', widget=forms.TextInput(attrs={'class': 'form-control mb-2', 'aria-label': 'Title'}))
+    descr = forms.CharField(label="Description", widget=forms.Textarea(attrs={'class': 'form-control mb-2', 'aria-label': 'Description'}))
+    s_bid = forms.IntegerField(label="Starting Bid", widget=forms.NumberInput(attrs={'class': 'form-control mb-2', 'aria-label': 'Starting Bid'}))
+    url = forms.URLField(label="URL image", widget=forms.URLInput(attrs={'class': 'form-control mb-2', 'aria-label': 'URL image'}), required=False)
+    cat = forms.CharField(label="Category", widget=forms.TextInput(attrs={'class': 'form-control mb-2', 'aria-label': 'Category'}), required=False)
 
 
 @login_required()
@@ -130,10 +128,10 @@ def new(request):
     })
 
 class BidForm(forms.Form):
-    bid = forms.IntegerField(label="Bid amount")
+    bid = forms.IntegerField(label="Bid amount", widget=forms.NumberInput(attrs={'class': 'form-control mb-2', 'aria-label': 'Bid amount'}))
 
 class CommentForm(forms.Form):
-    comment = forms.CharField(label="Comment", widget=forms.Textarea)
+    comment = forms.CharField(label="Comment", widget=forms.Textarea(attrs={'class': 'form-control mb-2', 'aria-label': 'Comment'}))
 
 
 def listing(request, listing_id):

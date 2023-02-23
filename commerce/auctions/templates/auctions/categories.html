@@ -1,14 +1,16 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Categories</h2>
-    <ul>
-        {% for category in categories %}
-            <li>
-                <a href="{% url 'active_in_cat' category %}">
-                    {{ category }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
+    <main class="container">
+        <h2 class="display-3 mx-2">Categories</h2>
+        <ul class="list-group">
+            {% for category in categories %}
+                <li class="list-group-item">
+                    <a class="list-group-item list-group-item-action" aria-current="true" href="{% url 'active_in_cat' category %}">
+                        {{ category }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </main>
 {% endblock %}

@@ -1,24 +1,30 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Watchlist</h2>
-    <ul>
+    <main class="container">
+        <h2 class="display-3 mx-2">Watchlist</h2>
         {% for listing in user_watchlist %}
-            <li>
-                <a href="{% url 'listing' listing.id %}">
-                    <h3>{{ listing.title }}</h3>
-                    <!-- <p>Category: {{ listing.cat }}</p> -->
-                    <p>{{ listing.descr }}</p>
-                    <img src="{{ listing.url }}" alt="Listing Picture">
+            <div class="card my-5 mx-2">
+                <img src="{{ listing.url }}" class="card-img-top" alt="Listing Picture">
+                <div class="card-body">
+                    <h5 class="card-title">{{ listing.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Category: {{ listing.cat }}</h6>
+                    <p class="card-text">{{ listing.descr }}</p>
+                </div>
+
+                <ul class="list-group list-group-flush">
                     {% if listing.price < listing.s_bid %}
-                    <h5>Starting Bid: ${{ listing.s_bid }} million</h5>
+                    <li class="list-group-item">Starting Bid: ${{ listing.s_bid }} million</li>
                     {% else %}
-                    <h5>Current Price: ${{ listing.price }} million.</h5>
+                    <li class="list-group-item">Current Price: ${{ listing.price }} million.</li>
                     {% endif %}
-                </a>
-            </li>
+                </ul>
+                <div class="card-body">
+                    <a class="card-link btn btn-primary stretched-link" href="{% url 'listing' listing.id %}">Details</a>
+                </div>
+            </div>
         {% empty %}
-            Watchlist empty
+            <p class="fs-6 text-center my-5">No Listings</p>
         {% endfor %}
-    </ul>
+    </main>
 {% endblock %}

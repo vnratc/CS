@@ -1,7 +1,11 @@
-/* body {
-    padding: 10px;
-} */
+footer {
+    text-align: center;
+}
 
-img {
-    width: 300px;
+label {
+    margin: 0.3rem 0rem;
+}
+
+#id_comment {
+    display: block;
 }

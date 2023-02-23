@@ -1,20 +1,26 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Closed Listings</h2>
-    <ul>
+    <main class="container">
+        <h2 class="display-3 mx-2">Closed Listings</h2>
         {% for closed_listing in closed_listings %}
-        <li>
-            <a href="{% url 'listing' closed_listing.id %}">
-            <h3>{{ closed_listing.title }}</h3>
-            <!-- <p>Category: {{ closed_listing.cat }}</p> -->
-            <p>{{ closed_listing.descr }}</p>
-            <img src="{{ closed_listing.url }}" alt="Listing Picture">
-            </a>
-            <h5>Highest Bid: ${{ closed_listing.price }} million</h5>
-        </li>
+            <div class="card my-5 mx-2">
+                <img src="{{ closed_listing.url }}" class="card-img-top" alt="Listing Picture">
+                <div class="card-body">
+                    <h5 class="card-title">{{ closed_listing.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Category: {{ closed_listing.cat }}</h6>
+                    <p class="card-text">{{ closed_listing.descr }}</p>
+                </div>
+                
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Highest Bid: ${{ closed_listing.price }} million</li>
+                </ul>
+                <div class="card-body">
+                    <a class="card-link btn btn-primary stretched-link" href="{% url 'listing' closed_listing.id %}">Details</a>
+                </div>
+            </div>
         {% empty %}
             No Closed Listings
         {% endfor %}
-    </ul>
+    </main>
 {% endblock %}

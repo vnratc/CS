@@ -1,10 +1,42 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Create New Listing</h2>
-    <form action="{% url 'new' %}" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit">
-    </form>
+    <main class="container">
+        <h2 class="display-3 mx-2">Create New Listing</h2>
+        <form action="{% url 'new' %}" method="post">
+            {% csrf_token %}
+            <div class="row g-3 align-items-start justify-content-between">
+                <div class="col-auto">
+                    {{ form.title.label_tag }}
+                    {{ form.title}}
+                </div>
+                <div class="col-auto">
+                    {{ form.cat.label_tag }}
+                    {{ form.cat }}
+                </div>
+                <div class="col-auto">
+                    {{ form.s_bid.label_tag }}
+                    {{ form.s_bid }}
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col">
+                    {{ form.url.label_tag }}
+                    {{ form.url }}
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col">
+                    {{ form.descr.label_tag }}
+                    {{ form.descr }}
+                </div>
+            </div>
+            <div class="row g-3 justify-content-center">
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-outline-success mt-2">Submit</button>
+                    <!-- <input type="submit"> -->
+                </div>
+            </div>
+        </form>
+    </main>
 {% endblock %}
