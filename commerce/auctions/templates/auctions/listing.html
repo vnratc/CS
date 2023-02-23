@@ -9,7 +9,7 @@
         {% endif %}
         <div class="card-g">
             <div class="card my-3 mx-2">
-                <img src="{{ listing.url }}" class="card-img-top" alt="Listing Picture">
+                <img src="{{ listing.url }}" class="card-img-top card-img-top-listing" alt="Listing Picture">
                 <div class="card-body">
                     <h5 class="card-title">{{ listing.title }}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Category: {{ listing.cat }}</h6>
@@ -29,7 +29,6 @@
                             <form action="{% url 'remove_from_watchlist' listing.id %}" method="post">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-outline-success">Remove From Watchlist</button>
-                                <!-- <input type="submit" value="Remove From Watchlist"> -->
                             </form>
                         {% elif not listing.active %}
                             This Listing is Closed
@@ -37,7 +36,6 @@
                             <form action="{% url 'add_to_watchlist' listing.id %}" method="post">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-outline-success">Add To Watchlist</button>
-                                <!-- <input type="submit" value="Add To Watchlist"> -->
                             </form>
                         {% endif %}
                         </li>
@@ -47,7 +45,6 @@
                                     {% csrf_token %}
                                     {{ bidform }}
                                     <button type="submit" class="btn btn-outline-success">Place Bid</button>
-                                    <!-- <input type="submit" value="Place Bid"> -->
                                 </form>
                             </li>
                             <li class="list-group-item text-end">
@@ -55,7 +52,6 @@
                                     <form action="{% url 'close' listing.id %}" method="POST">
                                         {% csrf_token %}
                                         <input class="btn btn-outline-primary" type="submit" value="Close Listing">
-                                        <!-- <input type="submit" value="Close Listing"> -->
                                     </form>
                                 {% endif %}
                             </li>
@@ -63,7 +59,6 @@
                                 <form action="{% url 'add_comment' listing.id %}" method="post">
                                     {% csrf_token %}
                                     {{ comment_form }}
-                                    <!-- <button type="submit" class="btn btn-outline-success">Add Comment</button> -->
                                     <input class="btn btn-outline-success" type="submit" value="Add Comment">
                                 </form>
                             </li>

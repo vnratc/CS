@@ -9,3 +9,38 @@ label {
 #id_comment {
     display: block;
 }
+
+@media (max-width: 576px) {
+    
+}
+
+
+/* .card-img-top {
+    width: 100%;
+    height: 30vw;
+    object-fit: cover;
+} */
+
+/* @media (max-width: 576px) {
+    .card-img-top {
+        height: 40vw;
+    }
+} */
+/* @media (max-width: 768px) {
+    .card-img-top {
+        height: 35vw;
+    }
+} */
+/* @media (max-width: 920px) {
+    .card-img-top {
+        height: 40vw;
+    }
+}*/
+/* @media (min-width: 1200px) {
+    .card-img-top {
+        height: 15vw;
+    }
+} */
+/* .card {
+    width: 20rem;
+} */

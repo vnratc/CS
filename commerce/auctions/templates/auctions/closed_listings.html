@@ -3,24 +3,28 @@
 {% block body %}
     <main class="container">
         <h2 class="display-3 mx-2">Closed Listings</h2>
-        {% for closed_listing in closed_listings %}
-            <div class="card my-5 mx-2">
-                <img src="{{ closed_listing.url }}" class="card-img-top" alt="Listing Picture">
-                <div class="card-body">
-                    <h5 class="card-title">{{ closed_listing.title }}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Category: {{ closed_listing.cat }}</h6>
-                    <p class="card-text">{{ closed_listing.descr }}</p>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+            {% for closed_listing in closed_listings %}
+                <div class="col d-flex align-items-evenly">
+                    <div class="card my-3 mx-2">
+                        <img src="{{ closed_listing.url }}" class="card-img-top" alt="Listing Picture">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ closed_listing.title }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Category: {{ closed_listing.cat }}</h6>
+                            <p class="card-text">{{ closed_listing.descr }}</p>
+                        </div>
+                    
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Highest Bid: ${{ closed_listing.price }} million</li>
+                        </ul>
+                        <div class="card-body  d-flex align-items-end">
+                            <a class="card-link btn btn-primary stretched-link" href="{% url 'listing' closed_listing.id %}">Details</a>
+                        </div>
+                    </div>
                 </div>
-                
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Highest Bid: ${{ closed_listing.price }} million</li>
-                </ul>
-                <div class="card-body">
-                    <a class="card-link btn btn-primary stretched-link" href="{% url 'listing' closed_listing.id %}">Details</a>
-                </div>
-            </div>
-        {% empty %}
-            No Closed Listings
-        {% endfor %}
+            {% empty %}
+                No Closed Listings
+            {% endfor %}
+        </div>
     </main>
 {% endblock %}
