@@ -8,38 +8,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // By default, load the inbox
     load_mailbox('inbox');
+
     
     // Send Mail
+
     // By default "Send" button is disabled
     document.querySelector('#send').disabled = true;
     // Enable "Send" button if body inpyt is filled
     document.querySelector('#compose-body').onkeyup = () => {
-        console.log(document.querySelector('#compose-body').value)
         if (document.querySelector('#compose-body').value.length > 0) {
             document.querySelector('#send').disabled = false;
         } else {
             document.querySelector('#send').disabled = true;
         }
     }
-
-
+    // On form submit
     document.querySelector('#compose-form').onsubmit = function() {    
         fetch('/emails', {
             method: 'POST',
-            body: JSON.stringify({
+            body: JSON.stringify({  // This "body" object is used in "compose" view to extract forms' values.
                 recipients: document.querySelector('#compose-recipients').value,
                 subject: document.querySelector('#compose-subject').value,
                 body: document.querySelector('#compose-body').value
 
             })
         })
-        // .then(response => response.json())
-        // .then(result => {
-        //     console.log(result);
-        // });
         document.querySelector('#send').disabled = true
     }
-    load_mailbox('sent')
 });
 
 function compose_email() {
@@ -62,4 +57,22 @@ function load_mailbox(mailbox) {
 
     // Show the mailbox name
     document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+    fetch('/emails/' + mailbox)
+    .then(response => response.json())
+    .then(emails => {
+        // console.log(emails)
+        for (email of emails) {
+            let div = document.createElement('div');
+            div.classList.add('div-border')
+            if (email.read === true) {
+                div.classList.add('read')
+            } else {
+                div.classList.add('unread')
+            }
+            div.innerHTML = `From: ${email.sender}. Subject: ${email.subject}. Date & Time: ${email.timestamp}.`
+            document.querySelector('#emails-view').append(div)
+        }
+    })
+
 }

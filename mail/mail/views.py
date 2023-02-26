@@ -30,7 +30,7 @@ def compose(request):
         return JsonResponse({"error": "POST request required."}, status=400)
 
     # Check recipient emails
-    data = json.loads(request.body)
+    data = json.loads(request.body) # "body" because in inbox.js I send object with key "body" which value is object with forms' values.
     print(data)
     emails = [email.strip() for email in data.get("recipients").split(",")]
     if emails == [""]:
