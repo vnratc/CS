@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colors</title>
+    <script>
+        // When function takes no input: () => {}
+        // document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', () => {
+
+            document.querySelector('select').onchange = function() {
+                document.querySelector('#hello').style.color = this.value;
+            }
+
+
+            // // Select all buttons and forEach of them run anonymous function with argument "button"
+            // // When function DOES take input: argument => {}
+            // // document.querySelectorAll('button').forEach(function(button) {
+            // document.querySelectorAll('button').forEach(button => {
+            //     button.onclick = function() {
+            //         // Assign whatever is in "button.dataset.color" to stylr of #hello
+            //         document.querySelector('#hello').style.color = button.dataset.color
+            //     }
+            // })
+
+            // // Change font color to red
+            // document.querySelector('#red').onclick = function() {
+            //     document.querySelector('#hello').style.color = 'red'
+            // }
+            // // Change font color to blue
+            // document.querySelector('#blue').onclick = function() {
+            //     document.querySelector('#hello').style.color = 'blue'
+            // }
+            // // Change font color to green
+            // document.querySelector('#green').onclick = function() {
+            //     document.querySelector('#hello').style.color = 'green'
+            // }
+
+        });
+    </script>
+</head>
+<body>
+    <h1 id="hello">Hello!</h1>
+    <select name="" id="">
+        <option value="black">Black</option>
+        <option value="red">Red</option>
+        <option value="blue">Blue</option>
+        <option value="green">Green</option>
+    </select>
+    <!-- <button data-color="red">Red</button>
+    <button data-color="blue">Blue</button>
+    <button data-color="green">Green</button> -->
+</body>
+</html>
