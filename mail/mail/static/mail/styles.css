@@ -2,7 +2,7 @@ textarea {
     min-height: 400px;
 }
 
-.div-border {
+.email-item {
     border: 1px solid blue;
     margin-bottom: 1rem;
 }
