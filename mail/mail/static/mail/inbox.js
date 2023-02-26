@@ -152,11 +152,6 @@ async function load_mailbox(mailbox) {
                         read: true
                     })
                 })
-                
-
-            
-            
-            
             }
         })
     })
