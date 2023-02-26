@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     // On form submit
-    document.querySelector('#compose-form').onsubmit = function() {    
-        fetch('/emails', {
+    document.querySelector('#compose-form').onsubmit = async function() {    
+        await fetch('/emails', {
             method: 'POST',
             body: JSON.stringify({  // This "body" object is used in "compose" view to extract forms' values.
                 recipients: document.querySelector('#compose-recipients').value,
@@ -49,7 +49,7 @@ function compose_email() {
     document.querySelector('#compose-body').value = '';
 }
 
-function load_mailbox(mailbox) {
+async function load_mailbox(mailbox) {
 
     // Show the mailbox and hide other views
     document.querySelector('#emails-view').style.display = 'block';
@@ -57,10 +57,16 @@ function load_mailbox(mailbox) {
     document.querySelector('#view-email').style.display = 'none';
     // Show the mailbox name
     document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+    // Remove previously created elements
+    let elements = document.querySelectorAll("#view-email > *")
+    for (let element of elements) {
+        element.remove()
+    }
+
 
     // Mailbox
 
-    fetch('/emails/' + mailbox)
+    await fetch('/emails/' + mailbox)
     .then(response => response.json())
     .then(emails => {
         for (email of emails) {
@@ -77,13 +83,14 @@ function load_mailbox(mailbox) {
             document.querySelector('#emails-view').append(div)
         }
 
+
         // View Email
 
         document.querySelectorAll('.email-item').forEach(email_item => {
-            email_item.onclick = function() {
+            email_item.onclick = async function() {
                 document.querySelector('#emails-view').style.display = 'none';
                 document.querySelector('#view-email').style.display = 'block';
-                fetch('emails/' + email_item.dataset.id)
+                await fetch('emails/' + email_item.dataset.id)
                 .then(response => response.json())
                 .then(email => {
                     // Create 5 divs
@@ -99,15 +106,60 @@ function load_mailbox(mailbox) {
                     document.querySelector('#div2').innerHTML = `Subject: ${email.subject}`
                     document.querySelector('#div3').innerHTML = `Date & Time: ${email.timestamp}`
                     document.querySelector('#div4').innerHTML = `${email.body}`
+
+                    // Archive and Unarchive
+
+                    if (mailbox !== 'sent') {
+                        let button = document.createElement('button')
+                        button.dataset.id = email.id
+                        document.querySelector('#view-email').append(button)
+                        // Archive
+                        if (mailbox === 'inbox') {
+                            button.classList.add('btn', 'btn-primary')
+                            button.innerHTML = 'Archive'
+                            button.onclick = async () => {
+                                await fetch('/emails/' + button.dataset.id, {
+                                    method: 'PUT',
+                                    body: JSON.stringify({
+                                        archived: true
+                                    })
+                                })
+                                load_mailbox('inbox')
+                            }
+                        }
+                        // Unarchive
+                        else if (mailbox === 'archive') {
+                            button.classList.add('btn', 'btn-success')
+                            button.innerHTML = 'Unarchive'
+                            button.onclick = async () => {
+                                await fetch('/emails/' + button.dataset.id, {
+                                    method: 'PUT',
+                                    body: JSON.stringify({
+                                        archived: false
+                                    })
+                                })
+                                load_mailbox('inbox')
+                            }
+                        }
+                    }
+                    
+
                 })
-                fetch('emails/' + email_item.dataset.id, {
+                // Mark as "read"
+                await fetch('emails/' + email_item.dataset.id, {
                     method: 'PUT',
                     body: JSON.stringify({
                         read: true
                     })
                 })
+                
+
+            
+            
+            
             }
         })
     })
 
 }
+
