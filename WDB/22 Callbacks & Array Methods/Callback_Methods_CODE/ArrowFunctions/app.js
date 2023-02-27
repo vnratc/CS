@@ -17,9 +17,7 @@ const square = num => {
 //     return Math.floor(Math.random() * 6) + 1
 // }
 
-const rollDie = () => (
-    Math.floor(Math.random() * 6) + 1
-)
+const rollDie = () => Math.floor(Math.random() * 6) + 1
 
 
 
@@ -43,17 +41,27 @@ const movies = [
     }
 ]
 
+// const new_movies = movies.map(function(movie) {
+//     return `${movie.title} - ${movie.score / 10}`
+// })
+
+const new_movies = movies.map(movie =>
+    `${movie.title} - ${movie.score / 10}`
+)
+
+// const new_movies = movies.map(movie => `${movie.title} - ${movie.score / 10}`)
+
 // const newMovies = movies.map(function (movie) {
 //     return `${movie.title} - ${movie.score / 10}`
 // })
 
 
 // IMPLICIT RETURN
-const newMovies = movies.map(movie => (
-    `${movie.title} - ${movie.score / 10}`
-))
+// const newMovies = movies.map(movie => (
+//     `${movie.title} - ${movie.score / 10}`
+// ))
 
 
-
+const greet = name => `Hey ${name}!`
 
 

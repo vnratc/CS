@@ -1,6 +1,6 @@
 const exams = [80, 98, 92, 78, 77, 90, 89, 84, 81, 77]
 
-exams.every(score => score >= 75)
+// exams.every(score => score >= 75)
 
 const movies = [
     {
@@ -51,4 +51,12 @@ const movies = [
 ]
 
 
-movies.some(movie => movie.year > 2015)
+// movies.some(movie => movie.year > 2015)
+
+// const allEvens = arr => arr.every(arr % 2 === 0)
+
+function allEvens(arr) {
+    return arr.every(el => el % 2 === 0)
+}
+
+const allEvens = arr => arr.every(el => el % 2 === 0)

@@ -23,6 +23,7 @@ const square = {
     area: function(side) {
         return side * side
     },
+    // Applying shorthand described above.
     perimeter(side) {
         return side * 4
     }
