@@ -63,7 +63,6 @@ async function load_mailbox(mailbox) {
         element.remove()
     }
 
-
     // Mailbox
 
     await fetch('/emails/' + mailbox)
@@ -82,7 +81,6 @@ async function load_mailbox(mailbox) {
             div.innerHTML = `From: ${email.sender}. Subject: ${email.subject}. Date & Time: ${email.timestamp}.`
             document.querySelector('#emails-view').append(div)
         }
-
 
         // View Email
 
@@ -113,9 +111,9 @@ async function load_mailbox(mailbox) {
                         let button = document.createElement('button')
                         button.dataset.id = email.id
                         document.querySelector('#view-email').append(button)
+                        button.classList.add('btn', 'btn-secondary')
                         // Archive
                         if (mailbox === 'inbox') {
-                            button.classList.add('btn', 'btn-primary')
                             button.innerHTML = 'Archive'
                             button.onclick = async () => {
                                 await fetch('/emails/' + button.dataset.id, {
@@ -125,11 +123,11 @@ async function load_mailbox(mailbox) {
                                     })
                                 })
                                 load_mailbox('inbox')
-                            }
+                            }                            
                         }
+
                         // Unarchive
                         else if (mailbox === 'archive') {
-                            button.classList.add('btn', 'btn-success')
                             button.innerHTML = 'Unarchive'
                             button.onclick = async () => {
                                 await fetch('/emails/' + button.dataset.id, {
@@ -142,8 +140,29 @@ async function load_mailbox(mailbox) {
                             }
                         }
                     }
-                    
 
+                    // Reply
+
+                    let button_reply = document.createElement('button')
+                    button_reply.classList.add('btn', 'btn-primary')
+                    button_reply.innerHTML = 'Reply'
+                    document.querySelector('#view-email').append(button_reply)
+                    button_reply.onclick = () => {
+                        // Show compose view and hide other views
+                        document.querySelector('#emails-view').style.display = 'none';
+                        document.querySelector('#compose-view').style.display = 'block';
+                        document.querySelector('#view-email').style.display = 'none';
+
+                        // Clear out composition fields
+                        document.querySelector('#compose-recipients').value = email.sender;
+                        console.log(email.subject.slice(0, 4))
+                        if (email.subject.slice(0, 4) !== 'Re: ') {
+                            document.querySelector('#compose-subject').value = `Re: ${email.subject}`
+                        } else {
+                            document.querySelector('#compose-subject').value = email.subject
+                        }
+                        document.querySelector('#compose-body').value = `\n\nOn ${email.timestamp} ${email.sender} wrote:\n${email.body}`;
+                    }
                 })
                 // Mark as "read"
                 await fetch('emails/' + email_item.dataset.id, {
