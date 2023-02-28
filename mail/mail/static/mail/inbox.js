@@ -1,7 +1,16 @@
+window.onpopstate = function(event) {
+    console.log(event.state)
+    // console.log(history.length)
+    if (event.state.tempState === 'inbox' || event.state.tempState === 'sent' || event.state.tempState === 'archive') {
+        load_mailbox(event.state.tempState)
+    } else if (event.state.tempState === 'compose_email') {
+        compose_email()
+    } else {
+        console.log(event.state.tempState, event.state.mailbox)
+        view_email(event.state.tempState, event.state.mailbox)
+    }
+}
 
-document.querySelectorAll('.email-item').forEach(item => {
-    item.addEventListener('click', () => console.log('click'))
-})
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -41,6 +50,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function compose_email() {
+    // Update history and url
+    history.pushState({tempState: 'compose_email'}, "")
 
     // Show compose view and hide other views
     document.querySelector('#emails-view').style.display = 'none';
@@ -54,6 +65,9 @@ function compose_email() {
 }
 
 async function load_mailbox(mailbox) {
+
+    // Update history and url
+    history.pushState({tempState: mailbox}, "")
 
     // Show the mailbox and hide other views
     document.querySelector('#emails-view').style.display = 'block';
@@ -89,15 +103,17 @@ async function load_mailbox(mailbox) {
     document.querySelectorAll('.email-item').forEach(email => {
         email.onclick = function() {
             // console.log(email.dataset.id)
+            const emailId = this.dataset.id
+            history.pushState({tempState: emailId, mailbox: mailbox}, "")
+            console.log(history.state)
             view_email(email.dataset.id, mailbox)
         } 
     })
 }
 
 // View Email
+
 async function view_email(email_item, mailbox) {
-    const viewEmail = email_item
-    history.pushState({viewEmail: viewEmail}, "", `${viewEmail}`)
     document.querySelector('#emails-view').style.display = 'none';
     document.querySelector('#view-email').style.display = 'block';
     await fetch('emails/' + email_item)
