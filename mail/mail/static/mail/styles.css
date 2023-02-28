@@ -4,9 +4,6 @@ textarea {
 
 .email-item {
     cursor: pointer;
-    /* border: 1px solid gray;
-    border-radius: 0.5rem;
-    padding: 0.5rem; */
 }
 
 .read {
@@ -15,5 +12,20 @@ textarea {
 
 .unread {
     background-color: lightgray;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+
+#compose-view, #emails-view, #view-email {
+    animation-name: appear;
+    animation-duration: 500ms;
 }
 

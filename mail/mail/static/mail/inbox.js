@@ -40,6 +40,7 @@ function compose_email() {
     // Show compose view and hide other views
     document.querySelector('#emails-view').style.display = 'none';
     document.querySelector('#compose-view').style.display = 'block';
+    document.querySelector('#compose-view').style.animationPlayState = 'running'
     document.querySelector('#view-email').style.display = 'none';
 
     // Clear out composition fields
@@ -77,9 +78,10 @@ async function send_mail() {
 
 async function load_mailbox(mailbox) {
     // Show the mailbox and hide other views
-    document.querySelector('#emails-view').style.display = 'block';
     document.querySelector('#compose-view').style.display = 'none';
     document.querySelector('#view-email').style.display = 'none';
+    document.querySelector('#emails-view').style.display = 'block';
+    document.querySelector('#emails-view').style.animationPlayState = 'running'
     // Show the mailbox name
     document.querySelector('#emails-view').innerHTML = `<h3 class="display-6">${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
@@ -121,6 +123,7 @@ async function view_email(email_item, mailbox) {
     document.querySelector('#compose-view').style.display = 'none';
     document.querySelector('#emails-view').style.display = 'none';
     document.querySelector('#view-email').style.display = 'block';
+    document.querySelector('#view-email').style.animationPlayState = 'running'
     await fetch('emails/' + email_item)
     .then(response => response.json())
     .then(email => {
