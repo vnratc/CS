@@ -1,3 +1,4 @@
+// Handle history
 window.onpopstate = function(event) {
     if (event.state.tempState === 'inbox' || event.state.tempState === 'sent' || event.state.tempState === 'archive') {
         load_mailbox(event.state.tempState)
@@ -10,7 +11,6 @@ window.onpopstate = function(event) {
 
 
 document.addEventListener('DOMContentLoaded', function () {
-
     // Use buttons to toggle between views
     document.querySelector('#inbox').addEventListener('click', () => {
         history.pushState({tempState: 'inbox'}, "")
@@ -29,7 +29,11 @@ document.addEventListener('DOMContentLoaded', function () {
         compose_email()
     });
     // By default, load the inbox
+    history.replaceState({tempState: 'inbox'}, "")
     load_mailbox('inbox');
+    
+    // "Send Mail" Element of the Specification
+    document.querySelector('#compose-form').onsubmit = send_mail
 });
 
 function compose_email() {
@@ -43,8 +47,6 @@ function compose_email() {
     document.querySelector('#compose-subject').value = '';
     document.querySelector('#compose-body').value = '';
 
-    // Send Mail
-
     // By default "Send" button is disabled
     document.querySelector('#send').disabled = true;
     // Enable "Send" button if body inpyt is filled
@@ -55,19 +57,22 @@ function compose_email() {
             document.querySelector('#send').disabled = true;
         }
     }
-    // On form submit
-    document.querySelector('#compose-form').onsubmit = async function() {    
-        await fetch('/emails', {
-            method: 'POST',
-            body: JSON.stringify({  // This "body" object is used in "compose" view to extract forms' values.
-                recipients: document.querySelector('#compose-recipients').value,
-                subject: document.querySelector('#compose-subject').value,
-                body: document.querySelector('#compose-body').value
+}
 
-            })
+// "Send Mail" Element of the Specification
+
+async function send_mail() {
+    // On form submit
+    await fetch('/emails', {
+        method: 'POST',
+        body: JSON.stringify({  // This "body" object is used in "compose" view to extract forms' values.
+            recipients: document.querySelector('#compose-recipients').value,
+            subject: document.querySelector('#compose-subject').value,
+            body: document.querySelector('#compose-body').value
+
         })
-        document.querySelector('#send').disabled = true
-    }
+    })
+    document.querySelector('#send').disabled = true
 }
 
 async function load_mailbox(mailbox) {
@@ -78,14 +83,14 @@ async function load_mailbox(mailbox) {
     // Show the mailbox name
     document.querySelector('#emails-view').innerHTML = `<h3 class="display-6">${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
-    // Mailbox
+    // "Mailbox" Element of the Specification
 
     await fetch('/emails/' + mailbox)
     .then(response => response.json())
     .then(emails => {
         for (email of emails) {
             let div = document.createElement('div');
-            div.classList.add('email-item', 'border', 'border-secondary', 'p-2', 'mb-2', 'border-opacity-25', 'rounded')
+            div.classList.add('email-item', 'border', 'border-secondary', 'p-2', 'my-3', 'border-opacity-25', 'rounded')
             if (email.read === true) {
                 div.classList.add('read')
             } else {
@@ -99,15 +104,15 @@ async function load_mailbox(mailbox) {
     })
     document.querySelectorAll('.email-item').forEach(email => {
         email.onclick = function() {
+            history.pushState({tempState: email.dataset.id, mailbox: mailbox}, "")
             view_email(email.dataset.id, mailbox)
         } 
     })
 }
 
-// View Email
+// "View Email" Element of the Specification
 
 async function view_email(email_item, mailbox) {
-    history.pushState({tempState: email_item, mailbox: mailbox}, "")
     // Remove previously created elements
     let elements = document.querySelectorAll("#view-email > *")
     for (let element of elements) {
@@ -130,13 +135,12 @@ async function view_email(email_item, mailbox) {
         document.querySelector('#div0').innerHTML = `From: ${email.sender}`
         document.querySelector('#div1').innerHTML = `Recipients: ${email.recipients}`
         document.querySelector('#div2').innerHTML = `Subject: ${email.subject}`
-        document.querySelector('#div3').innerHTML = `Date & Time: ${email.timestamp}`
-        document.querySelector('#div4').innerHTML = `${email.body}`
+        document.querySelector('#div3').innerHTML = `Date & Time: ${email.timestamp}<hr>`
+        document.querySelector('#div4').innerHTML = `${email.body}<hr>`
 
         // Create a div for buttons
         let divBtn = document.createElement('div')
-        divBtn.classList.add('container', 'text-center')
-        divBtn.id = 'div-btn'
+        divBtn.classList.add('container', 'text-center', 'mt-4')
         let row = document.createElement('div')
         row.classList.add('row', 'justify-content-center')
         let col0 = document.createElement('div')
@@ -147,7 +151,7 @@ async function view_email(email_item, mailbox) {
         divBtn.append(row)
         document.querySelector('#view-email').append(divBtn)
 
-        // Archive and Unarchive
+        // "Archive and Unarchive" Element of the Specification
 
         if (mailbox !== 'sent') {
             let button = document.createElement('button')
@@ -183,7 +187,7 @@ async function view_email(email_item, mailbox) {
             }
         }
 
-        // Reply
+        // "Reply" Element of the Specification
 
         let button_reply = document.createElement('button')
         button_reply.classList.add('btn', 'btn-primary')
