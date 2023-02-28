@@ -1,12 +1,9 @@
 window.onpopstate = function(event) {
-    console.log(event.state)
-    // console.log(history.length)
     if (event.state.tempState === 'inbox' || event.state.tempState === 'sent' || event.state.tempState === 'archive') {
         load_mailbox(event.state.tempState)
     } else if (event.state.tempState === 'compose_email') {
         compose_email()
     } else {
-        console.log(event.state.tempState, event.state.mailbox)
         view_email(event.state.tempState, event.state.mailbox)
     }
 }
@@ -15,13 +12,37 @@ window.onpopstate = function(event) {
 document.addEventListener('DOMContentLoaded', function () {
 
     // Use buttons to toggle between views
-    document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
-    document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
-    document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
-    document.querySelector('#compose').addEventListener('click', compose_email);
+    document.querySelector('#inbox').addEventListener('click', () => {
+        history.pushState({tempState: 'inbox'}, "")
+        load_mailbox('inbox')
+    });
+    document.querySelector('#sent').addEventListener('click', () => {
+        history.pushState({tempState: 'sent'}, "")
+        load_mailbox('sent')
+    });
+    document.querySelector('#archived').addEventListener('click', () => {
+        history.pushState({tempState: 'archive'}, "")
+        load_mailbox('archive')
+});
+    document.querySelector('#compose').addEventListener('click', () => {
+        history.pushState({tempState: 'compose_email'}, "")
+        compose_email()
+    });
     // By default, load the inbox
     load_mailbox('inbox');
-    
+});
+
+function compose_email() {
+    // Show compose view and hide other views
+    document.querySelector('#emails-view').style.display = 'none';
+    document.querySelector('#compose-view').style.display = 'block';
+    document.querySelector('#view-email').style.display = 'none';
+
+    // Clear out composition fields
+    document.querySelector('#compose-recipients').value = '';
+    document.querySelector('#compose-subject').value = '';
+    document.querySelector('#compose-body').value = '';
+
     // Send Mail
 
     // By default "Send" button is disabled
@@ -47,39 +68,15 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         document.querySelector('#send').disabled = true
     }
-});
-
-function compose_email() {
-    // Update history and url
-    history.pushState({tempState: 'compose_email'}, "")
-
-    // Show compose view and hide other views
-    document.querySelector('#emails-view').style.display = 'none';
-    document.querySelector('#compose-view').style.display = 'block';
-    document.querySelector('#view-email').style.display = 'none';
-
-    // Clear out composition fields
-    document.querySelector('#compose-recipients').value = '';
-    document.querySelector('#compose-subject').value = '';
-    document.querySelector('#compose-body').value = '';
 }
 
 async function load_mailbox(mailbox) {
-
-    // Update history and url
-    history.pushState({tempState: mailbox}, "")
-
     // Show the mailbox and hide other views
     document.querySelector('#emails-view').style.display = 'block';
     document.querySelector('#compose-view').style.display = 'none';
     document.querySelector('#view-email').style.display = 'none';
     // Show the mailbox name
-    document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
-    // Remove previously created elements
-    let elements = document.querySelectorAll("#view-email > *")
-    for (let element of elements) {
-        element.remove()
-    }
+    document.querySelector('#emails-view').innerHTML = `<h3 class="display-6">${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
     // Mailbox
 
@@ -88,7 +85,7 @@ async function load_mailbox(mailbox) {
     .then(emails => {
         for (email of emails) {
             let div = document.createElement('div');
-            div.classList.add('email-item')
+            div.classList.add('email-item', 'border', 'border-secondary', 'p-2', 'mb-2', 'border-opacity-25', 'rounded')
             if (email.read === true) {
                 div.classList.add('read')
             } else {
@@ -96,16 +93,12 @@ async function load_mailbox(mailbox) {
             }
             // Store email.id in a dataset of this div
             div.dataset.id = email.id;
-            div.innerHTML = `From: ${email.sender}. Subject: ${email.subject}. Date & Time: ${email.timestamp}.`
+            div.innerHTML = `From: ${email.sender}<br> Subject: ${email.subject}<br> Date & Time: ${email.timestamp}`
             document.querySelector('#emails-view').append(div)
         }
     })
     document.querySelectorAll('.email-item').forEach(email => {
         email.onclick = function() {
-            // console.log(email.dataset.id)
-            const emailId = this.dataset.id
-            history.pushState({tempState: emailId, mailbox: mailbox}, "")
-            console.log(history.state)
             view_email(email.dataset.id, mailbox)
         } 
     })
@@ -114,6 +107,13 @@ async function load_mailbox(mailbox) {
 // View Email
 
 async function view_email(email_item, mailbox) {
+    history.pushState({tempState: email_item, mailbox: mailbox}, "")
+    // Remove previously created elements
+    let elements = document.querySelectorAll("#view-email > *")
+    for (let element of elements) {
+        element.remove()
+    }
+    document.querySelector('#compose-view').style.display = 'none';
     document.querySelector('#emails-view').style.display = 'none';
     document.querySelector('#view-email').style.display = 'block';
     await fetch('emails/' + email_item)
@@ -123,7 +123,7 @@ async function view_email(email_item, mailbox) {
         for (let i = 0; i < 5; i++) {
             let new_div = document.createElement('div')
             new_div.setAttribute('id', 'div' + i)
-            new_div.classList.add('email-content')
+            new_div.classList.add('email-content', 'mb-2')
             document.querySelector('#view-email').append(new_div)
         }
         // Populate divs with data
@@ -133,12 +133,26 @@ async function view_email(email_item, mailbox) {
         document.querySelector('#div3').innerHTML = `Date & Time: ${email.timestamp}`
         document.querySelector('#div4').innerHTML = `${email.body}`
 
+        // Create a div for buttons
+        let divBtn = document.createElement('div')
+        divBtn.classList.add('container', 'text-center')
+        divBtn.id = 'div-btn'
+        let row = document.createElement('div')
+        row.classList.add('row', 'justify-content-center')
+        let col0 = document.createElement('div')
+        let col1 = document.createElement('div')
+        col0.classList.add('col')
+        col1.classList.add('col')
+        row.append(col0, col1)
+        divBtn.append(row)
+        document.querySelector('#view-email').append(divBtn)
+
         // Archive and Unarchive
 
         if (mailbox !== 'sent') {
             let button = document.createElement('button')
             button.dataset.id = email.id
-            document.querySelector('#view-email').append(button)
+            col0.append(button)
             button.classList.add('btn', 'btn-secondary')
             // Archive
             if (mailbox === 'inbox') {
@@ -174,7 +188,7 @@ async function view_email(email_item, mailbox) {
         let button_reply = document.createElement('button')
         button_reply.classList.add('btn', 'btn-primary')
         button_reply.innerHTML = 'Reply'
-        document.querySelector('#view-email').append(button_reply)
+        col1.append(button_reply)
         button_reply.onclick = () => {
             // Show compose view and hide other views
             document.querySelector('#emails-view').style.display = 'none';
@@ -183,7 +197,6 @@ async function view_email(email_item, mailbox) {
 
             // Clear out composition fields
             document.querySelector('#compose-recipients').value = email.sender;
-            console.log(email.subject.slice(0, 4))
             if (email.subject.slice(0, 4) !== 'Re: ') {
                 document.querySelector('#compose-subject').value = `Re: ${email.subject}`
             } else {
