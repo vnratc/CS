@@ -10,15 +10,42 @@
         <div id="app"></div>
 
         <script type="text/babel">
-            function App() {
+
+            // Describing a react component of the app
+            function Hello(props) {
                 return (
+                    <h1>Hello, {props.name}!</h1>
+                );
+            }
+
+            // Describing a react component of the app
+            function App() {
+                const x = 5;
+                const y = 2;
+                return (
+                    // <div>Hello WORLD!</div>
+                    // <div>{ x * y }</div>
+                    // name value is stored in "props.name"
                     <div>
-                        Hello!
+                        <Hello name="Vlad" />
+                        <Hello name="Harry" />
+                        <Hello name="Ron"/>
+                        <Hello name="Hermione"/>
                     </div>
                 );
             }
 
-            ReactDOM.render(<App />, document.querySelector("#app"));
+            ReactDOM.render(<App />, document.querySelector("#app"))
+
+            // function App() {
+            //     return (
+            //         <div>
+            //             Hello!
+            //         </div>
+            //     );
+            // }
+
+            // ReactDOM.render(<App />, document.querySelector("#app"));
         </script>
     </body>
 </html>
