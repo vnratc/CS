@@ -50,7 +50,7 @@ function compose_email() {
 
     // By default "Send" button is disabled
     document.querySelector('#send').disabled = true;
-    // Enable "Send" button if body inpyt is filled
+    // Enable "Send" button if body input is filled
     document.querySelector('#compose-body').onkeyup = () => {
         if (document.querySelector('#compose-body').value.length > 0) {
             document.querySelector('#send').disabled = false;
@@ -127,6 +127,7 @@ async function view_email(email_item, mailbox) {
     await fetch('emails/' + email_item)
     .then(response => response.json())
     .then(email => {
+        console.log(email.body)
         // Create 5 divs
         for (let i = 0; i < 5; i++) {
             let new_div = document.createElement('div')
@@ -139,7 +140,7 @@ async function view_email(email_item, mailbox) {
         document.querySelector('#div1').innerHTML = `Recipients: ${email.recipients}`
         document.querySelector('#div2').innerHTML = `Subject: ${email.subject}`
         document.querySelector('#div3').innerHTML = `Date & Time: ${email.timestamp}<hr>`
-        document.querySelector('#div4').innerHTML = `${email.body}<hr>`
+        document.querySelector('#div4').innerHTML = `${email.body.replaceAll('\n', '<br>')}<hr>`
 
         // Create a div for buttons
         let divBtn = document.createElement('div')
