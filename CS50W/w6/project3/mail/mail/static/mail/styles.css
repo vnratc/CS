@@ -1,0 +1,31 @@
+textarea {
+    min-height: 400px;
+}
+
+.email-item {
+    cursor: pointer;
+}
+
+.read {
+    background-color: white;
+}
+
+.unread {
+    background-color: lightgray;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+
+#compose-view, #emails-view, #view-email {
+    animation-name: appear;
+    animation-duration: 500ms;
+}
+
