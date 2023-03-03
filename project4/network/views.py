@@ -38,11 +38,28 @@ def new_post(request):
     
 
 def profile(request, user_id):
-    user = User.objects.get(pk=user_id)
-    user_posts = user.user_posts.all().order_by("-timestamp").all()
+    # Get data about viewed user
+    user_profile = User.objects.get(pk=user_id)
+    # user_posts is a related name inside Post class
+    user_profile_posts = user_profile.user_posts.all().order_by("-timestamp").all()
+    followers_count = user_profile.followers.count()
+    following_count = user_profile.following.count()
+    # Get data about logged in user
+    user = User.objects.get(pk=request.user.id)
+    # followers = user.followers.all()
+    following = user.following.all()
+
+    
+    print(user.following.all())
+    print(user_profile in user.following.all())
+
     return render(request, "network/profile.html", {
-        "user_profile": user,
-        "user_posts": user_posts
+        "user_profile": user_profile,
+        "user_profile_posts": user_profile_posts,
+        # "followers": followers,
+        "following": following,
+        "followers_count": followers_count,
+        "following_count": following_count
     })
 
 

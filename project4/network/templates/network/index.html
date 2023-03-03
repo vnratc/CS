@@ -16,7 +16,7 @@
                 <ul>
                     {% for post in posts %}
                         <li>
-                            <p><a class="nav-link" href="{{ post.user.id }}">User: {{ post.user }}</a></p>
+                            <p><a class="nav-link" href="{% url 'profile' post.user.id %}">User: {{ post.user }}</a></p>
                             <p>{{ post.body }}</p>
                             <p>{{ post.timestamp }}</p>
                             <p>Likes: {{ post.likes }}</p>
