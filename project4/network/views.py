@@ -10,6 +10,11 @@ from .models import User, Post
 
 def index(request):
     posts = Post.objects.all().order_by("-timestamp").all()
+
+    # Solve new lines in body. The following didn't work
+    # for post in posts:
+    #     post.body = post.body.replace("\n", "<br>")
+
     return render(request, "network/index.html", {
         "new_post_form": NewPostForm,
         "posts": posts
@@ -29,11 +34,16 @@ def new_post(request):
             post.save()
             return HttpResponseRedirect(reverse("index"))
     else:
-        return HttpResponse('GET method is not allowed')
+        return HttpResponseRedirect(reverse("index"))
     
 
-def profile(request):
-    return render(request, "network/profile.html")
+def profile(request, user_id):
+    user = User.objects.get(pk=user_id)
+    user_posts = user.user_posts.all().order_by("-timestamp").all()
+    return render(request, "network/profile.html", {
+        "user_profile": user,
+        "user_posts": user_posts
+    })
 
 
 def login_view(request):

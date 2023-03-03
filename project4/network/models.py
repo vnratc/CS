@@ -4,14 +4,14 @@ from django.db import models
 
 class User(AbstractUser):
     followers = models.IntegerField(default=0)
-    follows = models.IntegerField(default=0)
-    # posts = 
+    following = models.IntegerField(default=0)
+    # posts = models.ManyToManyField(Post, related_name="posters", blank=True)
 
 
 class Post(models.Model):
     body = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now_add=True, null=True)
-    user = models.ForeignKey("User", on_delete=models.PROTECT, related_name="posts", null=True)
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="user_posts", null=True)
     likes = models.IntegerField(default=0)
 
     def serialize(self):
@@ -22,4 +22,3 @@ class Post(models.Model):
             "user": self.user,
             "likes": self.likes
         }
-

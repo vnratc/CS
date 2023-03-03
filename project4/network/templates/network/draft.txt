@@ -1,0 +1,9 @@
+    <!-- <ul>
+        {% for post in user.posts %}
+            <li>
+                {{ post }}
+            </li>
+        {% empty %}
+            No Posts
+        {% endfor %}
+    </ul> -->
