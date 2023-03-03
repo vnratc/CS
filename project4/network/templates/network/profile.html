@@ -7,14 +7,14 @@
 
     {% if user.id != user_profile.id %}
         {% if not user_profile in following %}
-            <form action="" method="post">
-                <button type="submit" id="follow">Follow</button>
-
+            <form action="{% url 'follow' user_profile.id %}" method="post" id="follow">
+                {% csrf_token %}
+                <button type="submit">Follow</button>
             </form>
         {% else %}
-            <form action="" method="post">
-                <button type="submit" id="unfollow">Unfollow</button>
-
+            <form action="{% url 'unfollow' user_profile.id %}" method="post" id="unfollow">
+                {% csrf_token %}
+                <button type="submit">Unfollow</button>
             </form>
         {% endif %}
     {% endif %}

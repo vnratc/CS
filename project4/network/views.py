@@ -27,6 +27,7 @@ class NewPostForm(forms.Form):
 
 def new_post(request):
     if request.method == 'POST':
+        print(request.POST)
         form = NewPostForm(request.POST)
         if form.is_valid():
             body = form.cleaned_data["body"]
@@ -48,11 +49,6 @@ def profile(request, user_id):
     user = User.objects.get(pk=request.user.id)
     # followers = user.followers.all()
     following = user.following.all()
-
-    
-    print(user.following.all())
-    print(user_profile in user.following.all())
-
     return render(request, "network/profile.html", {
         "user_profile": user_profile,
         "user_profile_posts": user_profile_posts,
@@ -61,6 +57,26 @@ def profile(request, user_id):
         "followers_count": followers_count,
         "following_count": following_count
     })
+
+
+# add login requred decorator for all required functions 
+def follow(request, user_id):
+    if request.method == 'POST':
+        user_follow = User.objects.get(pk=user_id)
+        user = User.objects.get(pk=request.user.id)
+        user.following.add(user_follow)
+        return HttpResponseRedirect(reverse("profile", args=(user_id,)))
+    return HttpResponseRedirect(reverse("profile", args=(user_id,)))
+
+
+def unfollow(request, user_id):
+    if request.method == 'POST':
+        user_unfollow = User.objects.get(pk=user_id)
+        user = User.objects.get(pk=request.user.id)
+        user.following.remove(user_unfollow)
+        return HttpResponseRedirect(reverse("profile", args=(user_id,)))
+    return HttpResponseRedirect(reverse("profile", args=(user_id,)))
+
 
 
 def login_view(request):
