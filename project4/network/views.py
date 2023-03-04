@@ -1,7 +1,8 @@
 from django import forms
+from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -10,16 +11,22 @@ from .models import User, Post
 
 def index(request):
     posts = Post.objects.all().order_by("-timestamp").all()
+    p = Paginator(posts, 10)
     # TRY JSON() OR TXT(). Solve new lines in body. The following didn't work
     # for post in posts:
     #     post.body = post.body.replace("\n", "<br>")
+    # return JsonResponse([post.serialize() for post in posts], safe=False)
+    
+
     return render(request, "network/index.html", {
         "new_post_form": NewPostForm,
-        "posts": posts
+        "posts": posts,
+        "p": p
     })
 
 
 def following(request):
+    print(request.GET.urlencode())
     user = User.objects.get(pk=request.user.id)
     followed_users = user.following.all()
     posts = Post.objects.filter(user__in=followed_users)    # all posts made by users that the current user follows

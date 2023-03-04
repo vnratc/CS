@@ -10,7 +10,7 @@ class User(AbstractUser):
 class Post(models.Model):
     body = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now_add=True, null=True)
-    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="user_posts", null=True)
+    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="user_posts", null=True)
     likes = models.IntegerField(default=0)
 
     def serialize(self):
@@ -18,6 +18,6 @@ class Post(models.Model):
             "id": self.id,
             "body": self.body,
             "timestamp":self.timestamp.strftime("%b %d %Y, %I:%M %p"),  # %b month abriged, %B month full, %p is for AM/PM, %I for hours
-            "user": self.user,
+            "username": self.user.username,
             "likes": self.likes
         }

@@ -1,5 +1,7 @@
-document.addEventListener('DOMContentLoaded'), function () {
-    document.querySelector('#follow').addEventListener('click', async () => {
-        // Wanted to follow/unfollow with async await fetch
-    })
-}
+// document.addEventListener('DOMContentLoaded'), function () {
+
+// fetch("")
+//     .then(response => response.json())
+//     .then(data => console.log(data))
+
+// }
