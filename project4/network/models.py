@@ -3,8 +3,8 @@ from django.db import models
 
 
 class User(AbstractUser):
-    following = models.ManyToManyField("self", blank=True)
-    followers = models.ManyToManyField("self", blank=True)
+    following = models.ManyToManyField("User", blank=True, related_name="fg")   # "self" din't work here, follow actions somehow duplicated to both following and followers
+    followers = models.ManyToManyField("User", blank=True, related_name="fs")
 
 
 class Post(models.Model):

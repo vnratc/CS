@@ -10,7 +10,6 @@ from .models import User, Post
 
 def index(request):
     posts = Post.objects.all().order_by("-timestamp").all()
-
     # Solve new lines in body. The following didn't work
     # for post in posts:
     #     post.body = post.body.replace("\n", "<br>")
@@ -27,13 +26,14 @@ class NewPostForm(forms.Form):
 
 def new_post(request):
     if request.method == 'POST':
-        print(request.POST)
         form = NewPostForm(request.POST)
         if form.is_valid():
             body = form.cleaned_data["body"]
             post = Post(body=body, user=request.user)
             post.save()
             return HttpResponseRedirect(reverse("index"))
+        else:
+            return HttpResponse('Invalid Form')
     else:
         return HttpResponseRedirect(reverse("index"))
     
@@ -47,13 +47,15 @@ def profile(request, user_id):
     following_count = user_profile.following.count()
     # Get data about logged in user
     user = User.objects.get(pk=request.user.id)
-    # followers = user.followers.all()
-    following = user.following.all()
+    user_following = user.following.all()
+    following = user_profile.following.all()
+    followers = user_profile.followers.all()
     return render(request, "network/profile.html", {
         "user_profile": user_profile,
         "user_profile_posts": user_profile_posts,
-        # "followers": followers,
+        "user_following": user_following,
         "following": following,
+        "followers": followers,
         "followers_count": followers_count,
         "following_count": following_count
     })
@@ -62,18 +64,22 @@ def profile(request, user_id):
 # add login requred decorator for all required functions 
 def follow(request, user_id):
     if request.method == 'POST':
-        user_follow = User.objects.get(pk=user_id)
+        user_profile = User.objects.get(pk=user_id)
+        print(user_profile.id)
         user = User.objects.get(pk=request.user.id)
-        user.following.add(user_follow)
+        print(user.id)
+        user.following.add(user_profile)
+        user_profile.followers.add(user)
         return HttpResponseRedirect(reverse("profile", args=(user_id,)))
     return HttpResponseRedirect(reverse("profile", args=(user_id,)))
 
 
 def unfollow(request, user_id):
     if request.method == 'POST':
-        user_unfollow = User.objects.get(pk=user_id)
+        user_profile = User.objects.get(pk=user_id)
         user = User.objects.get(pk=request.user.id)
-        user.following.remove(user_unfollow)
+        user.following.remove(user_profile)
+        user_profile.followers.remove(user)
         return HttpResponseRedirect(reverse("profile", args=(user_id,)))
     return HttpResponseRedirect(reverse("profile", args=(user_id,)))
 
