@@ -10,15 +10,24 @@ from .models import User, Post
 
 def index(request):
     posts = Post.objects.all().order_by("-timestamp").all()
-    # Solve new lines in body. The following didn't work
+    # TRY JSON() OR TXT(). Solve new lines in body. The following didn't work
     # for post in posts:
     #     post.body = post.body.replace("\n", "<br>")
-
     return render(request, "network/index.html", {
         "new_post_form": NewPostForm,
         "posts": posts
     })
 
+
+def following(request):
+    user = User.objects.get(pk=request.user.id)
+    followed_users = user.following.all()
+    posts = Post.objects.filter(user__in=followed_users)    # all posts made by users that the current user follows
+    posts = posts.order_by("-timestamp").all()
+    return render(request, "network/following.html", {
+        "posts": posts
+    })
+    
 
 class NewPostForm(forms.Form):
     body = forms.CharField(label="New Post", widget=forms.Textarea(attrs={'class': 'form-control mb-2', 'aria-label': 'New Post'}))
@@ -82,7 +91,6 @@ def unfollow(request, user_id):
         user_profile.followers.remove(user)
         return HttpResponseRedirect(reverse("profile", args=(user_id,)))
     return HttpResponseRedirect(reverse("profile", args=(user_id,)))
-
 
 
 def login_view(request):
