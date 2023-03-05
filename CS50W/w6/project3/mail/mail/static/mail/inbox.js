@@ -70,7 +70,6 @@ async function send_mail() {
             recipients: document.querySelector('#compose-recipients').value,
             subject: document.querySelector('#compose-subject').value,
             body: document.querySelector('#compose-body').value
-
         })
     })
     document.querySelector('#send').disabled = true
