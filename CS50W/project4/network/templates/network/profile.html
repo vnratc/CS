@@ -24,10 +24,13 @@
         <!-- Posts -->
         <div>
             {% for post in page_obj %}
-                <div class="post mb-3">
+                <div id="post-{{ post.id }}" class="post mb-3">
                     <div>{{ post.body }}</div>
                     <div>{{ post.timestamp }}</div>
                     <div>Likes: {{ post.likes }}</div>
+                    {% if user == post.user %}
+                        <button class="btn-edit" id="{{ post.id }}">Edit</button>
+                    {% endif %}
                 </div>
             {% empty %}
                 No Posts
@@ -48,7 +51,7 @@
                     {% endif %}
                 </span>
             </div>
-            
+
         </div>
     {% endif %}
 {% endblock %}

@@ -14,11 +14,14 @@
 
         <div class="" id="posts">
             {% for post in page_obj %}
-                <div class="post mb-3">
-                    <div><a class="nav-link" href="{% url 'profile' post.user.id %}">User: {{ post.user }}</a></div>
-                    <div>{{ post.body }}</div>
+                <div id="post-{{ post.id }}" class="post mb-3">
+                    <div><a class="" href="{% url 'profile' post.user.id %}">User: {{ post.user }}</a></div>
+                    <div id="body-{{ post.id }}">{{ post.body }}</div>
                     <div>{{ post.timestamp }}</div>
                     <div>Likes: {{ post.likes }}</div>
+                    {% if user == post.user %}
+                        <button class="btn-edit" id="{{ post.id }}">Edit</button>
+                    {% endif %}
                 </div>
             {% empty %}
                 No Posts

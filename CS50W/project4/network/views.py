@@ -1,11 +1,12 @@
+import json
 from django import forms
-from django.views.generic import ListView
 from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 
 from .models import User, Post
@@ -20,7 +21,6 @@ def paginate(list, request):
 def index(request):
     posts = Post.objects.all().order_by("-timestamp").all()
     page_obj = paginate(posts, request)
-
     # TRY JSON() OR TXT(). Solve new lines in body. The following didn't work
     # for post in posts:
     #     post.body = post.body.replace("\n", "<br>")
@@ -39,11 +39,10 @@ def profile(request, user_id):
     page_obj = paginate(profile_posts, request)
     # Get data about logged in user
     user = User.objects.get(pk=request.user.id)
-    user_following = user.following.all()
     return render(request, "network/profile.html", {
         "profile": profile,
         "page_obj": page_obj,
-        "user_following": user_following,
+        "user_following": user.following.all(),
         "following": profile.following.all(),
         "followers": profile.followers.all(),
         "following_count": profile.following.count(),
@@ -67,6 +66,7 @@ class NewPostForm(forms.Form):
     body = forms.CharField(label="New Post", widget=forms.Textarea(attrs={'rows': 4, 'class': 'form-control mb-2', 'aria-label': 'New Post'}))
 
 
+@login_required()
 def new_post(request):
     if request.method == 'POST':
         form = NewPostForm(request.POST)
@@ -79,6 +79,26 @@ def new_post(request):
             return HttpResponse('Invalid Form')
     else:
         return HttpResponseRedirect(reverse("index"))
+    
+
+@login_required()
+def edit_post(request, post_id):
+    # Check if requested post is in current users' posts
+    user = User.objects.get(pk=request.user.id)
+    post = Post.objects.get(pk=post_id)
+    if not post in user.user_posts.all():
+        return HttpResponse('Post belongs to another user')
+    return JsonResponse(post.serialize())
+
+
+@csrf_exempt
+@login_required()
+def save_edit(request, post_id):
+    data = json.loads(request.body)
+    post = Post.objects.get(pk=post_id)
+    # Update db and return new text body(probably with a new editing date)
+    print(data)
+    return JsonResponse(post.serialize())
 
 
 @login_required() 
