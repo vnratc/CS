@@ -18,6 +18,6 @@ class Post(models.Model):
             "id": self.id,
             "body": self.body,
             "timestamp":self.timestamp.strftime("%b %d %Y, %I:%M %p"),  # %b month abriged, %B month full, %p is for AM/PM, %I for hours
-            "user": self.user,
+            # "user": self.user, commented out because User is not JSON serializable
             "likes": self.likes
         }

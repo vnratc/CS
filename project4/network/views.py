@@ -1,4 +1,6 @@
 from django import forms
+from django.views.generic import ListView
+from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -7,15 +9,22 @@ from django.urls import reverse
 
 from .models import User, Post
 
+# class PostListView(ListView):
+#     paginate_by = 10
+#     model = Post
 
 def index(request):
     posts = Post.objects.all().order_by("-timestamp").all()
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     # TRY JSON() OR TXT(). Solve new lines in body. The following didn't work
     # for post in posts:
     #     post.body = post.body.replace("\n", "<br>")
     return render(request, "network/index.html", {
         "new_post_form": NewPostForm,
-        "posts": posts
+        "posts": posts,
+        "page_obj": page_obj
     })
 
 
