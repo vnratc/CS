@@ -9,9 +9,9 @@ from django.urls import reverse
 
 from .models import User, Post
 
-# class PostListView(ListView):
-#     paginate_by = 10
-#     model = Post
+class PostListView(ListView):
+    paginate_by = 10
+    model = Post
 
 def index(request):
     posts = Post.objects.all().order_by("-timestamp").all()
@@ -23,7 +23,6 @@ def index(request):
     #     post.body = post.body.replace("\n", "<br>")
     return render(request, "network/index.html", {
         "new_post_form": NewPostForm,
-        "posts": posts,
         "page_obj": page_obj
     })
 
