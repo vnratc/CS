@@ -12,6 +12,8 @@ from .models import User, Post
 
 def posts(request):
 
+    # Add conditions for "all posts", "profile page posts" and "following page posts" like for different mailboxes in p3
+
     # Get start and end points
     start = int(request.GET.get("start") or 0)
     end = int(request.GET.get("end") or (start + 9))
