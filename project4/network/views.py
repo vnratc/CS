@@ -1,3 +1,5 @@
+import time
+
 from django import forms
 from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
@@ -8,7 +10,30 @@ from django.urls import reverse
 
 from .models import User, Post
 
+def posts(request):
 
+    # Get start and end points
+    start = int(request.GET.get("start") or 0)
+    end = int(request.GET.get("end") or (start + 9))
+    posts = Post.objects.all().order_by("-timestamp").all()
+
+    # Generate list of posts
+    data = []
+    for i in range(start, end + 1):
+        data.append(f"Post #{i}")
+
+    # Artificially delay speed of response
+    # time.sleep(1)
+
+    # Return list of posts
+    return JsonResponse([post.serialize() for post in posts], safe=False)
+    # return JsonResponse({
+    #     "posts": posts
+    # })
+
+
+# Remake everything using JsonResponse. def new func to return posts. Let index just show the home page.
+# USE REACT TO CREATE HTML ELEMENTS
 def index(request):
     posts = Post.objects.all().order_by("-timestamp").all()
     p = Paginator(posts, 10)
@@ -20,8 +45,8 @@ def index(request):
 
     return render(request, "network/index.html", {
         "new_post_form": NewPostForm,
-        "posts": posts,
-        "p": p
+        # "posts": posts,
+        # "p": p
     })
 
 
@@ -37,7 +62,7 @@ def following(request):
     
 
 class NewPostForm(forms.Form):
-    body = forms.CharField(label="New Post", widget=forms.Textarea(attrs={'class': 'form-control mb-2', 'aria-label': 'New Post'}))
+    body = forms.CharField(label="New Post", widget=forms.Textarea(attrs={'rows': 4, 'class': 'form-control mb-2', 'aria-label': 'New Post'}))
 
 
 def new_post(request):
