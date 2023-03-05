@@ -1,38 +1,54 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-
-    <h1>Profile</h1>
-    <h2>{{ user_profile.username }}</h2>
-
-    {% if user.id != user_profile.id %}
-        {% if not user_profile in user_following %}
-            <form action="{% url 'follow' user_profile.id %}" method="post" id="follow">
-                {% csrf_token %}
-                <button type="submit">Follow</button>
-            </form>
-        {% else %}
-            <form action="{% url 'unfollow' user_profile.id %}" method="post" id="unfollow">
-                {% csrf_token %}
-                <button type="submit">Unfollow</button>
-            </form>
+    {% if user.is_authenticated %}
+        <h1>Profile</h1>
+        <h2>{{ profile.username }}</h2>
+        <!-- Follow/Unfollow buttons -->
+        {% if user.id != profile.id %}
+            {% if not profile in user_following %}
+                <form action="{% url 'follow' profile.id %}" method="post" id="follow">
+                    {% csrf_token %}
+                    <button type="submit">Follow</button>
+                </form>
+            {% else %}
+                <form action="{% url 'unfollow' profile.id %}" method="post" id="unfollow">
+                    {% csrf_token %}
+                    <button type="submit">Unfollow</button>
+                </form>
+            {% endif %}
         {% endif %}
+
+        <p>Following: {{ following_count }}</p>
+        <p>Followers: {{ followers_count }}</p>
+        <!-- Posts -->
+        <div>
+            {% for post in page_obj %}
+                <div class="post mb-3">
+                    <div>{{ post.body }}</div>
+                    <div>{{ post.timestamp }}</div>
+                    <div>Likes: {{ post.likes }}</div>
+                </div>
+            {% empty %}
+                No Posts
+            {% endfor %}
+
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page1">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+            
+        </div>
     {% endif %}
-
-    <p>Following: {{ following_count }}</p>
-    <p>Followers: {{ followers_count }}</p>
-    <ul>
-        {% for post in user_profile_posts %}
-            <li>
-                <p>{{ post.body }}</p>
-                <p>{{ post.timestamp }}</p>
-                <p>Likes: {{ post.likes }}</p>
-            </li>
-        {% empty %}
-            No Posts
-        {% endfor %}
-    </ul>
-
-
-
 {% endblock %}

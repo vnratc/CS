@@ -13,18 +13,16 @@
         </div>
 
         <div class="" id="posts">
-            <ul>
-                {% for post in page_obj %}
-                    <li>
-                        <a class="nav-link" href="{% url 'profile' post.user.id %}">User: {{ post.user }}</a>
-                        <p>{{ post.body }}</p>
-                        <p>{{ post.timestamp }}</p>
-                        <p>Likes: {{ post.likes }}</p>
-                    </li>
-                {% empty %}
-                    No Posts
-                {% endfor %}
-            </ul>
+            {% for post in page_obj %}
+                <div class="post mb-3">
+                    <div><a class="nav-link" href="{% url 'profile' post.user.id %}">User: {{ post.user }}</a></div>
+                    <div>{{ post.body }}</div>
+                    <div>{{ post.timestamp }}</div>
+                    <div>Likes: {{ post.likes }}</div>
+                </div>
+            {% empty %}
+                No Posts
+            {% endfor %}
 
             <div class="pagination">
                 <span class="step-links">
@@ -43,6 +41,7 @@
                     {% endif %}
                 </span>
             </div>
+
         </div>
     {% endif %}
 

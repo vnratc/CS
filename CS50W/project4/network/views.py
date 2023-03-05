@@ -2,6 +2,7 @@ from django import forms
 from django.views.generic import ListView
 from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -9,15 +10,17 @@ from django.urls import reverse
 
 from .models import User, Post
 
-class PostListView(ListView):
-    paginate_by = 10
-    model = Post
+
+def paginate(list, request):
+    paginator = Paginator(list, 10)
+    page_number = request.GET.get('page')
+    return paginator.get_page(page_number)
+
 
 def index(request):
     posts = Post.objects.all().order_by("-timestamp").all()
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    page_obj = paginate(posts, request)
+
     # TRY JSON() OR TXT(). Solve new lines in body. The following didn't work
     # for post in posts:
     #     post.body = post.body.replace("\n", "<br>")
@@ -27,18 +30,41 @@ def index(request):
     })
 
 
+@login_required()
+def profile(request, user_id):
+    # Get data about viewed user
+    profile = User.objects.get(pk=user_id)
+    # user_posts is a related name inside Post class
+    profile_posts = profile.user_posts.all().order_by("-timestamp").all()
+    page_obj = paginate(profile_posts, request)
+    # Get data about logged in user
+    user = User.objects.get(pk=request.user.id)
+    user_following = user.following.all()
+    return render(request, "network/profile.html", {
+        "profile": profile,
+        "page_obj": page_obj,
+        "user_following": user_following,
+        "following": profile.following.all(),
+        "followers": profile.followers.all(),
+        "following_count": profile.following.count(),
+        "followers_count": profile.followers.count()
+    })
+
+
+@login_required()
 def following(request):
     user = User.objects.get(pk=request.user.id)
     followed_users = user.following.all()
     posts = Post.objects.filter(user__in=followed_users)    # all posts made by users that the current user follows
     posts = posts.order_by("-timestamp").all()
+    page_obj = paginate(posts, request)
     return render(request, "network/following.html", {
-        "posts": posts
+        "page_obj": page_obj
     })
     
 
 class NewPostForm(forms.Form):
-    body = forms.CharField(label="New Post", widget=forms.Textarea(attrs={'class': 'form-control mb-2', 'aria-label': 'New Post'}))
+    body = forms.CharField(label="New Post", widget=forms.Textarea(attrs={'rows': 4, 'class': 'form-control mb-2', 'aria-label': 'New Post'}))
 
 
 def new_post(request):
@@ -53,50 +79,27 @@ def new_post(request):
             return HttpResponse('Invalid Form')
     else:
         return HttpResponseRedirect(reverse("index"))
-    
-
-def profile(request, user_id):
-    # Get data about viewed user
-    user_profile = User.objects.get(pk=user_id)
-    # user_posts is a related name inside Post class
-    user_profile_posts = user_profile.user_posts.all().order_by("-timestamp").all()
-    followers_count = user_profile.followers.count()
-    following_count = user_profile.following.count()
-    # Get data about logged in user
-    user = User.objects.get(pk=request.user.id)
-    user_following = user.following.all()
-    following = user_profile.following.all()
-    followers = user_profile.followers.all()
-    return render(request, "network/profile.html", {
-        "user_profile": user_profile,
-        "user_profile_posts": user_profile_posts,
-        "user_following": user_following,
-        "following": following,
-        "followers": followers,
-        "followers_count": followers_count,
-        "following_count": following_count
-    })
 
 
-# add login requred decorator for all required functions 
+@login_required() 
 def follow(request, user_id):
     if request.method == 'POST':
-        user_profile = User.objects.get(pk=user_id)
-        print(user_profile.id)
+        profile = User.objects.get(pk=user_id)
+        print(profile.id)
         user = User.objects.get(pk=request.user.id)
         print(user.id)
-        user.following.add(user_profile)
-        user_profile.followers.add(user)
+        user.following.add(profile)
+        profile.followers.add(user)
         return HttpResponseRedirect(reverse("profile", args=(user_id,)))
     return HttpResponseRedirect(reverse("profile", args=(user_id,)))
 
-
+@login_required()
 def unfollow(request, user_id):
     if request.method == 'POST':
-        user_profile = User.objects.get(pk=user_id)
+        profile = User.objects.get(pk=user_id)
         user = User.objects.get(pk=request.user.id)
-        user.following.remove(user_profile)
-        user_profile.followers.remove(user)
+        user.following.remove(profile)
+        profile.followers.remove(user)
         return HttpResponseRedirect(reverse("profile", args=(user_id,)))
     return HttpResponseRedirect(reverse("profile", args=(user_id,)))
 
