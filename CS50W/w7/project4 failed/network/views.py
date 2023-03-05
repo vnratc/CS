@@ -1,32 +1,59 @@
-from django.views.generic import ListView
+import time
+
+from django import forms
 from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 
 from .models import User, Post
 
-class PostListView(ListView):
-    paginate_by = 10
-    model = Post
+def posts(request):
 
+    # Add conditions for "all posts", "profile page posts" and "following page posts" like for different mailboxes in p3
+
+    # Get start and end points
+    start = int(request.GET.get("start") or 0)
+    end = int(request.GET.get("end") or (start + 9))
+    posts = Post.objects.all().order_by("-timestamp").all()
+
+    # Generate list of posts
+    data = []
+    for i in range(start, end + 1):
+        data.append(f"Post #{i}")
+
+    # Artificially delay speed of response
+    # time.sleep(1)
+
+    # Return list of posts
+    return JsonResponse([post.serialize() for post in posts], safe=False)
+    # return JsonResponse({
+    #     "posts": posts
+    # })
+
+
+# Remake everything using JsonResponse. def new func to return posts. Let index just show the home page.
+# USE REACT TO CREATE HTML ELEMENTS
 def index(request):
     posts = Post.objects.all().order_by("-timestamp").all()
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    p = Paginator(posts, 10)
     # TRY JSON() OR TXT(). Solve new lines in body. The following didn't work
     # for post in posts:
     #     post.body = post.body.replace("\n", "<br>")
+    # return JsonResponse([post.serialize() for post in posts], safe=False)
+    
+
     return render(request, "network/index.html", {
         "new_post_form": NewPostForm,
-        "page_obj": page_obj
+        # "posts": posts,
+        # "p": p
     })
 
 
 def following(request):
+    print(request.GET.urlencode())
     user = User.objects.get(pk=request.user.id)
     followed_users = user.following.all()
     posts = Post.objects.filter(user__in=followed_users)    # all posts made by users that the current user follows
@@ -37,7 +64,7 @@ def following(request):
     
 
 class NewPostForm(forms.Form):
-    body = forms.CharField(label="New Post", widget=forms.Textarea(attrs={'class': 'form-control mb-2', 'aria-label': 'New Post'}))
+    body = forms.CharField(label="New Post", widget=forms.Textarea(attrs={'rows': 4, 'class': 'form-control mb-2', 'aria-label': 'New Post'}))
 
 
 def new_post(request):
