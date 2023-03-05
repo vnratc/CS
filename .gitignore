@@ -1,2 +1,10 @@
+# OS generated files #
+######################
 .DS_Store
 .DS_Store?
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
