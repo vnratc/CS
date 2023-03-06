@@ -47,11 +47,15 @@ document.addEventListener('click', async (event) => {
     }
     // "Like" and "Unlike"
     else if (element.className === 'btn-like') {    // Make sure adding other classes doesn't break this. Replace "ClassName"?
+        let likes = document.querySelector(`#lico-${element.id.slice(5, 7)}`)
         await fetch('like/' + element.id.slice(5, 7), {
             method: 'POST',
             body: JSON.stringify(element.innerHTML.trim())
         })
-        console.log(element.innerHTML)
+        .then(response => response.json())
+        .then(data => {
+            likes.innerHTML = `Likes: ${data.likes}`
+        })
         if (element.innerHTML === 'Like') {
             element.innerHTML = "Unlike"
         } else if (element.innerHTML === 'Unlike') {

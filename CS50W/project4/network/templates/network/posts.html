@@ -4,7 +4,7 @@
             <div><a class="" href="{% url 'profile' post.user.id %}">User: {{ post.user }}</a></div>
             <div class="body" id="body-{{ post.id }}">{{ post.body }}</div>
             <div>{{ post.timestamp }}</div>
-            <div>Likes: {{ post.likes }}</div>
+            <div id="lico-{{ post.id }}">Likes: {{ post.count_likes }}</div>
             {% if user == post.user %}
                 <button class="btn-edit" id="{{ post.id }}">Edit</button>
             {% endif %}

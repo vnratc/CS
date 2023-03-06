@@ -132,9 +132,11 @@ def like(request, post_id):
     data = json.loads(request.body)
     if data == 'Like' and not post in user.liked_posts.all():
         user.liked_posts.add(post)
+        post.likes.add(user)
     elif data == 'Unlike' and post in user.liked_posts.all():
         user.liked_posts.remove(post)
-    return JsonResponse('liked_posts updated', safe=False)
+        post.likes.remove(user)
+    return JsonResponse(post.serialize())
 
 
 def login_view(request):
