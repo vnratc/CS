@@ -44,7 +44,12 @@ document.addEventListener('click', async (event) => {
             .then(post => body.innerHTML = post.body.replaceAll('\n', '<br>'))
             reset()  
         }
-
-        // Check if code above works for "Profile" page
     }
+})
+
+// Fix new line for post body
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.body').forEach(body => {
+        body.innerHTML = body.innerHTML.replaceAll('\n', '<br>')
+    }) 
 })
