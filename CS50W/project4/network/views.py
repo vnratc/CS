@@ -101,27 +101,23 @@ def save_edit(request, post_id):
     return JsonResponse(post.serialize())
 
 
-@login_required() 
-def follow(request, user_id):
-    if request.method == 'POST':
-        profile = User.objects.get(pk=user_id)
-        print(profile.id)
-        user = User.objects.get(pk=request.user.id)
-        print(user.id)
+@login_required()
+def fol_unfol(request, user_id):
+    if request.method != 'POST':
+        return HttpResponseRedirect(reverse("profile", args=(user_id,)))
+    profile = User.objects.get(pk=user_id)
+    user = User.objects.get(pk=request.user.id)
+    print(request.POST)
+    # Check if key "follow" is in dist request.POST
+    if 'follow' in request.POST:
         user.following.add(profile)
         profile.followers.add(user)
         return HttpResponseRedirect(reverse("profile", args=(user_id,)))
-    return HttpResponseRedirect(reverse("profile", args=(user_id,)))
-
-@login_required()
-def unfollow(request, user_id):
-    if request.method == 'POST':
-        profile = User.objects.get(pk=user_id)
-        user = User.objects.get(pk=request.user.id)
+    elif 'unfollow' in request.POST:
         user.following.remove(profile)
         profile.followers.remove(user)
         return HttpResponseRedirect(reverse("profile", args=(user_id,)))
-    return HttpResponseRedirect(reverse("profile", args=(user_id,)))
+    else: return HttpResponse('Invalid Request')
 
 
 def login_view(request):
