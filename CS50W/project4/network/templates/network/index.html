@@ -1,8 +1,6 @@
 {% extends "network/layout.html" %}
 
-{% block body %}
-        
-    {% if user.is_authenticated %}
+{% block body %} 
         <h1>All Posts</h1>
         <div class="" id="new_post">
             <form action="{% url 'new_post' %}" method="post">
@@ -11,41 +9,6 @@
                 <button type="submit">Post</button>
             </form>
         </div>
-
-        <div class="" id="posts">
-            {% for post in page_obj %}
-                <div id="post-{{ post.id }}" class="post mb-3">
-                    <div><a class="" href="{% url 'profile' post.user.id %}">User: {{ post.user }}</a></div>
-                    <div id="body-{{ post.id }}">{{ post.body }}</div>
-                    <div>{{ post.timestamp }}</div>
-                    <div>Likes: {{ post.likes }}</div>
-                    {% if user == post.user %}
-                        <button class="btn-edit" id="{{ post.id }}">Edit</button>
-                    {% endif %}
-                </div>
-            {% empty %}
-                No Posts
-            {% endfor %}
-
-            <div class="pagination">
-                <span class="step-links">
-                    {% if page_obj.has_previous %}
-                        <a href="?page1">&laquo; first</a>
-                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-                    {% endif %}
-
-                    <span class="current">
-                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                    </span>
-
-                    {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}">next</a>
-                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-                    {% endif %}
-                </span>
-            </div>
-
-        </div>
-    {% endif %}
-
+        
+        {% include "network/posts.html" %}
 {% endblock %}

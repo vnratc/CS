@@ -1,40 +1,6 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-
-    {% if user.is_authenticated %}
-
         <h1>Posts by followed users</h1>
-        <div>
-            {% for post in page_obj %}
-                <div>
-                    <div><a class="" href="{% url 'profile' post.user.id %}">User: {{ post.user }}</a></div>
-                    <div>{{ post.body }}</div>
-                    <div>{{ post.timestamp }}</div>
-                    <div>Likes: {{ post.likes }}</div>
-                </div>
-            {% empty %}
-                No Posts
-            {% endfor %}
-
-            <div class="pagination">
-                <span class="step-links">
-                    {% if page_obj.has_previous %}
-                        <a href="?page1">&laquo; first</a>
-                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-                    {% endif %}
-                    <span class="current">
-                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                    </span>
-                    {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}">next</a>
-                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-                    {% endif %}
-                </span>
-            </div>
-
-        </div>
-
-    {% endif %}
-
+        {% include "network/posts.html" %}
 {% endblock %}

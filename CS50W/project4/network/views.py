@@ -94,10 +94,10 @@ def edit_post(request, post_id):
 @csrf_exempt
 @login_required()
 def save_edit(request, post_id):
-    data = json.loads(request.body)
     post = Post.objects.get(pk=post_id)
     # Update db and return new text body(probably with a new editing date)
-    print(data)
+    post.body = json.loads(request.body)
+    post.save()
     return JsonResponse(post.serialize())
 
 

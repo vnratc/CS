@@ -32,25 +32,19 @@ document.addEventListener('click', async (event) => {
             .then(response => response.json())
             .then(post => body.innerHTML = post.body)
             reset()
-            // textarea.remove()
-            // cancel.remove()
-            // save.remove()
-            // element.style.display = 'inline-block'
         }
 
         // Save
         save.onclick = async () => {
             await fetch('/save_edit/' + element.id, {
                 method: 'POST',
-                body: JSON.stringify({body: textarea.value})
+                body: JSON.stringify(textarea.value)
             })
             .then(response => response.json())
-            .then(post => body.innerHTML = post.body)
-            reset()
-            // textarea.remove()
-            // cancel.remove()
-            // save.remove()
-            // element.style.display = 'inline-block'     
+            .then(post => body.innerHTML = post.body.replaceAll('\n', '<br>'))
+            reset()  
         }
+
+        // Check if code above works for "Profile" page
     }
 })
