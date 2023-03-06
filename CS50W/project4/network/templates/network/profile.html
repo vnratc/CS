@@ -1,16 +1,16 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-        <h1>Profile</h1>
+        <h1 class="display-5 my-3">Profile</h1>
         <h2>{{ profile.username }}</h2>
         <!-- Follow/Unfollow buttons -->
         {% if user.id != profile.id %}
             <form action="{% url 'fol_unfol' profile.id %}" method="post">
                 {% csrf_token %}
                 {% if not profile in user_following %}
-                    <button type="submit" name="follow">Follow</button>
+                    <button class="btn btn-info my-3" type="submit" name="follow">Follow</button>
                 {% else %}
-                    <button type="submit" name="unfollow">Unfollow</button>
+                    <button class="btn btn-info my-3" type="submit" name="unfollow">Unfollow</button>
                 {% endif %}
             </form>
         {% endif %}

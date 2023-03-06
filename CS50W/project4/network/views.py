@@ -19,13 +19,18 @@ def paginate(list, request):
 
 
 def index(request):
-    user = User.objects.get(pk=request.user.id)
     posts = Post.objects.all().order_by("-timestamp").all()
     page_obj = paginate(posts, request)
-    return render(request, "network/index.html", {
+    if request.user.is_authenticated:
+        user = User.objects.get(pk=request.user.id)
+        return render(request, "network/index.html", {
+            "new_post_form": NewPostForm,
+            "page_obj": page_obj,
+            "liked_posts": user.liked_posts.all()
+        })
+    else: return render(request, "network/index.html", {
         "new_post_form": NewPostForm,
-        "page_obj": page_obj,
-        "liked_posts": user.liked_posts.all()
+        "page_obj": page_obj
     })
 
 
@@ -66,7 +71,7 @@ def following(request):
     
 
 class NewPostForm(forms.Form):
-    body = forms.CharField(label="New Post", widget=forms.Textarea(attrs={'rows': 4, 'class': 'form-control mb-2', 'aria-label': 'New Post'}))
+    body = forms.CharField(label="New Post", widget=forms.Textarea(attrs={'rows': 4, 'class': 'form-control my-3', 'aria-label': 'New Post'}))
 
 
 @login_required()

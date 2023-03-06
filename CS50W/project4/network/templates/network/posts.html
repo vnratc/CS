@@ -1,14 +1,20 @@
 <div class="" id="posts">
     {% for post in page_obj %}
-        <div id="post-{{ post.id }}" class="post mb-3">
-            <div><a class="" href="{% url 'profile' post.user.id %}">User: {{ post.user }}</a></div>
-            <div class="body" id="body-{{ post.id }}">{{ post.body }}</div>
-            <div>{{ post.timestamp }}</div>
-            <div id="lico-{{ post.id }}">Likes: {{ post.count_likes }}</div>
-            {% if user == post.user %}
-                <button class="btn-edit" id="{{ post.id }}">Edit</button>
-            {% endif %}
-            <button class="btn-like" id="like-{{ post.id }}">{% if not post in liked_posts %}Like{% else %}Unlike{% endif %}</button>
+        <div class="list-group">
+            <div id="post-{{ post.id }}" class="post mb-3 list-group-item">
+                <div><a class="link-info" href="{% url 'profile' post.user.id %}">User: {{ post.user }}</a></div>
+                <div class="my-3 body" id="body-{{ post.id }}">{{ post.body }}</div>
+                <div class="mb-3 text-end">{{ post.timestamp }}</div>
+                <div class="mb-3 text-end" id="lico-{{ post.id }}">Likes: {{ post.count_likes }}</div>
+                {% if user.is_authenticated %}
+                    <div class="container mb-3" id="btn-div-{{ post.id }}">
+                        {% if user == post.user %}
+                            <button class="btn-edit btn btn-secondary my-1 me-5" id="{{ post.id }}">Edit</button>
+                        {% endif %}
+                        <button class="btn-like btn btn-success my-1 me-5" id="like-{{ post.id }}">{% if not post in liked_posts %}Like{% else %}Unlike{% endif %}</button>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     {% empty %}
         No Posts

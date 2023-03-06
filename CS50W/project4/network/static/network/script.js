@@ -1,7 +1,7 @@
 document.addEventListener('click', async (event) => {
     let element = event.target;
     // Edit Post
-    if (element.className === 'btn-edit') {
+    if (element.classList.contains('btn-edit')) {
 
         // Replace body with a textarea
         let body = document.querySelector(`#body-${element.id}`)
@@ -18,13 +18,14 @@ document.addEventListener('click', async (event) => {
         // Hide "Edit" and add "Cancel" and "Save" buttons
         element.style.display = 'none'
         let cancel = document.createElement('button')
+        cancel.classList.add('btn', 'btn-secondary', 'me-5')
         cancel.innerHTML = "Cancel"
         let save = document.createElement('button')
-        save
+        save.classList.add('btn', 'btn-primary', 'me-5')
         save.innerHTML = "Save"
-        let post_div = document.querySelector(`#post-${element.id}`)
-        post_div.append(cancel, save)
-
+        let post_div = document.querySelector(`#btn-div-${element.id}`)
+        post_div.prepend(cancel, save)
+        // Remove created elements
         function reset() {textarea.remove(), cancel.remove(), save.remove(), element.style.display = 'inline-block'}
         // Cancel action
         cancel.onclick = async () => {
@@ -46,7 +47,7 @@ document.addEventListener('click', async (event) => {
         }
     }
     // "Like" and "Unlike"
-    else if (element.className === 'btn-like') {    // Make sure adding other classes doesn't break this. Replace "ClassName"?
+    else if (element.classList.contains('btn-like')) {    // Make sure adding other classes doesn't break this. Replace "ClassName"?
         let likes = document.querySelector(`#lico-${element.id.slice(5, 7)}`)
         await fetch('like/' + element.id.slice(5, 7), {
             method: 'POST',

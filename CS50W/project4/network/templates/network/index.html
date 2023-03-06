@@ -1,14 +1,16 @@
 {% extends "network/layout.html" %}
 
 {% block body %} 
-        <h1>All Posts</h1>
-        <div class="" id="new_post">
+        <h1 class="display-5 my-3">All Posts</h1>
+        {% if user.is_authenticated %}
+        <div class="mb-4 text-center" id="new_post">
             <form action="{% url 'new_post' %}" method="post">
                 {% csrf_token %}
                 {{ new_post_form }}
-                <button type="submit">Post</button>
+                <button class="btn btn-primary" type="submit">Post</button>
             </form>
         </div>
+        {% endif %}
         
         {% include "network/posts.html" %}
 {% endblock %}
