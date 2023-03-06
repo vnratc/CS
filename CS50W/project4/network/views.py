@@ -19,14 +19,13 @@ def paginate(list, request):
 
 
 def index(request):
+    user = User.objects.get(pk=request.user.id)
     posts = Post.objects.all().order_by("-timestamp").all()
     page_obj = paginate(posts, request)
-    # TRY JSON() OR TXT(). Solve new lines in body. The following didn't work
-    # for post in posts:
-    #     post.body = post.body.replace("\n", "<br>")
     return render(request, "network/index.html", {
         "new_post_form": NewPostForm,
-        "page_obj": page_obj
+        "page_obj": page_obj,
+        "liked_posts": user.liked_posts.all()
     })
 
 
@@ -46,7 +45,9 @@ def profile(request, user_id):
         "following": profile.following.all(),
         "followers": profile.followers.all(),
         "following_count": profile.following.count(),
-        "followers_count": profile.followers.count()
+        "followers_count": profile.followers.count(),
+        "liked_posts": user.liked_posts.all()
+
     })
 
 
@@ -58,7 +59,9 @@ def following(request):
     posts = posts.order_by("-timestamp").all()
     page_obj = paginate(posts, request)
     return render(request, "network/following.html", {
-        "page_obj": page_obj
+        "page_obj": page_obj,
+        "liked_posts": user.liked_posts.all()
+
     })
     
 
@@ -94,8 +97,9 @@ def edit_post(request, post_id):
 @csrf_exempt
 @login_required()
 def save_edit(request, post_id):
+    if request.method != 'POST':
+        return HttpResponse('Method Not Allowed')
     post = Post.objects.get(pk=post_id)
-    # Update db and return new text body(probably with a new editing date)
     post.body = json.loads(request.body)
     post.save()
     return JsonResponse(post.serialize())
@@ -107,17 +111,30 @@ def fol_unfol(request, user_id):
         return HttpResponseRedirect(reverse("profile", args=(user_id,)))
     profile = User.objects.get(pk=user_id)
     user = User.objects.get(pk=request.user.id)
-    print(request.POST)
     # Check if key "follow" is in dist request.POST
     if 'follow' in request.POST:
         user.following.add(profile)
         profile.followers.add(user)
-        return HttpResponseRedirect(reverse("profile", args=(user_id,)))
     elif 'unfollow' in request.POST:
         user.following.remove(profile)
         profile.followers.remove(user)
-        return HttpResponseRedirect(reverse("profile", args=(user_id,)))
     else: return HttpResponse('Invalid Request')
+    return HttpResponseRedirect(reverse("profile", args=(user_id,)))
+
+
+@csrf_exempt
+@login_required()
+def like(request, post_id):
+    if request.method != 'POST':
+        return HttpResponse('Method Not Allowed')
+    post = Post.objects.get(pk=post_id)
+    user = User.objects.get(pk=request.user.id)
+    data = json.loads(request.body)
+    if data == 'Like' and not post in user.liked_posts.all():
+        user.liked_posts.add(post)
+    elif data == 'Unlike' and post in user.liked_posts.all():
+        user.liked_posts.remove(post)
+    return JsonResponse('liked_posts updated', safe=False)
 
 
 def login_view(request):

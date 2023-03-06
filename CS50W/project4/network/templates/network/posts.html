@@ -8,6 +8,7 @@
             {% if user == post.user %}
                 <button class="btn-edit" id="{{ post.id }}">Edit</button>
             {% endif %}
+            <button class="btn-like" id="like-{{ post.id }}">{% if not post in liked_posts %}Like{% else %}Unlike{% endif %}</button>
         </div>
     {% empty %}
         No Posts

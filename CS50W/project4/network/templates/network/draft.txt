@@ -1,13 +1,3 @@
-    <!-- <ul>
-        {% for post in user.posts %}
-            <li>
-                {{ post }}
-            </li>
-        {% empty %}
-            No Posts
-        {% endfor %}
-    </ul> -->
+<button class="btn-like" id="like-{{ post.id }}">Like</button>
 
-    {% block script %}
-        <script src="{% static 'network/script.js' %}"></script>
-    {% endblock %}
+<button class="btn-like" id="like-{{ post.id }}">Unlike</button>
