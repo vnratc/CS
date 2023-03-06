@@ -95,7 +95,7 @@ def edit_post(request, post_id):
     user = User.objects.get(pk=request.user.id)
     post = Post.objects.get(pk=post_id)
     if not post in user.user_posts.all():
-        return HttpResponse('Post belongs to another user')
+        return JsonResponse('You are not authorized to edit this post', safe=False)
     return JsonResponse(post.serialize())
 
 
@@ -105,6 +105,9 @@ def save_edit(request, post_id):
     if request.method != 'POST':
         return HttpResponse('Method Not Allowed')
     post = Post.objects.get(pk=post_id)
+    user = User.objects.get(pk=request.user.id)
+    if not post in user.user_posts.all():
+        return JsonResponse('You are not authorized to edit this post', safe=False)
     post.body = json.loads(request.body)
     post.save()
     return JsonResponse(post.serialize())
