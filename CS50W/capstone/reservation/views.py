@@ -1,47 +1,54 @@
-import calendar
-import time
-from calendar import HTMLCalendar
 from datetime import datetime
-from datetime import date
 from django import forms
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
+from django.views.generic.list import ListView
 from django.urls import reverse
 
-from .models import User
+from .models import User, Room, Reservation
 
 # Create your views here.
-
-day = datetime.now().day
-month = datetime.now().month
-year = datetime.now().year
-
-
 class ResForm(forms.Form):
     checkin = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     checkout = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    room = forms.ModelChoiceField(queryset=Room.objects.all())
 
 
 def index(request):
-    test_cal = calendar.Calendar()
-    # print(test_cal.yeardatescalendar(year, width=3))
-    cal = HTMLCalendar().formatmonth(year, month)     
     return render(request, 'reservation/index.html', {
-        'cal': cal,
         'res_form': ResForm
     })
 
+
 @login_required()
 def reserve(request):
-    checkin = request.POST['checkin']
-    dt = datetime.strptime(checkin, '%Y-%m-%d')
-    print(dt.date())
-    # checkin_dt = checkin_dt.date()
-    # checkin_dt
+    if request.method == 'POST':
+        form = ResForm(request.POST)
+        if form.is_valid():
+
+            
+            # ADD LOGIC TO CHECK DATES FOR AVAILABILITY, DO NOT ALLOW DATES OVERLAPPING
+
+
+            checkin = form.cleaned_data['checkin']
+            checkout = form.cleaned_data['checkout']
+            room = form.cleaned_data['room']
+            user = request.user
+            reservation = Reservation(checkin=checkin, checkout=checkout, room=room, guest=user)
+            reservation.save()
+            user.reservations.add(reservation)
     return HttpResponseRedirect(reverse('index'))
+
+
+@login_required()
+def profile(request):
+    reservations = Reservation.objects.filter(guest=request.user)
+    return render(request, 'reservation/profile.html', {
+        'reservations': reservations
+    })
 
 
 def login_view(request):

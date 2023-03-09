@@ -4,29 +4,26 @@ from django.db import models
 
 # Create your models here.
 class User(AbstractUser):
-    pass
-
-
-# class Schedule(models.Model):
-#     avail
-#     unavail
+    reservations = models.ManyToManyField('Reservation')
     
 
+class Room(models.Model):
+    reservation = models.ManyToManyField('Reservation', related_name='rooms', blank=True)
+    title = models.CharField(max_length=64)
+    description = models.TextField(blank=True)
+    bed_num = models.PositiveSmallIntegerField()
 
-# class Hotel(models.Model):
-#     name
-#     rooms
-    
-
-
-# class Room(models.Model):
-#     hotel
-#     schedule
-#     facilities
+    def __str__(self):
+        return f'{self.title}'
 
 
-# class Reservation(models.Model):
-#     room
-#     guest
-#     dates
+class Reservation(models.Model):
+    checkin = models.DateField()
+    checkout = models.DateField()
+    room = models.ForeignKey('Room', on_delete=models.PROTECT, related_name='reservations')
+    guest = models.ForeignKey('User', on_delete=models.PROTECT)
+
+    def __str__(self):
+        return f'{self.guest}: {self.checkin} - {self.checkout} - {self.room}'
+
     
