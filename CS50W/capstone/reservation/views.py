@@ -11,39 +11,68 @@ from django.urls import reverse
 from .models import * 
 
 # Create your views here.
-class ResForm(forms.Form):
+class SearchForm(forms.Form):
     checkin = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     checkout = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
-    room = forms.ModelChoiceField(queryset=Room.objects.all())
+    # room = forms.ModelChoiceField(queryset=Room.objects.all())
 
 
 def index(request):
+    rooms = Room.objects.all()
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            requested_checkin = form.cleaned_data['checkin']
+            requested_checkout = form.cleaned_data['checkout']
+            print(requested_checkin, requested_checkout)
+            # Search for existing reservations for requested dates
+            conflicting_res = Reservation.objects.filter(
+                checkin__lt=requested_checkout, checkout__gt=requested_checkin
+            )
+            print(conflicting_res)
+            if conflicting_res:
+                rooms = rooms.exclude(reservation__in=conflicting_res)
+            # print(rooms)
     return render(request, 'reservation/index.html', {
-        'res_form': ResForm
+        'rooms': rooms,
+        'search_form': SearchForm
+    })
+
+
+def room(request, room_id):
+    room = Room.objects.get(pk=room_id)
+    return render(request, 'reservation/room.html', {
+        'room': room,
+        'search_form': SearchForm
     })
 
 
 @login_required()
-def reserve(request):
+def reserve(request, room_id):
     if request.method == 'POST':
-        form = ResForm(request.POST)
+        form = SearchForm(request.POST)
         if form.is_valid():
             requested_checkin = form.cleaned_data['checkin']
             requested_checkout = form.cleaned_data['checkout']
             # Check for valid input
             if requested_checkin >= requested_checkout:
                 return HttpResponse('Invalid Checkin/Checkout dates.')
-            requested_room = form.cleaned_data['room']
+            requested_room = Room.objects.get(pk=room_id)
             # Check requested period and room for availability
             for reservation in requested_room.reservations.all():
-                if requested_checkin >= reservation.checkin and requested_checkin < reservation.checkout or requested_checkout > reservation.checkin and requested_checkout <= reservation.checkout or requested_checkin < reservation.checkin and requested_checkout > reservation.checkout:
+                if (requested_checkin >= reservation.checkin and requested_checkin < reservation.checkout or
+                    requested_checkout > reservation.checkin and requested_checkout <= reservation.checkout or
+                    requested_checkin < reservation.checkin and requested_checkout > reservation.checkout):
                     return HttpResponse('These dates are not available')
                 else: print('No dates conflict')
             # Create Reservation
-            # user = request.user
-            # reservation = Reservation(guest=user, room=requested_room, checkin=requested_checkin, checkout=requested_checkout)
-            # reservation.save()
-            # user.reservations.add(reservation)
+            user = request.user
+            reservation = Reservation(guest=user, room=requested_room, checkin=requested_checkin, checkout=requested_checkout)
+            reservation.save()
+            requested_room.reservations.add(reservation)
+            user.reservations.add(reservation)
+        else: return HttpResponse('Form is invalid')
+    else: return HttpResponse('Method not allowed')
     return HttpResponseRedirect(reverse('index'))
 
 

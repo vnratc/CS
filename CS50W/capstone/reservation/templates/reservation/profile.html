@@ -1,13 +1,9 @@
 {% extends 'reservation/layout.html' %}
 
 {% block body %}
-    <div>
-        {% for reservation in reservations %}
-        <div>{{ reservation.room }}</div>
-        <div>{{ reservation.checkin }}</div>
-        <div>{{ reservation.checkout }}</div>
-        {% empty %}
-            No Reservations
-        {% endfor %}
-    </div>
+    {% for reservation in reservations %}
+    <div>{{ reservation.room }} - {{ reservation.checkin }} - {{ reservation.checkout }}</div>
+    {% empty %}
+        No Reservations
+    {% endfor %}
 {% endblock %}

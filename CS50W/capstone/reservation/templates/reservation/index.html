@@ -1,14 +1,16 @@
 {% extends "reservation/layout.html" %}
 
 {% block body %}
-    <center>
-        <div class="container">
-            <form action="{% url 'reserve' %}" method="post">
-                {% csrf_token %}
-                {{ res_form }}
-                <button type="submit">Submit</button>
-            </form>
+    <h1>Search Available Rooms</h1>
+    <form action="{% url 'index' %}" method="post">
+        {% csrf_token %}
+        {{ search_form }}
+        <button type="submit">Search</button>
+    </form>
+    {% for room in rooms %}
+        <div>
+            <a href="{% url 'room' room.id %}">{{ room.title }}</a>
         </div>
-    </center>
+    {% endfor %}
 {% endblock %}
 

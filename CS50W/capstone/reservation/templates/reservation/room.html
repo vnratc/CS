@@ -1,0 +1,15 @@
+{% extends "reservation/layout.html" %}
+
+{% block body %}
+    <h1>{{ room.title }}</h1>
+    <p>Number of Beds: {{ room.bed_num }}.</p>
+    <p>Description: {{ room.description }}</p>
+    <h1>Search Available Dates</h1>
+    <form action="{% url 'reserve' room.id %}" method="post">
+        {% csrf_token %}
+        {{ search_form }}
+        {% if user.is_authenticated %}
+            <button type="submit">Reserve</button>
+        {% endif %}
+    </form>
+{% endblock %}
