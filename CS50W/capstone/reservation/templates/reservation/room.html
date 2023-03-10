@@ -7,7 +7,7 @@
     <h1>Search Available Dates</h1>
     <form action="{% url 'reserve' room.id %}" method="post">
         {% csrf_token %}
-        {{ search_form }}
+        {{ search_form.checkin.label_tag }} {{ search_form.checkin }} {{ search_form.checkout.label_tag }} {{ search_form.checkout }}
         {% if user.is_authenticated %}
             <button type="submit">Reserve</button>
         {% endif %}
