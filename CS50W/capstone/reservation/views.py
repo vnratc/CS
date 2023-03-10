@@ -17,7 +17,7 @@ class SearchForm(forms.Form):
     room = forms.ModelChoiceField(queryset=Room.objects.all(), required=False, label='Room Preference')
 
 
-def get_dates(request):
+def dates_room(request):
     form = SearchForm(request.POST)
     if form.is_valid():
         requested_checkin = form.cleaned_data['checkin']
@@ -26,17 +26,18 @@ def get_dates(request):
         # Check for valid input
         if requested_checkin >= requested_checkout:
             return HttpResponse('Invalid Checkin/Checkout dates.')
-        return {'in':requested_checkin, 'out': requested_checkout, 'room': room}
+        return requested_checkin, requested_checkout, room
+    # {'in':requested_checkin, 'out': requested_checkout, 'room': room}
     else: return HttpResponse('Form is invalid')
 
 
 def index(request):
     rooms = Room.objects.all()
     if request.method == 'POST':
-        dates = get_dates(request)
-        if dates['room']: rooms = Room.objects.filter(pk=dates['room'].id)
+        chin, chout, room = dates_room(request)
+        if room: rooms = Room.objects.filter(pk=room.id)
         conflicting_res = Reservation.objects.filter(
-            checkin__lt=dates['out'], checkout__gt=dates['in']
+            checkin__lt=chout, checkout__gt=chin
         )
         if conflicting_res:
             rooms = rooms.exclude(reservation__in=conflicting_res)
@@ -57,17 +58,17 @@ def room(request, room_id):
 @login_required()
 def reserve(request, room_id):
     if request.method == 'POST':
-        dates = get_dates(request)
+        chin, chout, room = dates_room(request)
         requested_room = Room.objects.get(pk=room_id)
         # Check requested period and room for availability
         for reservation in requested_room.reservations.all():
-            if (dates['in'] >= reservation.checkin and dates['in'] < reservation.checkout or
-                dates['out'] > reservation.checkin and dates['out'] <= reservation.checkout or
-                dates['in'] < reservation.checkin and dates['out'] > reservation.checkout):
+            if (chin >= reservation.checkin and chin < reservation.checkout or
+                chout > reservation.checkin and chout <= reservation.checkout or
+                chin < reservation.checkin and chout > reservation.checkout):
                 return HttpResponse('These dates are not available')
             else: print('No dates conflict')
         # Create Reservation
-        reservation = Reservation(guest=user, room=requested_room, checkin=dates['in'], checkout=dates['out'])
+        reservation = Reservation(guest=user, room=requested_room, checkin=chin, checkout=chout)
         reservation.save()
         requested_room.reservations.add(reservation)
         user = request.user
