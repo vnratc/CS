@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.urls import reverse
 
-from .models import User, Room, Reservation
+from .models import * 
 
 # Create your views here.
 class ResForm(forms.Form):
@@ -28,18 +28,22 @@ def reserve(request):
     if request.method == 'POST':
         form = ResForm(request.POST)
         if form.is_valid():
-
-            
-            # ADD LOGIC TO CHECK DATES FOR AVAILABILITY, DO NOT ALLOW DATES OVERLAPPING
-
-
-            checkin = form.cleaned_data['checkin']
-            checkout = form.cleaned_data['checkout']
-            room = form.cleaned_data['room']
-            user = request.user
-            reservation = Reservation(checkin=checkin, checkout=checkout, room=room, guest=user)
-            reservation.save()
-            user.reservations.add(reservation)
+            requested_checkin = form.cleaned_data['checkin']
+            requested_checkout = form.cleaned_data['checkout']
+            # Check for valid input
+            if requested_checkin >= requested_checkout:
+                return HttpResponse('Invalid Checkin/Checkout dates.')
+            requested_room = form.cleaned_data['room']
+            # Check requested period and room for availability
+            for reservation in requested_room.reservations.all():
+                if requested_checkin >= reservation.checkin and requested_checkin < reservation.checkout or requested_checkout > reservation.checkin and requested_checkout <= reservation.checkout or requested_checkin < reservation.checkin and requested_checkout > reservation.checkout:
+                    return HttpResponse('These dates are not available')
+                else: print('No dates conflict')
+            # Create Reservation
+            # user = request.user
+            # reservation = Reservation(guest=user, room=requested_room, checkin=requested_checkin, checkout=requested_checkout)
+            # reservation.save()
+            # user.reservations.add(reservation)
     return HttpResponseRedirect(reverse('index'))
 
 

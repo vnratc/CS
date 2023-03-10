@@ -3,9 +3,9 @@
 {% block body %}
     <div>
         {% for reservation in reservations %}
+        <div>{{ reservation.room }}</div>
         <div>{{ reservation.checkin }}</div>
         <div>{{ reservation.checkout }}</div>
-        <div>{{ reservation.room }}</div>
         {% empty %}
             No Reservations
         {% endfor %}
