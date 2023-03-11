@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('#rooms').addEventListener('click', () => {
         rooms()
     })
-    document.querySelector('#profile').addEventListener('click', () => {
-        profile()
+    document.querySelector('#my_reservations').addEventListener('click', () => {
+        my_reservations()
     })
     // By default show 'search'
     search()
@@ -44,7 +44,7 @@ function remove_room() {
 }
 
 function remove_reservations() {
-    res_del = document.querySelectorAll('#profile-div > *')
+    res_del = document.querySelectorAll('#my_reservations-div > *')
     for (r of res_del) {r.remove()}
 }
 
@@ -84,7 +84,7 @@ async function query_db() {
 function search() {
     // Show 'search
     document.querySelector('#search-div').style.display = 'block'
-    document.querySelectorAll('#results-div, #rooms-div, #profile-div, #room-div').forEach(div => {
+    document.querySelectorAll('#results-div, #rooms-div, #my_reservations-div, #room-div').forEach(div => {
         div.style.display = 'none'
     })
     remove_results()
@@ -94,14 +94,14 @@ function search() {
 
 async function results() {
     document.querySelector('#results-div').style.display = 'block'
-    document.querySelectorAll('#rooms-div, #profile-div, #room-div').forEach(div => {
+    document.querySelectorAll('#rooms-div, #my_reservations-div, #room-div').forEach(div => {
         div.style.display = 'none'
     })
     query_db()
 }
 
 async function select_room(room_id) {
-    document.querySelectorAll('#results-div, #room-div, #profile-div').forEach(div => {
+    document.querySelectorAll('#results-div, #room-div, #my_reservations-div').forEach(div => {
         div.style.display = 'none'
     })
     document.querySelector('#room-div').style.display = 'block'
@@ -136,7 +136,7 @@ async function reserve(room) {
     .then(response => {
         console.log(response)
     })
-    profile()
+    my_reservations()
 }
 
 
@@ -145,7 +145,7 @@ async function reserve(room) {
 function rooms() {
     // Show all rooms
     document.querySelector('#rooms-div').style.display = 'block'
-    document.querySelectorAll('#search-div, #results-div, #profile-div, #room-div').forEach(div => {
+    document.querySelectorAll('#search-div, #results-div, #my_reservations-div, #room-div').forEach(div => {
         div.style.display = 'none'
         remove_room()
         remove_results()
@@ -153,27 +153,27 @@ function rooms() {
     })
 }
 
-async function profile() {
-    // Show profile
-    document.querySelector('#profile-div').style.display = 'block'
+async function my_reservations() {
+    // Show my_reservations
+    document.querySelector('#my_reservations-div').style.display = 'block'
     document.querySelectorAll('#search-div, #results-div, #rooms-div, #room-div').forEach(div => {
         div.style.display = 'none'
     })
     remove_reservations()
     remove_room()
     remove_results()
-    await fetch('profile')
+    await fetch('my_reservations')
     .then(response => response.json())
     .then(reservations => {
         let title = document.createElement('h2')
         title.innerHTML = 'My Reservations:'
-        document.querySelector('#profile-div').prepend(title)
+        document.querySelector('#my_reservations-div').prepend(title)
         for (res of reservations) {
             let res_div = document.createElement('div')
             res_div.classList.add('room-item','rounded', 'border', 'border-secondary', 'p-2', 'my-3', 'border-opacity-25')
             res_div.id = res.id
             res_div.innerHTML = `${res.room_title}, Beds: ${res.room_bed_num}<br>${res.checkin} - ${res.checkout}<br>${res.room_description.replaceAll('\n', '<br>')}`
-            document.querySelector('#profile-div').append(res_div)
+            document.querySelector('#my_reservations-div').append(res_div)
         }
     })
 }

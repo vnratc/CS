@@ -7,7 +7,7 @@
     <button class="btn btn-sm btn-outline-info btn-nav" id="search">Search</button>
     <button class="btn btn-sm btn-outline-info btn-nav" id="rooms">Rooms</button>
     {% if user.is_authenticated %}
-        <button class="btn btn-sm btn-outline-info btn-nav" id="profile" href="" aria-current="User">My Reservations</button>
+        <button class="btn btn-sm btn-outline-info btn-nav" id="my_reservations" aria-current="User">My Reservations</button>
         <a class="btn btn-sm btn-outline-info btn-nav" href="{% url 'logout' %}" aria-current="Log out">Log Out</a>
     {% else %}
         <a class="btn btn-sm btn-outline-info btn-nav" href="{% url 'login' %}" aria-current="Log In">Log In</a>
@@ -40,7 +40,7 @@
             pictures with links to 'search'
         </div>
 
-        <div id="profile-div"></div>
+        <div id="my_reservations-div"></div>
 
     <script src="{% static 'reservation/script.js' %}"></script>
 

@@ -89,7 +89,7 @@ def reserve(request, room_id):
     else: return HttpResponseRedirect(reverse('index'))
 
 @login_required()
-def profile(request):
+def my_reservations(request):
     reservations = Reservation.objects.filter(guest=request.user)
     return JsonResponse([res.serialize() for res in reservations], safe=False)
 
