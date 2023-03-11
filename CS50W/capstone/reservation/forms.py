@@ -12,9 +12,9 @@ class SearchForm(forms.Form):
         'id': 'checkout'
     }))
     
-    room = forms.ModelChoiceField(widget=forms.Select(attrs={
-        'id': 'room'
-    }), queryset=Room.objects.all(), required=False, label='Room Preference')
+    # room = forms.ModelChoiceField(widget=forms.Select(attrs={
+    #     'id': 'room'
+    # }), queryset=Room.objects.all(), required=False, label='Room Preference')
    
     pers_num = forms.IntegerField(widget=forms.NumberInput(attrs={
         'id': 'pers_num',

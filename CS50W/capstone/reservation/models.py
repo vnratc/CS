@@ -22,8 +22,18 @@ class Room(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField(blank=True)
     bed_num = models.PositiveSmallIntegerField()
+    # add pictures url field? file field? static folder?
 
     def __str__(self):
         return f'{self.title}'
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            # 'reservations': self.reservations,
+            'description': self.description,
+            'bed_num': self.bed_num
+        }
 
     

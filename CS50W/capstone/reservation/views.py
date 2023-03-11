@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -21,11 +22,8 @@ def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login'))
 
-
-
         # rooms = Room.objects.all()
         # if request.method == 'POST':
-
 
         # form = SearchForm(request.POST)
         # if form.is_valid():
@@ -52,17 +50,36 @@ def index(request):
 
 @csrf_exempt
 def search(request):
-    data = json.loads(request.body)
-    print(data) 
-    return JsonResponse({'message': 'promise fulfilled'})
+    # Extract data from search form
+    try:
+        req_chin = datetime.strptime(request.GET['chin'], '%Y-%m-%d')
+        req_chout = datetime.strptime(request.GET['chout'], '%Y-%m-%d')
+        pers_num = int(request.GET['pers_num'])
+        if req_chin >= req_chout:
+            return JsonResponse({'message': 'Invalid Checkin/Checkout dates.'})
+    except ValueError:
+        return JsonResponse({'message': 'Invalid Request.'})
+    # Query db
+    rooms = Room.objects.exclude(bed_num__lt=pers_num)
+    conflicting_res = Reservation.objects.filter(
+        checkin__lt=req_chout,
+        checkout__gt=req_chin
+    )
+    if conflicting_res:
+        rooms = rooms.exclude(reservation__in=conflicting_res)
+    
+    print(rooms)
+
+    # return JsonResponse({'message': 'promise fulfilled'}, status=200)
+    return JsonResponse([room.serialize() for room in rooms], safe=False)
 
 
-def room(request, room_id):
-    room = Room.objects.get(pk=room_id)
-    return render(request, 'reservation/room.html', {
-        'room': room
-        # 'search_form': SearchForm
-    })
+# def room(request, room_id):
+#     room = Room.objects.get(pk=room_id)
+#     return render(request, 'reservation/room.html', {
+#         'room': room
+#         # 'search_form': SearchForm
+#     })
 
 
 # @login_required()
