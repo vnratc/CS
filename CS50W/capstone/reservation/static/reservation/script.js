@@ -17,8 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('input, select').forEach(input => {
         input.onchange = () => {
-            remove_results()
-            remove_room()
             query_db()
             
         } 
@@ -48,6 +46,7 @@ function remove_room() {
 
 async function query_db() {
     remove_results()
+    remove_room()
     // Fetch search request
     let chin = document.querySelector('#checkin').value
     let chout = document.querySelector('#checkout').value
@@ -86,7 +85,6 @@ function search() {
 }
 
 async function results() {
-    remove_room()
     document.querySelector('#results-div').style.display = 'block'
     document.querySelectorAll('#rooms-div, #profile-div, #room-div').forEach(div => {
         div.style.display = 'none'
@@ -100,15 +98,38 @@ async function select_room(room_id) {
         div.style.display = 'none'
     })
     document.querySelector('#room-div').style.display = 'block'
-    await fetch('rooms/' + parseInt(room_id))
+    await fetch('room/' + parseInt(room_id))
     .then(response => response.json())
     .then(room => {
         let room_div = create_room_div(room.id, room.title, room.bed_num, room.description)
         document.querySelector('#room-div').append(room_div)
+        let reserve_btn = document.createElement('button')
+        reserve_btn.id = 'reserve-' + room.id
+        reserve_btn.innerHTML = 'Reserve'
+        document.querySelector('#room-div').append(reserve_btn)
+        reserve_btn.addEventListener('click', () => {
+            reserve(room)
+        })
+        
     })
 }
 
-
+async function reserve(room) {
+    fetch(`room/${room.id}/reserve` , {
+        method: 'POST',
+        body: JSON.stringify({
+            chin: document.querySelector('#checkin').value,
+            chout: document.querySelector('#checkout').value,
+            pers_num: parseInt(document.querySelector('#pers_num').value),
+            req_room: parseInt(room.id)
+        })
+    })
+    .then(response => response.json())
+    .then(response => {
+        console.log(response)
+    })
+    profile()
+}
 
 
 

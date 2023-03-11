@@ -50,8 +50,7 @@ def index(request):
 
 @csrf_exempt
 def search(request):
-    # Extract data from search form
-    # try:
+    # Extract and check data from search form
     if not request.GET['chin']:
         return JsonResponse({'message': 'Invalid Checkin date.'})
     else: req_chin = datetime.strptime(request.GET['chin'], '%Y-%m-%d').date()
@@ -69,8 +68,6 @@ def search(request):
     
     if req_chin >= req_chout:
         return JsonResponse({'message': 'Invalid Checkin/Checkout dates.'})
-    # except ValueError:
-    #     return JsonResponse({'message': 'Invalid Request.'})
     
     # Query and filter db
     if req_room:
@@ -83,7 +80,6 @@ def search(request):
     )
     if conflicting_res:
         rooms = rooms.exclude(reservation__in=conflicting_res)
-    print(rooms)
     return JsonResponse([room.serialize() for room in rooms], safe=False)
 
 
@@ -92,27 +88,36 @@ def room(request, room_id):
     return JsonResponse(room.serialize(), safe=False)
 
 
+@csrf_exempt
+@login_required()
+def reserve(request, room_id):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        # Check for room id match from url and data
+        if data['req_room'] != room_id:
+            return JsonResponse({'message': 'invalid room'})
+        # Convert str to date objects
+        chin = datetime.strptime(data['chin'], '%Y-%m-%d').date()
+        chout = datetime.strptime(data['chout'], '%Y-%m-%d').date()
+        # Check requested period and room for availability
+        requested_room = Room.objects.get(pk=room_id)
+        for reservation in requested_room.reservations.all():
+            if (chin >= reservation.checkin and chin < reservation.checkout or
+                chout > reservation.checkin and chout <= reservation.checkout or
+                chin < reservation.checkin and chout > reservation.checkout):
+                print('These dates are not available')
+                return show_error(request, 'These dates are not available')
+                return JsonResponse({'message': 'These dates are not available'})
+            else: print('No dates conflict')
+        # Create Reservation
+        user = request.user
+        reservation = Reservation(guest=user, room=requested_room, checkin=chin, checkout=chout)
+        reservation.save()
+        requested_room.reservations.add(reservation)
+        user.reservations.add(reservation)     
+        return JsonResponse({'message': 'Reservation Created Successfuly'})
+    else: return HttpResponseRedirect(reverse('index'))
 
-# @login_required()
-# def reserve(request, room_id):
-#     if request.method == 'POST':
-#         chin, chout, room = dates_room(request)
-#         requested_room = Room.objects.get(pk=room_id)
-#         # Check requested period and room for availability
-#         for reservation in requested_room.reservations.all():
-#             if (chin >= reservation.checkin and chin < reservation.checkout or
-#                 chout > reservation.checkin and chout <= reservation.checkout or
-#                 chin < reservation.checkin and chout > reservation.checkout):
-#                 return HttpResponse('These dates are not available')
-#             else: print('No dates conflict')
-#         # Create Reservation
-#         reservation = Reservation(guest=user, room=requested_room, checkin=chin, checkout=chout)
-#         reservation.save()
-#         requested_room.reservations.add(reservation)
-#         user = request.user
-#         user.reservations.add(reservation)     
-#     else: return HttpResponse('Method not allowed')
-#     return HttpResponseRedirect(reverse('index'))
 
 
 @login_required()
