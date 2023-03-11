@@ -70,12 +70,13 @@ def search(request):
     return JsonResponse([room.serialize() for room in rooms], safe=False)
 
 
-# def room(request, room_id):
-#     room = Room.objects.get(pk=room_id)
-#     return render(request, 'reservation/room.html', {
-#         'room': room
-#         # 'search_form': SearchForm
-#     })
+def room(request, room_id):
+    room = Room.objects.get(pk=room_id)
+    return JsonResponse(room.serialize(), safe=False)
+    # return render(request, 'reservation/room.html', {
+    #     'room': room
+    #     # 'search_form': SearchForm
+    # })
 
 
 # @login_required()

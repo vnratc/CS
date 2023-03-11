@@ -10,7 +10,7 @@ urlpatterns = [
     path('search', views.search, name='search'),
     path('profile', views.profile, name='profile'),
     path('error', views.error, name='error'),
+    path('rooms/<int:room_id>', views.room, name='room')
     # path("rooms/<int:room_id>/reserve", views.reserve, name="reserve"),
-    # path('rooms/<int:room_id>', views.room, name='room')
 
 ]

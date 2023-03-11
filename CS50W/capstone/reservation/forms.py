@@ -19,5 +19,5 @@ class SearchForm(forms.Form):
     pers_num = forms.IntegerField(widget=forms.NumberInput(attrs={
         'id': 'pers_num',
         'min': '1',
-        'max': '4'
+        'max': '10'
     }), label='Number of Persons')
