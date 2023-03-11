@@ -11,39 +11,14 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import *
 from .forms import SearchForm
 
-
 def show_error(request, message):
     return render(request, 'reservation/error.html', {
         'message': message
     })
 
-
 def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login'))
-
-        # rooms = Room.objects.all()
-        # if request.method == 'POST':
-
-        # form = SearchForm(request.POST)
-        # if form.is_valid():
-        #     requested_checkin = form.cleaned_data['checkin']
-        #     requested_checkout = form.cleaned_data['checkout']
-        #     room = form.cleaned_data['room']
-        #     # Check for valid input
-        #     if requested_checkin >= requested_checkout:
-        #         return error(request, 'Invalid Checkin/Checkout dates.')
-        #     if room: rooms = Room.objects.filter(pk=room.id)
-        #     conflicting_res = Reservation.objects.filter(
-        #         checkin__lt=requested_checkout,
-        #         checkout__gt=requested_checkin
-        #     )
-        #     if conflicting_res:
-        #         rooms = rooms.exclude(reservation__in=conflicting_res)
-        # else: return HttpResponse('Form is invalid')
-
-        
-
     return render(request, 'reservation/index.html', {
         'search_form': SearchForm
     })
@@ -51,16 +26,13 @@ def index(request):
 @csrf_exempt
 def search(request):
     # Extract and check data from search form
-    if not request.GET['chin']:
-        return JsonResponse({'message': 'Invalid Checkin date.'})
+    if not request.GET['chin']: return JsonResponse({'message': 'Invalid Checkin date.'})
     else: req_chin = datetime.strptime(request.GET['chin'], '%Y-%m-%d').date()
     
-    if not request.GET['chout']:
-        return JsonResponse({'message': 'Invalid Checkout date.'})
+    if not request.GET['chout']: return JsonResponse({'message': 'Invalid Checkout date.'})
     else: req_chout = datetime.strptime(request.GET['chout'], '%Y-%m-%d').date()
     
-    if not request.GET['pers_num']:
-        return JsonResponse({'message': 'Enter number of guests.'})
+    if not request.GET['pers_num']: return JsonResponse({'message': 'Enter number of guests.'})
     else: pers_num: pers_num = int(request.GET['pers_num'])
     
     req_room = request.GET['req_room']
@@ -82,11 +54,9 @@ def search(request):
         rooms = rooms.exclude(reservation__in=conflicting_res)
     return JsonResponse([room.serialize() for room in rooms], safe=False)
 
-
 def room(request, room_id):
     room = Room.objects.get(pk=room_id)
     return JsonResponse(room.serialize(), safe=False)
-
 
 @csrf_exempt
 @login_required()
@@ -109,7 +79,7 @@ def reserve(request, room_id):
                 return show_error(request, 'These dates are not available')
                 return JsonResponse({'message': 'These dates are not available'})
             else: print('No dates conflict')
-        # Create Reservation
+        # Create Reservation, add it to room and user
         user = request.user
         reservation = Reservation(guest=user, room=requested_room, checkin=chin, checkout=chout)
         reservation.save()
@@ -118,14 +88,10 @@ def reserve(request, room_id):
         return JsonResponse({'message': 'Reservation Created Successfuly'})
     else: return HttpResponseRedirect(reverse('index'))
 
-
-
 @login_required()
 def profile(request):
     reservations = Reservation.objects.filter(guest=request.user)
-    return render(request, 'reservation/profile.html', {
-        'reservations': reservations
-    })
+    return JsonResponse([res.serialize() for res in reservations], safe=False)
 
 
 # login, logout, register
@@ -150,11 +116,9 @@ def login_view(request):
     else:
         return render(request, "reservation/login.html")
 
-
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
-
 
 def register(request):
     if request.method == "POST":
