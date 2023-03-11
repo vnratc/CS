@@ -12,7 +12,7 @@ from .models import *
 from .forms import SearchForm
 
 
-def error(request, message):
+def show_error(request, message):
     return render(request, 'reservation/error.html', {
         'message': message
     })
@@ -51,32 +51,46 @@ def index(request):
 @csrf_exempt
 def search(request):
     # Extract data from search form
-    try:
-        req_chin = datetime.strptime(request.GET['chin'], '%Y-%m-%d')
-        req_chout = datetime.strptime(request.GET['chout'], '%Y-%m-%d')
-        pers_num = int(request.GET['pers_num'])
-        if req_chin >= req_chout:
-            return JsonResponse({'message': 'Invalid Checkin/Checkout dates.'})
-    except ValueError:
-        return JsonResponse({'message': 'Invalid Request.'})
+    # try:
+    if not request.GET['chin']:
+        return JsonResponse({'message': 'Invalid Checkin date.'})
+    else: req_chin = datetime.strptime(request.GET['chin'], '%Y-%m-%d').date()
+    
+    if not request.GET['chout']:
+        return JsonResponse({'message': 'Invalid Checkout date.'})
+    else: req_chout = datetime.strptime(request.GET['chout'], '%Y-%m-%d').date()
+    
+    if not request.GET['pers_num']:
+        return JsonResponse({'message': 'Enter number of guests.'})
+    else: pers_num: pers_num = int(request.GET['pers_num'])
+    
+    req_room = request.GET['req_room']
+    if req_room: req_room = int(request.GET['req_room'])
+    
+    if req_chin >= req_chout:
+        return JsonResponse({'message': 'Invalid Checkin/Checkout dates.'})
+    # except ValueError:
+    #     return JsonResponse({'message': 'Invalid Request.'})
+    
     # Query and filter db
-    rooms = Room.objects.exclude(bed_num__lt=pers_num)
+    if req_room:
+        rooms = Room.objects.filter(pk=req_room).exclude(bed_num__lt=pers_num)
+    else:
+        rooms = Room.objects.exclude(bed_num__lt=pers_num)
     conflicting_res = Reservation.objects.filter(
         checkin__lt=req_chout,
         checkout__gt=req_chin
     )
     if conflicting_res:
         rooms = rooms.exclude(reservation__in=conflicting_res)
+    print(rooms)
     return JsonResponse([room.serialize() for room in rooms], safe=False)
 
 
 def room(request, room_id):
     room = Room.objects.get(pk=room_id)
     return JsonResponse(room.serialize(), safe=False)
-    # return render(request, 'reservation/room.html', {
-    #     'room': room
-    #     # 'search_form': SearchForm
-    # })
+
 
 
 # @login_required()

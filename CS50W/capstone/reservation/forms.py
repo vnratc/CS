@@ -11,13 +11,13 @@ class SearchForm(forms.Form):
         'type': 'date',
         'id': 'checkout'
     }))
-    
-    # room = forms.ModelChoiceField(widget=forms.Select(attrs={
-    #     'id': 'room'
-    # }), queryset=Room.objects.all(), required=False, label='Room Preference')
    
     pers_num = forms.IntegerField(widget=forms.NumberInput(attrs={
         'id': 'pers_num',
         'min': '1',
         'max': '10'
     }), label='Number of Persons')
+    
+    req_room = forms.ModelChoiceField(widget=forms.Select(attrs={
+        'id': 'req_room'
+    }), queryset=Room.objects.all(), required=False, label='Room Preference')

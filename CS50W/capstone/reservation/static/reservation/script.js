@@ -15,8 +15,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // By default show 'search'
     search()
 
-    document.querySelectorAll('input').forEach(input => {
-        input.onchange = query_db
+    document.querySelectorAll('input, select').forEach(input => {
+        input.onchange = () => {
+            remove_results()
+            remove_room()
+            query_db()
+            
+        } 
     })
 })
 
@@ -47,7 +52,8 @@ async function query_db() {
     let chin = document.querySelector('#checkin').value
     let chout = document.querySelector('#checkout').value
     let pers_num = document.querySelector('#pers_num').value
-    await fetch(`search?chin=${chin}&chout=${chout}&pers_num=${pers_num}`)
+    let req_room = document.querySelector('#req_room').value
+    await fetch(`search?chin=${chin}&chout=${chout}&pers_num=${pers_num}&req_room=${req_room}`)
     .then(response => response.json())
     .then(rooms => {
         try {
@@ -56,7 +62,7 @@ async function query_db() {
                 document.querySelector('#results-div').append(room_div)
             }
         } catch (e) {
-            console.log(e instanceof TypeError)
+            console.log(rooms)
         }
     })
     document.querySelectorAll('.room-item').forEach(room => {
@@ -71,6 +77,7 @@ async function query_db() {
 
 function search() {
     remove_results()
+    remove_room()
     // Show 'search
     document.querySelector('#search-div').style.display = 'block'
     document.querySelectorAll('#results-div, #rooms-div, #profile-div, #room-div').forEach(div => {
@@ -98,9 +105,13 @@ async function select_room(room_id) {
     .then(room => {
         let room_div = create_room_div(room.id, room.title, room.bed_num, room.description)
         document.querySelector('#room-div').append(room_div)
-        console.log(room)
     })
 }
+
+
+
+
+
 
 function rooms() {
     remove_room()
