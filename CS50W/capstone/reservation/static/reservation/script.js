@@ -1,9 +1,10 @@
 // Navigation
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('#search, #page-title').forEach(el => {
-        el.addEventListener('click', () => {
-            search()
-        })
+    document.querySelector('#search').addEventListener('click', () => {
+        search()
+    })
+    document.querySelector('#search-btn').addEventListener('click', () => {
+        results()
     })
     document.querySelector('#rooms').addEventListener('click', () => {
         rooms()
@@ -17,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 function search() {
-    console.log('test')
     // Show 'search
     document.querySelector('#search-div').style.display = 'block'
     document.querySelectorAll('#results-div, #rooms-div, #profile-div').forEach(div => {
@@ -27,17 +27,29 @@ function search() {
 
 
 function results() {
-    console.log('test')
     // Show results
     document.querySelector('#results-div').style.display = 'block'
-    document.querySelectorAll('#search-div, #rooms-div, #profile-div').forEach(div => {
+    document.querySelectorAll('#rooms-div, #profile-div').forEach(div => {
         div.style.display = 'none'
+    })
+    // Fetch search request
+    fetch('search', {
+        method: 'POST',
+        body: JSON.stringify({
+            checkin: document.querySelector('#checkin').value,
+            checkout: document.querySelector('#checkout').value,
+            pers_num: document.querySelector('#pers_num').value,
+            room: document.querySelector('#room').value
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
     })
 }
 
 
 function rooms() {
-    console.log('test')
     // Show all rooms
     document.querySelector('#rooms-div').style.display = 'block'
     document.querySelectorAll('#search-div, #results-div, #profile-div').forEach(div => {
@@ -47,7 +59,6 @@ function rooms() {
 
 
 function profile() {
-    console.log('test')
     // Show profile
     document.querySelector('#profile-div').style.display = 'block'
     document.querySelectorAll('#search-div, #results-div, #rooms-div').forEach(div => {

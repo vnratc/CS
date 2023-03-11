@@ -1,20 +1,14 @@
-from datetime import datetime
-from django import forms
+import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
-from django.views.generic.list import ListView
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
-from .models import * 
-
-# Create your views here.
-class SearchForm(forms.Form):
-    checkin = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
-    checkout = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
-    room = forms.ModelChoiceField(queryset=Room.objects.all(), required=False, label='Room Preference')
+from .models import *
+from .forms import SearchForm
 
 
 def error(request, message):
@@ -24,28 +18,43 @@ def error(request, message):
 
 
 def index(request):
-    rooms = Room.objects.all()
-    if request.method == 'POST':
-        form = SearchForm(request.POST)
-        if form.is_valid():
-            requested_checkin = form.cleaned_data['checkin']
-            requested_checkout = form.cleaned_data['checkout']
-            room = form.cleaned_data['room']
-            # Check for valid input
-            if requested_checkin >= requested_checkout:
-                return error(request, 'Invalid Checkin/Checkout dates.')
-            if room: rooms = Room.objects.filter(pk=room.id)
-            conflicting_res = Reservation.objects.filter(
-                checkin__lt=requested_checkout,
-                checkout__gt=requested_checkin
-            )
-            if conflicting_res:
-                rooms = rooms.exclude(reservation__in=conflicting_res)
-        else: return HttpResponse('Form is invalid')
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('login'))
+
+
+
+        # rooms = Room.objects.all()
+        # if request.method == 'POST':
+
+
+        # form = SearchForm(request.POST)
+        # if form.is_valid():
+        #     requested_checkin = form.cleaned_data['checkin']
+        #     requested_checkout = form.cleaned_data['checkout']
+        #     room = form.cleaned_data['room']
+        #     # Check for valid input
+        #     if requested_checkin >= requested_checkout:
+        #         return error(request, 'Invalid Checkin/Checkout dates.')
+        #     if room: rooms = Room.objects.filter(pk=room.id)
+        #     conflicting_res = Reservation.objects.filter(
+        #         checkin__lt=requested_checkout,
+        #         checkout__gt=requested_checkin
+        #     )
+        #     if conflicting_res:
+        #         rooms = rooms.exclude(reservation__in=conflicting_res)
+        # else: return HttpResponse('Form is invalid')
+
+        
+
     return render(request, 'reservation/index.html', {
-        'rooms': rooms,
         'search_form': SearchForm
     })
+
+@csrf_exempt
+def search(request):
+    data = json.loads(request.body)
+    print(data) 
+    return JsonResponse({'message': 'promise fulfilled'})
 
 
 def room(request, room_id):
