@@ -59,7 +59,7 @@ def search(request):
             return JsonResponse({'message': 'Invalid Checkin/Checkout dates.'})
     except ValueError:
         return JsonResponse({'message': 'Invalid Request.'})
-    # Query db
+    # Query and filter db
     rooms = Room.objects.exclude(bed_num__lt=pers_num)
     conflicting_res = Reservation.objects.filter(
         checkin__lt=req_chout,
@@ -67,10 +67,6 @@ def search(request):
     )
     if conflicting_res:
         rooms = rooms.exclude(reservation__in=conflicting_res)
-    
-    print(rooms)
-
-    # return JsonResponse({'message': 'promise fulfilled'}, status=200)
     return JsonResponse([room.serialize() for room in rooms], safe=False)
 
 
