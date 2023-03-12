@@ -1,5 +1,5 @@
-// Navigation
 document.addEventListener('DOMContentLoaded', function () {
+    // Navigation
     document.querySelector('#search').addEventListener('click', () => {
         search()
     })
@@ -14,9 +14,28 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     // By default show 'search'
     search()
-
+    // Query db on change in form only if 3 main inputs hava value
     document.querySelectorAll('input, select').forEach(input => {
-        input.onchange = () => {query_db()} 
+        input.onchange = () => {
+            if (document.querySelector('#checkout').value && document.querySelector('#checkin').value && 
+            document.querySelector('#pers_num').value) {
+                query_db()
+            }
+        } 
+    })
+    // Change dates with buttons
+    document.querySelectorAll('.change-date').forEach(btn => {
+        btn.onclick = async function() {
+            let chin = document.querySelector('#checkin').value
+            let chout = document.querySelector('#checkout').value
+            await fetch(`change_date?btn=${btn.id}&chin=${chin}&chout=${chout}`)
+            .then(response => response.json())
+            .then(new_date => {
+                if (btn.id.slice(0, 4) === 'chin') {document.querySelector('#checkin').value = new_date}
+                else if (btn.id.slice(0, 5) === 'chout') {document.querySelector('#checkout').value = new_date}
+            })
+            query_db()
+        }
     })
 })
 
@@ -101,6 +120,7 @@ async function results() {
         div.style.display = 'none'
     })
     query_db()
+    console.log('Results Updated')
 }
 
 
@@ -119,7 +139,6 @@ async function select_room(room_id) {
     let chout = document.querySelector('#checkout').value
 
     await fetch(`room/${parseInt(room_id)}?chin=${chin}&chout=${chout}`)
-    // await fetch('room/' + parseInt(room_id))
     .then(response => response.json())
     .then(room => {
         // Create div

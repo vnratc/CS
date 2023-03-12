@@ -1,18 +1,23 @@
 from django import forms
 from .models import Room
+from datetime import datetime, timedelta
+
+today_str = datetime.now().date().strftime('%Y-%m-%d')
+day = timedelta(days=1)
+tomorow_str = (datetime.now().date() + day).strftime('%Y-%m-%d')
 
 class SearchForm(forms.Form):
-    checkin = forms.DateField(widget=forms.DateInput(attrs={
+    checkin = forms.DateField(initial=today_str, widget=forms.DateInput(attrs={
         'type': 'date',
         'id': 'checkin'
     }))
     
-    checkout = forms.DateField(widget=forms.DateInput(attrs={
+    checkout = forms.DateField(initial=tomorow_str, widget=forms.DateInput(attrs={
         'type': 'date',
         'id': 'checkout'
     }))
    
-    pers_num = forms.IntegerField(widget=forms.NumberInput(attrs={
+    pers_num = forms.IntegerField(initial=1 , widget=forms.NumberInput(attrs={
         'id': 'pers_num',
         'min': '1',
         'max': '10'

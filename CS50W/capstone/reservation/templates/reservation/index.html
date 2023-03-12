@@ -20,8 +20,8 @@
             <h1>Search</h1>
             <form id="search-form">
                 {% csrf_token %}
-                <div class="mb-2">{{ search_form.checkin.label_tag }} {{ search_form.checkin }}</div>
-                <div class="mb-2">{{ search_form.checkout.label_tag }} {{ search_form.checkout }}</div>
+                <div class="mb-2">{{ search_form.checkin.label_tag }} <button class="change-date" id="chin-" type="button"><</button> {{ search_form.checkin }} <button class="change-date" id="chin" type="button">></button></div>
+                <div class="mb-2">{{ search_form.checkout.label_tag }} <button class="change-date" id="chout-" type="button"><</button> {{ search_form.checkout }} <button class="change-date" id="chout" type="button">></button></div>
                 <div class="mb-2">{{ search_form.pers_num.label_tag }} {{ search_form.pers_num }}</div>
                 <div class="mb-2">{{ search_form.req_room.label_tag }} {{ search_form.req_room }}</div>
                 <button class="mb-2" id="search-btn" type="button">Search</button>

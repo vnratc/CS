@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -25,8 +25,16 @@ def index(request):
         'search_form': SearchForm
     })
 
-# Add function to check dates and return 'date' objects and 'duration'
-# def check_dates(chin, chout):
+def change_date(request):
+    btn = request.GET['btn']
+    form_chin = datetime.strptime(request.GET['chin'], '%Y-%m-%d').date()
+    form_chout = datetime.strptime(request.GET['chout'], '%Y-%m-%d').date()
+    day = timedelta(days=1)
+    if btn == 'chin-': new_date = (form_chin - day).strftime('%Y-%m-%d')
+    elif btn == 'chin': new_date = (form_chin + day).strftime('%Y-%m-%d')
+    elif btn == 'chout-': new_date = (form_chout - day).strftime('%Y-%m-%d')
+    elif btn == 'chout': new_date = (form_chout + day).strftime('%Y-%m-%d')
+    return JsonResponse(new_date, safe=False)
 
 
 @csrf_exempt
@@ -34,19 +42,15 @@ def search(request):
     # Extract and check data from search form
     if not request.GET['chin']: return JsonResponse({'message': 'Select Checkin date.'})
     else: req_chin = datetime.strptime(request.GET['chin'], '%Y-%m-%d').date()
-    
+    if req_chin < datetime.now().date(): return JsonResponse({'message': 'Checkin can not be in the past'})
     if not request.GET['chout']: return JsonResponse({'message': 'Select Checkout date.'})
     else: req_chout = datetime.strptime(request.GET['chout'], '%Y-%m-%d').date()
-    
     # Get duration
     duration = req_chout.day - req_chin.day
-
     if not request.GET['pers_num']: return JsonResponse({'message': 'Enter number of guests.'})
     else: pers_num: pers_num = int(request.GET['pers_num'])
-    
     req_room = request.GET['req_room']
     if req_room: req_room = int(request.GET['req_room'])
-    
     if req_chin >= req_chout:
         return JsonResponse({'message': 'Invalid Checkin/Checkout dates.'})
     # Query and filter db
@@ -67,7 +71,6 @@ def search(request):
         room.update({'duration': duration})
         rooms_list.append(room)
     return JsonResponse(rooms_list, safe=False)
-    return JsonResponse([room.serialize() for room in rooms], safe=False)
 
 
 def room(request, room_id):
@@ -103,7 +106,8 @@ def reserve(request, room_id):
         duration = chout.day - chin.day
         total = round(requested_room.price * duration, 2)
         user = request.user
-        reservation = Reservation(guest=user, room=requested_room, checkin=chin, checkout=chout, duration=duration, total=total)
+        reservation = Reservation(guest=user, room=requested_room, checkin=chin, 
+                                  checkout=chout, duration=duration, total=total)
         reservation.save()
         requested_room.reservations.add(reservation)
         user.reservations.add(reservation)     

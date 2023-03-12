@@ -13,5 +13,6 @@ urlpatterns = [
     path('my_reservations', views.my_reservations, name='my_reservations'),
     path('my_reservations/<int:res_id>', views.select_res, name='select_res'),
     path('my_reservations/<int:res_id>/cancel_res', views.cancel_res, name='cancel_res'),
+    path('change_date', views.change_date, name='change_date'),
     path('show_error', views.show_error, name='show_error')
 ]
