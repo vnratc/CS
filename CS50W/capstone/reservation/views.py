@@ -25,6 +25,9 @@ def index(request):
         'search_form': SearchForm
     })
 
+# Add function to check dates and return 'date' objects and 'duration'
+# def check_dates(chin, chout):
+
 
 @csrf_exempt
 def search(request):
@@ -69,7 +72,13 @@ def search(request):
 
 def room(request, room_id):
     room = Room.objects.get(pk=room_id)
-    return JsonResponse(room.serialize(), safe=False)
+    print(request.GET)
+    req_chin = datetime.strptime(request.GET['chin'], '%Y-%m-%d').date() 
+    req_chout = datetime.strptime(request.GET['chout'], '%Y-%m-%d').date()
+    duration = req_chout.day - req_chin.day
+    room = room.serialize()
+    room.update({'duration': duration})
+    return JsonResponse(room, safe=False)
 
 
 @csrf_exempt
@@ -92,8 +101,9 @@ def reserve(request, room_id):
             else: print('No dates conflict')
         # Create Reservation, add it to room and user
         duration = chout.day - chin.day
+        total = round(requested_room.price * duration, 2)
         user = request.user
-        reservation = Reservation(guest=user, room=requested_room, checkin=chin, checkout=chout, duration=duration)
+        reservation = Reservation(guest=user, room=requested_room, checkin=chin, checkout=chout, duration=duration, total=total)
         reservation.save()
         requested_room.reservations.add(reservation)
         user.reservations.add(reservation)     

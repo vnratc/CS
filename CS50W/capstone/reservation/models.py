@@ -12,7 +12,7 @@ class Reservation(models.Model):
     checkin = models.DateField()
     checkout = models.DateField()
     duration = models.PositiveSmallIntegerField(null=True)
-    # total cost (duration * price)
+    total = models.FloatField(null=True)
 
     def __str__(self):
         return f'{self.guest} - {self.room} - {self.checkin} - {self.checkout}'
@@ -20,13 +20,15 @@ class Reservation(models.Model):
     def serialize(self):
         return {
             'id': self.id,
-            'room_id': self.room_id,
+            'guest': self.guest.username,
+            'room_id': self.room.id,
             'room_title': self.room.title,
             'room_description': self.room.description,
             'room_bed_num': self.room.bed_num,
             'checkin': self.checkin,
             'checkout': self.checkout,
-            'duration': self.duration
+            'duration': self.duration,
+            'total': self.total
         }
     
 
