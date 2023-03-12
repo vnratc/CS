@@ -22,11 +22,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Helper functions
 
-function create_room_div(room_id, room_title, room_bed_num, room_description) {
+function create_room_div(room) {
     let room_div = document.createElement('div')
     room_div.classList.add('room-item','rounded', 'border', 'border-secondary', 'p-2', 'my-3', 'border-opacity-25')
-    room_div.id = room_id
-    room_div.innerHTML = `${room_title}, Beds: ${room_bed_num}<br>${room_description.replaceAll('\n', '<br>')}`
+    room_div.id = room.id
+    total = room.price * room.duration
+    // console.log(typeof(parseFloat(room.price)), typeof(room.duration))
+    room_div.innerHTML = `<h6>${room.title}.</h6><br>Price per night: \$${room.price}.<br>Total price for ${room.duration} nights: \$${total}<br>Beds: ${room.bed_num}.<br>${room.description.replaceAll('\n', '<br>')}`
     return room_div
 }
 
@@ -67,12 +69,13 @@ async function query_db() {
     .then(response => response.json())
     .then(rooms => {
         try {
-            for (room of rooms) {
-                let room_div = create_room_div(room.id, room.title, room.bed_num, room.description)
+            for (r of rooms) {
+                // console.log(r.duration)
+                let room_div = create_room_div(r)
                 document.querySelector('#results-div').append(room_div)
             }
         } catch (e) {
-            console.log(room)
+            console.log(e)
         }
     })
     document.querySelectorAll('.room-item').forEach(room => {
@@ -116,7 +119,7 @@ async function select_room(room_id) {
     .then(response => response.json())
     .then(room => {
         // Create div
-        let room_div = create_room_div(room.id, room.title, room.bed_num, room.description)
+        let room_div = create_room_div(room)
         document.querySelector('#room-div').append(room_div)
         // Create btn
         let reserve_btn = document.createElement('button')

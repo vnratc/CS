@@ -46,7 +46,8 @@ class Room(models.Model):
             'id': self.id,
             'title': self.title,
             'description': self.description,
-            'bed_num': self.bed_num
+            'bed_num': self.bed_num,
+            'price': self.price
         }
 
     
