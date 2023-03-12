@@ -43,7 +43,6 @@ def search(request):
     
     if req_chin >= req_chout:
         return JsonResponse({'message': 'Invalid Checkin/Checkout dates.'})
-    
     # Query and filter db
     if req_room:
         rooms = Room.objects.filter(pk=req_room).exclude(bed_num__lt=pers_num)
@@ -82,8 +81,9 @@ def reserve(request, room_id):
                 return JsonResponse({'message': 'These dates are not available'})
             else: print('No dates conflict')
         # Create Reservation, add it to room and user
+        duration = chout.day - chin.day
         user = request.user
-        reservation = Reservation(guest=user, room=requested_room, checkin=chin, checkout=chout)
+        reservation = Reservation(guest=user, room=requested_room, checkin=chin, checkout=chout, duration=duration)
         reservation.save()
         requested_room.reservations.add(reservation)
         user.reservations.add(reservation)     
@@ -108,12 +108,8 @@ def cancel_res(request, res_id):
         return HttpResponseRedirect(reverse('index'))
     data = json.loads(request.body)
     reservation = Reservation.objects.get(pk=data['id'])
-    print(data)
-    print(reservation)
     user = request.user
-    print(user)
     room = Room.objects.get(pk=data['room_id'])
-    print(room)
     user.reservations.remove(reservation)
     room.reservations.remove(reservation)
     reservation.delete()

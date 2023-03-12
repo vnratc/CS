@@ -11,6 +11,8 @@ class Reservation(models.Model):
     room = models.ForeignKey('Room', on_delete=models.PROTECT)
     checkin = models.DateField()
     checkout = models.DateField()
+    duration = models.PositiveSmallIntegerField(null=True)
+    # total cost (duration * price)
 
     def __str__(self):
         return f'{self.guest} - {self.room} - {self.checkin} - {self.checkout}'
@@ -23,7 +25,8 @@ class Reservation(models.Model):
             'room_description': self.room.description,
             'room_bed_num': self.room.bed_num,
             'checkin': self.checkin,
-            'checkout': self.checkout
+            'checkout': self.checkout,
+            'duration': self.duration
         }
     
 
@@ -32,7 +35,7 @@ class Room(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField(blank=True)
     bed_num = models.PositiveSmallIntegerField()
-    # add price per night
+    price = models.FloatField(null=True)
     # add pictures url field? file field? static folder?
 
     def __str__(self):

@@ -72,7 +72,7 @@ async function query_db() {
                 document.querySelector('#results-div').append(room_div)
             }
         } catch (e) {
-            console.log(e)
+            console.log(room)
         }
     })
     document.querySelectorAll('.room-item').forEach(room => {
@@ -178,7 +178,7 @@ async function my_reservations() {
             let res_div = document.createElement('div')
             res_div.classList.add('res-item','rounded', 'border', 'border-secondary', 'p-2', 'my-3', 'border-opacity-25')
             res_div.id = res.id
-            res_div.innerHTML = `${res.checkin} - ${res.checkout}<br>${res.room_title}, Beds: ${res.room_bed_num}<br>${res.room_description.replaceAll('\n', '<br>')}`
+            res_div.innerHTML = `${res.checkin} - ${res.checkout}<br>${res.duration} nights<br>${res.room_title}, Beds: ${res.room_bed_num}<br>${res.room_description.replaceAll('\n', '<br>')}`
             document.querySelector('#my_reservations-div').append(res_div)
         }
     })
@@ -201,7 +201,7 @@ async function select_res(res) {
         let sel_res_div = document.createElement('div')
         sel_res_div.classList.add('sel-res-item','rounded', 'border', 'border-secondary', 'p-2', 'my-3', 'border-opacity-25')
         sel_res_div.id = res.id
-        sel_res_div.innerHTML = `${res.checkin} - ${res.checkout}<br>${res.room_title}, Beds: ${res.room_bed_num}<br>${res.room_description.replaceAll('\n', '<br>')}`
+        sel_res_div.innerHTML = `${res.checkin} - ${res.checkout}<br>${res.duration} nights<br>${res.room_title}, Beds: ${res.room_bed_num}<br>${res.room_description.replaceAll('\n', '<br>')}`
         document.querySelector('#select_res-div').append(sel_res_div)
         // Create btn
         let cancel_btn = document.createElement('button')

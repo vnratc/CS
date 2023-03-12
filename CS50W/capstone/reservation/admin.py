@@ -3,7 +3,7 @@ from .models import User, Room, Reservation
 
 
 class RoomAdmin(admin.ModelAdmin):
-    list_display = ('title', 'bed_num')
+    list_display = ('title', 'bed_num', 'price')
 
 
 # class ReservationAdmin(admin.ModelAdmin):
