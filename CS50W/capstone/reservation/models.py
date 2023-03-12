@@ -18,6 +18,7 @@ class Reservation(models.Model):
     def serialize(self):
         return {
             'id': self.id,
+            'room_id': self.room_id,
             'room_title': self.room.title,
             'room_description': self.room.description,
             'room_bed_num': self.room.bed_num,

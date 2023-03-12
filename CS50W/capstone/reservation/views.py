@@ -11,10 +11,12 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import *
 from .forms import SearchForm
 
+
 def show_error(request, message):
     return render(request, 'reservation/error.html', {
         'message': message
     })
+
 
 def index(request):
     if not request.user.is_authenticated:
@@ -23,13 +25,14 @@ def index(request):
         'search_form': SearchForm
     })
 
+
 @csrf_exempt
 def search(request):
     # Extract and check data from search form
-    if not request.GET['chin']: return JsonResponse({'message': 'Invalid Checkin date.'})
+    if not request.GET['chin']: return JsonResponse({'message': 'Select Checkin date.'})
     else: req_chin = datetime.strptime(request.GET['chin'], '%Y-%m-%d').date()
     
-    if not request.GET['chout']: return JsonResponse({'message': 'Invalid Checkout date.'})
+    if not request.GET['chout']: return JsonResponse({'message': 'Select Checkout date.'})
     else: req_chout = datetime.strptime(request.GET['chout'], '%Y-%m-%d').date()
     
     if not request.GET['pers_num']: return JsonResponse({'message': 'Enter number of guests.'})
@@ -54,18 +57,17 @@ def search(request):
         rooms = rooms.exclude(reservation__in=conflicting_res)
     return JsonResponse([room.serialize() for room in rooms], safe=False)
 
+
 def room(request, room_id):
     room = Room.objects.get(pk=room_id)
     return JsonResponse(room.serialize(), safe=False)
+
 
 @csrf_exempt
 @login_required()
 def reserve(request, room_id):
     if request.method == 'POST':
         data = json.loads(request.body)
-        # Check for room id match from url and data
-        if data['req_room'] != room_id:
-            return JsonResponse({'message': 'invalid room'})
         # Convert str to date objects
         chin = datetime.strptime(data['chin'], '%Y-%m-%d').date()
         chout = datetime.strptime(data['chout'], '%Y-%m-%d').date()
@@ -85,14 +87,37 @@ def reserve(request, room_id):
         reservation.save()
         requested_room.reservations.add(reservation)
         user.reservations.add(reservation)     
-        return JsonResponse({'message': 'Reservation Created Successfuly'})
+        return JsonResponse({'message': 'Reservation Successful'})
     else: return HttpResponseRedirect(reverse('index'))
+
 
 @login_required()
 def my_reservations(request):
     reservations = Reservation.objects.filter(guest=request.user)
     return JsonResponse([res.serialize() for res in reservations], safe=False)
 
+@login_required()
+def select_res(request, res_id):
+    res = Reservation.objects.get(pk=res_id)
+    return JsonResponse(res.serialize(), safe=False)
+
+@csrf_exempt
+@login_required()
+def cancel_res(request, res_id):
+    if request.method != 'POST':
+        return HttpResponseRedirect(reverse('index'))
+    data = json.loads(request.body)
+    reservation = Reservation.objects.get(pk=data['id'])
+    print(data)
+    print(reservation)
+    user = request.user
+    print(user)
+    room = Room.objects.get(pk=data['room_id'])
+    print(room)
+    user.reservations.remove(reservation)
+    room.reservations.remove(reservation)
+    reservation.delete()
+    return JsonResponse('Reservation Canceled', safe=False)
 
 # login, logout, register
 
@@ -116,9 +141,11 @@ def login_view(request):
     else:
         return render(request, "reservation/login.html")
 
+
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
+
 
 def register(request):
     if request.method == "POST":
