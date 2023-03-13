@@ -13,8 +13,8 @@
     </head>
     <body>
         
-        <div class="container">
-            <h1 class="display-4 my-3" id="page-title"><a href="{% url 'index' %}">Reservation</a></h1>
+        <div class="container text-center" id="main-container">
+            <h1 class="display-4 my-3" id="page-title"><a class="text-decoration-none" href="{% url 'index' %}">Reservation</a></h1>
             {% block body %}
             {% endblock %}
         </div>

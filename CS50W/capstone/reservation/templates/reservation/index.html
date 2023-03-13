@@ -4,40 +4,58 @@
 {% block body %}
 
 
-    <button class="btn btn-sm btn-outline-info btn-nav" id="search">Search</button>
-    <button class="btn btn-sm btn-outline-info btn-nav" id="rooms">Rooms</button>
+    <button class="btn btn-sm btn-info btn-nav" id="search">Search</button>
+    <button class="btn btn-sm btn-info btn-nav" id="rooms">All Rooms</button>
     {% if user.is_authenticated %}
-        <button class="btn btn-sm btn-outline-info btn-nav" id="my_reservations" aria-current="User">My Reservations</button>
-        <a class="btn btn-sm btn-outline-info btn-nav" href="{% url 'logout' %}" aria-current="Log out">Log Out</a>
+        <button class="btn btn-sm btn-info btn-nav" id="my_reservations" aria-current="User">My Reservations</button>
+        <a class="btn btn-sm btn-info btn-nav" href="{% url 'logout' %}" aria-current="Log out">Log Out</a>
     {% else %}
-        <a class="btn btn-sm btn-outline-info btn-nav" href="{% url 'login' %}" aria-current="Log In">Log In</a>
-        <a class="btn btn-sm btn-outline-info btn-nav" href="{% url 'register' %}" aria-current="Register">Register</a>
+        <a class="btn btn-sm btn-info btn-nav" href="{% url 'login' %}" aria-current="Log In">Log In</a>
+        <a class="btn btn-sm btn-info btn-nav" href="{% url 'register' %}" aria-current="Register">Register</a>
     {% endif %}
 
     <hr>
 
-        <div id="search-div">
-            <h1>Search</h1>
-            <form id="search-form">
-                {% csrf_token %}
-                <div class="mb-2">{{ search_form.checkin.label_tag }} <button class="change-date" id="chin-" type="button"><</button> {{ search_form.checkin }} <button class="change-date" id="chin" type="button">></button></div>
-                <div class="mb-2">{{ search_form.checkout.label_tag }} <button class="change-date" id="chout-" type="button"><</button> {{ search_form.checkout }} <button class="change-date" id="chout" type="button">></button></div>
-                <div class="mb-2">{{ search_form.pers_num.label_tag }} {{ search_form.pers_num }}</div>
-                <div class="mb-2">{{ search_form.req_room.label_tag }} {{ search_form.req_room }}</div>
-                <button class="mb-2" id="search-btn" type="button">Search</button>
-            </form>
+        <div id="search-div" class="container text-center">
+            <h1 class="display-6 my-3">Search</h1>
+            <center>
+                <form id="search-form">
+                    {% csrf_token %}
+                    <div class="mb-2">{{ search_form.checkin.label_tag }} <button class="change-date btn btn-secondary" id="chin-" type="button"><</button> {{ search_form.checkin }} <button class="change-date btn btn-secondary" id="chin" type="button">></button></div>
+                    <div class="mb-2">{{ search_form.checkout.label_tag }} <button class="change-date btn btn-secondary" id="chout-" type="button"><</button> {{ search_form.checkout }} <button class="change-date btn btn-secondary" id="chout" type="button">></button></div>
+                    <div class="mb-2">{{ search_form.pers_num.label_tag }} {{ search_form.pers_num }}</div>
+                    <div class="mb-2">{{ search_form.req_room }}</div>
+                    <button class="mb-2 btn btn-success" id="search-btn" type="button">Search</button>
+                </form>
+            </center>
         </div>
 
-        <div id="results-div"></div>
-        <div id="room-div"></div>
-        <div id="rooms-div">
-            ROOMS no need to create and remove elements in this div, they will just hide and show
-            room tiles <br>
-            pictures with links to 'search'
+        <div id="results-div" class="container"></div>
+        <div id="room-div" class="container"></div>
+
+        <div id="rooms-div" class="container">
+            <h1 class="display-6 my-3">All Rooms</h1>
+            <div class="row row-cols-1 row-cols-lg-2 g-4">
+                {% for room in all_rooms %}
+                    <div class="col d-flex align-items-evenly justify-content-center">
+
+                        <div class="card mb-3">
+                            <img src="{{ room.img_url  }}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ room.title }}</h5>
+                                <p class="card-text">Price per night: ${{ room.price }}. Beds: {{ room.bed_num }}</p>
+                                <p class="card-text">{{ room.description }}</p>
+                                <p class="card-text"><small class="text-muted"><button id="select-{{ room.id }}" class="search-title mb-2 btn btn-success">Search Available Dates</button></small></p>
+                            </div>
+                        </div>
+                    
+                    </div>
+                {% endfor %}
+            </div>
         </div>
 
-        <div id="my_reservations-div"></div>
-        <div id="select_res-div"></div>
+        <div id="my_reservations-div" class="container"></div>
+        <div id="select_res-div" class="container"></div>
 
     <script src="{% static 'reservation/script.js' %}"></script>
 

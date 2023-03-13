@@ -17,24 +17,26 @@ def show_error(request, message):
         'message': message
     })
 
-
 def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login'))
+    all_rooms = Room.objects.all()
     return render(request, 'reservation/index.html', {
-        'search_form': SearchForm
+        'search_form': SearchForm,
+        'all_rooms': all_rooms
     })
 
 def change_date(request):
     btn = request.GET['btn']
     form_chin = datetime.strptime(request.GET['chin'], '%Y-%m-%d').date()
     form_chout = datetime.strptime(request.GET['chout'], '%Y-%m-%d').date()
+    duration = (form_chout - form_chin).days
     day = timedelta(days=1)
     if btn == 'chin-': new_date = (form_chin - day).strftime('%Y-%m-%d')
     elif btn == 'chin': new_date = (form_chin + day).strftime('%Y-%m-%d')
     elif btn == 'chout-': new_date = (form_chout - day).strftime('%Y-%m-%d')
     elif btn == 'chout': new_date = (form_chout + day).strftime('%Y-%m-%d')
-    return JsonResponse(new_date, safe=False)
+    return JsonResponse({'new_date': new_date, 'duration': duration}, safe=False)
 
 
 @csrf_exempt
@@ -75,7 +77,6 @@ def search(request):
 
 def room(request, room_id):
     room = Room.objects.get(pk=room_id)
-    print(request.GET)
     req_chin = datetime.strptime(request.GET['chin'], '%Y-%m-%d').date() 
     req_chout = datetime.strptime(request.GET['chout'], '%Y-%m-%d').date()
     duration = req_chout.day - req_chin.day
@@ -113,6 +114,11 @@ def reserve(request, room_id):
         user.reservations.add(reservation)     
         return JsonResponse({'message': 'Reservation Successful'})
     else: return HttpResponseRedirect(reverse('index'))
+
+
+# def all_rooms():
+#     all_rooms = Room.objects.all()
+#     return JsonResponse(all_rooms, safe=False)
 
 
 @login_required()

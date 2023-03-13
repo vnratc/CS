@@ -1,0 +1,16 @@
+.room-item, .res-item  {
+    cursor: pointer;
+}
+
+.img-fluid {
+    width: 100%;
+}
+
+#results-div, #my_reservations-div, #room-div, #select_res-div {
+    width: 75%;
+}
+@media (width < 768px) {
+    #results-div, #my_reservations-div, #room-div, #select_res-div {
+        width: 100%;
+    }
+}
