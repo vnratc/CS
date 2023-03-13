@@ -1,7 +1,6 @@
-/* .room-item, .res-item  {
-    cursor: pointer;
-    margin-bottom: 20rem;
-} */
+.room-item, .res-item, .sel-res-item, .card-body, .card  {
+    background-color: rgba(255, 255, 255, 0.498);
+}
 
 .img-fluid {
     width: 100%;
@@ -16,3 +15,33 @@
     }
 }
 
+body {
+    background-image: url("shore_blurred.jpg");
+    background-attachment: fixed;
+    background-size: cover;
+    -webkit-filter: blur(8);
+    filter: blur(8);
+}
+
+* {
+    font-family: 'Itim', cursive;
+}
+
+#results-div, #room-div, #rooms-div, #my_reservations-div, #select_res-div {
+    font-size: 1.2rem;
+    display: none;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+#search-div, #results-div, #room-div, #rooms-div, #my_reservations-div, #select_res-div {
+    animation-name: appear;
+    animation-duration: 500ms;
+}

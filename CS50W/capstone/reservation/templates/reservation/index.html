@@ -4,29 +4,39 @@
 {% block body %}
 
 
-    <button class="btn btn-sm btn-info btn-nav m-2" id="search">Search</button>
-    <button class="btn btn-sm btn-info btn-nav m-2" id="rooms">All Rooms</button>
+    <button class="btn btn-sm btn-dark m-2" id="search">Search</button>
+    <button class="btn btn-sm btn-dark m-2" id="rooms">All Rooms</button>
     {% if user.is_authenticated %}
-        <button class="btn btn-sm btn-info btn-nav m-2" id="my_reservations" aria-current="User">My Reservations</button>
+        <button class="btn btn-sm btn-dark m-2" id="my_reservations" aria-current="User">My Reservations</button>
     {% else %}
-        <a class="btn btn-sm btn-info btn-nav m-2" href="{% url 'login' %}" aria-current="Log In">Log In</a>
-        <a class="btn btn-sm btn-info btn-nav m-2" href="{% url 'register' %}" aria-current="Register">Register</a>
+        <a class="btn btn-sm btn-dark m-2" href="{% url 'login' %}" aria-current="Log In">Log In</a>
+        <a class="btn btn-sm btn-dark m-2" href="{% url 'register' %}" aria-current="Register">Register</a>
     {% endif %}
-
-    <hr>
 
         <div id="search-div" class="container text-center">
             <h1 class="display-6 my-3">Search</h1>
-            <center>
                 <form id="search-form">
                     {% csrf_token %}
-                    <div class="mb-2">{{ search_form.checkin.label_tag }} <button class="change-date btn btn-secondary" id="chin-" type="button"><</button> {{ search_form.checkin }} <button class="change-date btn btn-secondary" id="chin" type="button">></button></div>
-                    <div class="mb-2">{{ search_form.checkout.label_tag }} <button class="change-date btn btn-secondary" id="chout-" type="button"><</button> {{ search_form.checkout }} <button class="change-date btn btn-secondary" id="chout" type="button">></button></div>
-                    <div class="mb-2">{{ search_form.pers_num.label_tag }} {{ search_form.pers_num }}</div>
-                    <div class="mb-2">{{ search_form.req_room }}</div>
-                    <button class="mb-2 btn btn-success" id="search-btn" type="button">Search</button>
+                    <div class="my-1">
+                        <label for="checkin" class="fs-5">Checkin</label> 
+                        
+                        <button class="change-date btn btn-dark m-2" id="chin-" type="button"><</button> 
+                        {{ search_form.checkin }} 
+                        <button class="change-date btn btn-dark m-2" id="chin" type="button">></button>
+                    </div>
+                    <div class="my-1">
+                        <label for="checkout" class="fs-5">Checkout</label>  
+                        <button class="change-date btn btn-dark m-2" id="chout-" type="button"><</button> 
+                        {{ search_form.checkout }} 
+                        <button class="change-date btn btn-dark m-2" id="chout" type="button">></button>
+                    </div>
+                    <div class="my-1">
+                        <label for="pers_num" class="fs-5">Number of Guests</label> 
+                        {{ search_form.pers_num }}
+                    </div>
+                    <div class="my-1">{{ search_form.req_room }}</div>
+                    <button class="my-1 btn btn-success" id="search-btn" type="button">Search</button>
                 </form>
-            </center>
         </div>
 
         <div id="results-div" class="container"></div>
@@ -44,7 +54,7 @@
                                 <h5 class="card-title">{{ room.title }}</h5>
                                 <p class="card-text">Price per night: ${{ room.price }}. Beds: {{ room.bed_num }}</p>
                                 <p class="card-text">{{ room.description }}</p>
-                                <p class="card-text"><small class="text-muted"><button id="select-{{ room.id }}" class="search-title mb-2 btn btn-success">Search Available Dates</button></small></p>
+                                <p class="card-text"><small class="text-muted"><button id="select-{{ room.id }}" class="search-title my-1 btn btn-success">Search Available Dates</button></small></p>
                             </div>
                         </div>
                     

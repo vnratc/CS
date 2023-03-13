@@ -52,15 +52,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function create_room_div(room) {
     let room_div = document.createElement('div')
-    room_div.classList.add('room-item','rounded', 'border', 'border-secondary', 'p-2', 'my-5', 'border-opacity-25')
+    room_div.classList.add('room-item','rounded', 'border', 'border-secondary', 'my-5', 'border-opacity-25')
     room_div.id = room.id
     total = (room.price * room.duration).toFixed(2)
-    room_div.innerHTML = `<img class="img-fluid" src="${room.img_url}"><br>
+    room_div.innerHTML = `<img class="img-fluid rounded-top" src="${room.img_url}"><br>
     <h5 class="card-title mt-4">${room.title}.</h5><br>
     ${document.querySelector('#checkin').value} - ${document.querySelector('#checkout').value}<br>
     Total price for ${room.duration} nights: <strong>\$${total}</strong><br>
     Price per night: \$${room.price.toFixed(2)}.<br>
-    Beds: ${room.bed_num}.<br>${room.description.replaceAll('\n', '<br>')}`
+    Beds: ${room.bed_num}.<br>
+    <p class='p-4'>${room.description.replaceAll('\n', '<br>')}</p>`
     return room_div
 }
 
@@ -161,12 +162,11 @@ async function select_room(room_id) {
         // Create btn
         let reserve_btn = document.createElement('button')
         reserve_btn.id = 'reserve-' + room.id
-        reserve_btn.classList.add('btn','mb-5', 'btn-success')
+        reserve_btn.classList.add('btn', 'mb-5', 'btn-success')
         reserve_btn.innerHTML = 'Reserve'
         document.querySelector('#room-div').append(reserve_btn)
         // Attach 'reserve' function
-        reserve_btn.addEventListener('click', () => {reserve(room)})
-        
+        reserve_btn.addEventListener('click', () => {reserve(room)}) 
     })
 }
 
@@ -218,13 +218,13 @@ async function my_reservations() {
         document.querySelector('#my_reservations-div').prepend(title)
         for (res of reservations) {
             let res_div = document.createElement('div')
-            res_div.classList.add('res-item','rounded', 'border', 'border-secondary', 'p-2', 'my-5', 'border-opacity-25')
+            res_div.classList.add('res-item','rounded', 'border', 'border-secondary', 'my-5', 'border-opacity-25')
             res_div.id = res.id
-            res_div.innerHTML = `<img class="img-fluid" src="${res.room_img_url}"><br>
-            ${res.room_title}, Beds: ${res.room_bed_num}<br>
+            res_div.innerHTML = `<img class="img-fluid rounded-top" src="${res.room_img_url}"><br>
+            <h5 class="card-title mt-4">${res.room_title}</h5>Beds: ${res.room_bed_num}<br>
             ${res.checkin} - ${res.checkout}<br>
             <strong>\$${res.total}</strong> for ${res.duration} nights<br>
-            ${res.room_description.replaceAll('\n', '<br>')}`
+            <p class='p-4'>${res.room_description.replaceAll('\n', '<br>')}</p>`
             document.querySelector('#my_reservations-div').append(res_div)
         }
     })
@@ -245,13 +245,13 @@ async function select_res(res) {
     .then(res => {
         // Create div
         let sel_res_div = document.createElement('div')
-        sel_res_div.classList.add('sel-res-item','rounded', 'border', 'border-secondary', 'p-2', 'my-3', 'border-opacity-25')
+        sel_res_div.classList.add('sel-res-item','rounded', 'border', 'border-secondary', 'my-3', 'border-opacity-25')
         sel_res_div.id = res.id
-        sel_res_div.innerHTML = `<img class="img-fluid" src="${res.room_img_url}"><br>
-        ${res.room_title}, Beds: ${res.room_bed_num}<br>
+        sel_res_div.innerHTML = `<img class="img-fluid rounded-top" src="${res.room_img_url}"><br>
+        <h5 class="card-title mt-4">${res.room_title}</h5>Beds: ${res.room_bed_num}<br>
         ${res.checkin} - ${res.checkout}<br>
         <strong>\$${res.total}</strong> for ${res.duration} nights<br>
-        ${res.room_description.replaceAll('\n', '<br>')}`
+        <p class='p-4'>${res.room_description.replaceAll('\n', '<br>')}</p>`
         document.querySelector('#select_res-div').append(sel_res_div)
         // Create btn
         let cancel_btn = document.createElement('button')
