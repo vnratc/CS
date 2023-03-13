@@ -6,6 +6,8 @@ today_str = datetime.now().date().strftime('%Y-%m-%d')
 day = timedelta(days=1)
 tomorow_str = (datetime.now().date() + day).strftime('%Y-%m-%d')
 
+numbers = [(num, num) for num in range(1, 11)]
+
 class SearchForm(forms.Form):
     checkin = forms.DateField(initial=today_str, widget=forms.DateInput(attrs={
         'type': 'date',
@@ -19,7 +21,7 @@ class SearchForm(forms.Form):
         'class': 'btn btn-outline-secondary'
     }))
    
-    pers_num = forms.IntegerField(initial=1 , widget=forms.NumberInput(attrs={
+    pers_num = forms.ChoiceField(choices=numbers, initial=1 , widget=forms.Select(attrs={
         'id': 'pers_num',
         'min': '1',
         'max': '10',

@@ -57,8 +57,9 @@ function create_room_div(room) {
     total = (room.price * room.duration).toFixed(2)
     room_div.innerHTML = `<img class="img-fluid" src="${room.img_url}"><br>
     <h5 class="card-title mt-4">${room.title}.</h5><br>
-    Price per night: \$${room.price.toFixed(2)}.<br>
+    ${document.querySelector('#checkin').value} - ${document.querySelector('#checkout').value}<br>
     Total price for ${room.duration} nights: <strong>\$${total}</strong><br>
+    Price per night: \$${room.price.toFixed(2)}.<br>
     Beds: ${room.bed_num}.<br>${room.description.replaceAll('\n', '<br>')}`
     return room_div
 }
@@ -137,7 +138,7 @@ async function results() {
 
 
 async function select_room(room_id) {
-    document.querySelectorAll('#results-div, #room-div, #my_reservations-div, #select_res-div').forEach(div => {
+    document.querySelectorAll('#search-div, #results-div, #room-div, #my_reservations-div, #select_res-div').forEach(div => {
         div.style.display = 'none'
     })
     document.querySelector('#room-div').style.display = 'block'
@@ -220,9 +221,9 @@ async function my_reservations() {
             res_div.classList.add('res-item','rounded', 'border', 'border-secondary', 'p-2', 'my-5', 'border-opacity-25')
             res_div.id = res.id
             res_div.innerHTML = `<img class="img-fluid" src="${res.room_img_url}"><br>
+            ${res.room_title}, Beds: ${res.room_bed_num}<br>
             ${res.checkin} - ${res.checkout}<br>
             <strong>\$${res.total}</strong> for ${res.duration} nights<br>
-            ${res.room_title}, Beds: ${res.room_bed_num}<br>
             ${res.room_description.replaceAll('\n', '<br>')}`
             document.querySelector('#my_reservations-div').append(res_div)
         }
@@ -247,9 +248,9 @@ async function select_res(res) {
         sel_res_div.classList.add('sel-res-item','rounded', 'border', 'border-secondary', 'p-2', 'my-3', 'border-opacity-25')
         sel_res_div.id = res.id
         sel_res_div.innerHTML = `<img class="img-fluid" src="${res.room_img_url}"><br>
+        ${res.room_title}, Beds: ${res.room_bed_num}<br>
         ${res.checkin} - ${res.checkout}<br>
         <strong>\$${res.total}</strong> for ${res.duration} nights<br>
-        ${res.room_title}, Beds: ${res.room_bed_num}<br>
         ${res.room_description.replaceAll('\n', '<br>')}`
         document.querySelector('#select_res-div').append(sel_res_div)
         // Create btn

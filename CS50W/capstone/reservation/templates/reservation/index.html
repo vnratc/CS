@@ -8,7 +8,6 @@
     <button class="btn btn-sm btn-info btn-nav m-2" id="rooms">All Rooms</button>
     {% if user.is_authenticated %}
         <button class="btn btn-sm btn-info btn-nav m-2" id="my_reservations" aria-current="User">My Reservations</button>
-        <a class="btn btn-sm btn-info btn-nav m-2" href="{% url 'logout' %}" aria-current="Log out">Log Out</a>
     {% else %}
         <a class="btn btn-sm btn-info btn-nav m-2" href="{% url 'login' %}" aria-current="Log In">Log In</a>
         <a class="btn btn-sm btn-info btn-nav m-2" href="{% url 'register' %}" aria-current="Register">Register</a>
