@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     // Change dates with buttons
     document.querySelectorAll('.change-date').forEach(btn => {
-        // Try event and eventlistener, is it better with target?
         btn.onclick = async function() {
             let chin = document.querySelector('#checkin').value
             let chout = document.querySelector('#checkout').value
@@ -102,7 +101,6 @@ async function query_db() {
     await fetch(`search?chin=${chin}&chout=${chout}&pers_num=${pers_num}&req_room=${req_room}`)
     .then(response => response.json())
     .then(rooms => {
-        console.log(rooms.length)
         if (rooms.length > 0) {
             for (r of rooms) {
                 let room_div = create_room_div(r)
@@ -130,10 +128,14 @@ function search() {
 }
 
 async function results() {
-    document.querySelector('#results-div').style.display = 'block'
     document.querySelectorAll('#rooms-div, #my_reservations-div, #select_res-div, #room-div').forEach(div => {
         div.style.display = 'none'
     })
+    document.querySelector('#results-div').style.display = 'block'
+    document.querySelector('#results-div').style.animationPlayState = 'none'
+    document.querySelector('#results-div').offsetHeight;
+    document.querySelector('#results-div').style.animation = null;
+    document.querySelector('#results-div').style.animationPlayState = 'running'
     query_db()
 }
 
@@ -152,7 +154,7 @@ async function select_room(room_id) {
     // Grab dates from the form
     let chin = document.querySelector('#checkin').value
     let chout = document.querySelector('#checkout').value
-
+    console.log(chout)
     await fetch(`room/${parseInt(room_id)}?chin=${chin}&chout=${chout}`)
     .then(response => response.json())
     .then(room => {

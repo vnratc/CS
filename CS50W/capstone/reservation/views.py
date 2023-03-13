@@ -116,11 +116,6 @@ def reserve(request, room_id):
     else: return HttpResponseRedirect(reverse('index'))
 
 
-# def all_rooms():
-#     all_rooms = Room.objects.all()
-#     return JsonResponse(all_rooms, safe=False)
-
-
 @login_required()
 def my_reservations(request):
     reservations = Reservation.objects.filter(guest=request.user)
@@ -144,6 +139,7 @@ def cancel_res(request, res_id):
     room.reservations.remove(reservation)
     reservation.delete()
     return JsonResponse('Reservation Canceled', safe=False)
+
 
 # login, logout, register
 
