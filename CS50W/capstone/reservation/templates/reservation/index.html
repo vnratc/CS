@@ -4,14 +4,14 @@
 {% block body %}
 
 
-    <button class="btn btn-sm btn-info btn-nav" id="search">Search</button>
-    <button class="btn btn-sm btn-info btn-nav" id="rooms">All Rooms</button>
+    <button class="btn btn-sm btn-info btn-nav m-2" id="search">Search</button>
+    <button class="btn btn-sm btn-info btn-nav m-2" id="rooms">All Rooms</button>
     {% if user.is_authenticated %}
-        <button class="btn btn-sm btn-info btn-nav" id="my_reservations" aria-current="User">My Reservations</button>
-        <a class="btn btn-sm btn-info btn-nav" href="{% url 'logout' %}" aria-current="Log out">Log Out</a>
+        <button class="btn btn-sm btn-info btn-nav m-2" id="my_reservations" aria-current="User">My Reservations</button>
+        <a class="btn btn-sm btn-info btn-nav m-2" href="{% url 'logout' %}" aria-current="Log out">Log Out</a>
     {% else %}
-        <a class="btn btn-sm btn-info btn-nav" href="{% url 'login' %}" aria-current="Log In">Log In</a>
-        <a class="btn btn-sm btn-info btn-nav" href="{% url 'register' %}" aria-current="Register">Register</a>
+        <a class="btn btn-sm btn-info btn-nav m-2" href="{% url 'login' %}" aria-current="Log In">Log In</a>
+        <a class="btn btn-sm btn-info btn-nav m-2" href="{% url 'register' %}" aria-current="Register">Register</a>
     {% endif %}
 
     <hr>

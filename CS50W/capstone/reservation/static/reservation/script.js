@@ -52,12 +52,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function create_room_div(room) {
     let room_div = document.createElement('div')
-    room_div.classList.add('room-item','rounded', 'border', 'border-secondary', 'p-2', 'my-3', 'border-opacity-25')
+    room_div.classList.add('room-item','rounded', 'border', 'border-secondary', 'p-2', 'my-5', 'border-opacity-25')
     room_div.id = room.id
     total = (room.price * room.duration).toFixed(2)
     room_div.innerHTML = `<img class="img-fluid" src="${room.img_url}"><br>
     <h5 class="card-title mt-4">${room.title}.</h5><br>
-    Price per night: \$${room.price.toFixed(2)}.<br>Total price for ${room.duration} nights: \$${total}<br>
+    Price per night: \$${room.price.toFixed(2)}.<br>
+    Total price for ${room.duration} nights: <strong>\$${total}</strong><br>
     Beds: ${room.bed_num}.<br>${room.description.replaceAll('\n', '<br>')}`
     return room_div
 }
@@ -99,14 +100,13 @@ async function query_db() {
     await fetch(`search?chin=${chin}&chout=${chout}&pers_num=${pers_num}&req_room=${req_room}`)
     .then(response => response.json())
     .then(rooms => {
-        try {
+        console.log(rooms.length)
+        if (rooms.length > 0) {
             for (r of rooms) {
                 let room_div = create_room_div(r)
                 document.querySelector('#results-div').append(room_div)
             }
-        } catch (e) {
-            console.log(e)
-        }
+        } else {title.innerHTML = 'No Rooms Available with selected parameters'}
     })
     document.querySelectorAll('.room-item').forEach(room => {
         room.addEventListener('click', () => {select_room(room.id)})})
@@ -160,7 +160,7 @@ async function select_room(room_id) {
         // Create btn
         let reserve_btn = document.createElement('button')
         reserve_btn.id = 'reserve-' + room.id
-        reserve_btn.classList.add('btn','mb-2', 'btn-success')
+        reserve_btn.classList.add('btn','mb-5', 'btn-success')
         reserve_btn.innerHTML = 'Reserve'
         document.querySelector('#room-div').append(reserve_btn)
         // Attach 'reserve' function
@@ -213,12 +213,17 @@ async function my_reservations() {
     .then(reservations => {
         let title = document.createElement('h2')
         title.innerHTML = 'My Reservations'
+        title.classList.add('display-6', 'my-3')
         document.querySelector('#my_reservations-div').prepend(title)
         for (res of reservations) {
             let res_div = document.createElement('div')
-            res_div.classList.add('res-item','rounded', 'border', 'border-secondary', 'p-2', 'my-3', 'border-opacity-25')
+            res_div.classList.add('res-item','rounded', 'border', 'border-secondary', 'p-2', 'my-5', 'border-opacity-25')
             res_div.id = res.id
-            res_div.innerHTML = `<img class="img-fluid" src="${res.room_img_url}"><br>${res.checkin} - ${res.checkout}<br>\$${res.total} for ${res.duration} nights<br>${res.room_title}, Beds: ${res.room_bed_num}<br>${res.room_description.replaceAll('\n', '<br>')}`
+            res_div.innerHTML = `<img class="img-fluid" src="${res.room_img_url}"><br>
+            ${res.checkin} - ${res.checkout}<br>
+            <strong>\$${res.total}</strong> for ${res.duration} nights<br>
+            ${res.room_title}, Beds: ${res.room_bed_num}<br>
+            ${res.room_description.replaceAll('\n', '<br>')}`
             document.querySelector('#my_reservations-div').append(res_div)
         }
     })
@@ -241,12 +246,16 @@ async function select_res(res) {
         let sel_res_div = document.createElement('div')
         sel_res_div.classList.add('sel-res-item','rounded', 'border', 'border-secondary', 'p-2', 'my-3', 'border-opacity-25')
         sel_res_div.id = res.id
-        sel_res_div.innerHTML = `<img class="img-fluid" src="${res.room_img_url}"><br>${res.checkin} - ${res.checkout}<br>\$${res.total} for ${res.duration} nights<br>${res.room_title}, Beds: ${res.room_bed_num}<br>${res.room_description.replaceAll('\n', '<br>')}`
+        sel_res_div.innerHTML = `<img class="img-fluid" src="${res.room_img_url}"><br>
+        ${res.checkin} - ${res.checkout}<br>
+        <strong>\$${res.total}</strong> for ${res.duration} nights<br>
+        ${res.room_title}, Beds: ${res.room_bed_num}<br>
+        ${res.room_description.replaceAll('\n', '<br>')}`
         document.querySelector('#select_res-div').append(sel_res_div)
         // Create btn
         let cancel_btn = document.createElement('button')
         cancel_btn.id = 'cancel-' + res.id
-        cancel_btn.classList.add('btn', 'btn-warning', 'mb-3')
+        cancel_btn.classList.add('btn', 'btn-warning', 'my-5')
         cancel_btn.innerHTML = 'Cancel Reservation'
         document.querySelector('#select_res-div').append(cancel_btn)
         // Attach 'cancel' function
