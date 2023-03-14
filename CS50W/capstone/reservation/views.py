@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import *
+from .models import User, Reservation, Room
 from .forms import SearchForm
 
 
@@ -135,6 +135,10 @@ def cancel_res(request, res_id):
     reservation = Reservation.objects.get(pk=data['id'])
     user = request.user
     room = Room.objects.get(pk=data['room_id'])
+    # Check if this user is the res creator or admin
+    if reservation.guest != user or reservation.guest != User.objects.get(pk=1):
+        print('You are not authorized to cancel this reservation')
+        return JsonResponse('You are not authorized to cancel this reservation', safe=False)
     user.reservations.remove(reservation)
     room.reservations.remove(reservation)
     reservation.delete()

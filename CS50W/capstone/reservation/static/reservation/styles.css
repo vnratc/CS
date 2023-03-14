@@ -1,4 +1,4 @@
-.room-item, .res-item, .sel-res-item, .card-body, .card  {
+.room-item, .res-item, .sel-res-item, .card-body, .card, .form-control  {
     background-color: rgba(255, 255, 255, 0.498);
 }
 

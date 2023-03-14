@@ -17,15 +17,16 @@
     <body>
             <div class="bg-img">
                 <div class="container text-center" id="main-container">
-                    {% if user.is_authenticated %}
                     <h1 class="display-4 my-2" id="page-title">
                         <a class="text-decoration-none text-black" href="{% url 'index' %}">Reservation</a>
                     </h1>
+                    {% if user.is_authenticated %}
                     <div class="fs-4 my-2">
                         Username: {{ user }}
-                        <a class="btn btn-sm btn-dark btn-nav m-2" href="{% url 'logout' %}" aria-current="Log out">Log Out</a>
+                        <a class="mx-4" href="{% url 'logout' %}" aria-current="Log out">Log Out</a>
                     </div>
                     {% endif %}
+
                     {% block body %}
                     {% endblock %}
                 </div>

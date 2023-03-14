@@ -8,9 +8,6 @@
     <button class="btn btn-sm btn-dark m-2" id="rooms">All Rooms</button>
     {% if user.is_authenticated %}
         <button class="btn btn-sm btn-dark m-2" id="my_reservations" aria-current="User">My Reservations</button>
-    {% else %}
-        <a class="btn btn-sm btn-dark m-2" href="{% url 'login' %}" aria-current="Log In">Log In</a>
-        <a class="btn btn-sm btn-dark m-2" href="{% url 'register' %}" aria-current="Register">Register</a>
     {% endif %}
 
         <div id="search-div" class="container text-center">

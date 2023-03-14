@@ -154,7 +154,6 @@ async function select_room(room_id) {
     // Grab dates from the form
     let chin = document.querySelector('#checkin').value
     let chout = document.querySelector('#checkout').value
-    console.log(chout)
     await fetch(`room/${parseInt(room_id)}?chin=${chin}&chout=${chout}`)
     .then(response => response.json())
     .then(room => {
