@@ -1,9 +1,0 @@
-(
-                checkin__lte=requested_checkin, checkout__gt=requested_checkin
-                ).filter(
-                checkin__lt=requested_checkout, checkout__gte=requested_checkout
-                ).filter(
-                checkin__gt=requested_checkin, checkout__lt=requested_checkout
-                )
-
-

@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function create_room_div(room) {
     let room_div = document.createElement('div')
     room_div.classList.add('room-item','rounded', 'border', 'border-secondary', 'my-5', 'border-opacity-25')
-    room_div.id = room.id
+    // room_div.id = room.id
     total = (room.price * room.duration).toFixed(2)
     room_div.innerHTML = `<img class="img-fluid rounded-top" src="${room.img_url}"><br>
     <h5 class="card-title mt-4">${room.title}</h5><br>
@@ -63,6 +63,7 @@ function create_room_div(room) {
     Beds: ${room.bed_num}
     </p>
     <p class='px-4 descr'>${room.description.replaceAll('\n', '<br>')}</p>`
+    room_div.addEventListener('click', () => select_room(room))
     return room_div
 }
 
@@ -106,13 +107,15 @@ async function query_db() {
     .then(rooms => {
         if (rooms.length > 0) {
             for (r of rooms) {
+                console.log(r)
                 let room_div = create_room_div(r)
+                console.log(r.id)
                 document.querySelector('#results-div').append(room_div)
             }
         } else {title.innerHTML = 'No Rooms Available with selected parameters'}
     })
-    document.querySelectorAll('.room-item').forEach(room => {
-        room.addEventListener('click', () => {select_room(room.id)})})
+    // document.querySelectorAll('.room-item').forEach(room => {
+    //     room.addEventListener('click', () => {select_room(room.id)})})
     console.log('Results Updated')
 }
 
@@ -145,10 +148,11 @@ async function results() {
 }
 
 
-async function select_room(room_id) {
+async function select_room(room) {
     document.querySelectorAll('#search-div, #results-div, #room-div, #my_reservations-div, #select_res-div').forEach(div => {
         div.style.display = 'none'
     })
+    console.log(room)
     document.querySelector('#room-div').style.display = 'block'
     remove_results()
     let title = document.createElement('h2')
@@ -160,7 +164,7 @@ async function select_room(room_id) {
     // Grab dates from the form
     let chin = document.querySelector('#checkin').value
     let chout = document.querySelector('#checkout').value
-    await fetch(`room/${parseInt(room_id)}?chin=${chin}&chout=${chout}`)
+    await fetch(`room/${parseInt(room.id)}?chin=${chin}&chout=${chout}`)
     .then(response => response.json())
     .then(room => {
         // Create div
@@ -168,7 +172,7 @@ async function select_room(room_id) {
         document.querySelector('#room-div').append(room_div)
         // Create btn
         let reserve_btn = document.createElement('button')
-        reserve_btn.id = 'reserve-' + room.id
+        // reserve_btn.id = 'reserve-' + room.id
         reserve_btn.classList.add('btn', 'mb-5', 'btn-success')
         reserve_btn.innerHTML = 'Reserve'
         document.querySelector('#room-div').append(reserve_btn)
@@ -228,7 +232,7 @@ async function my_reservations() {
         for (res of reservations) {
             let res_div = document.createElement('div')
             res_div.classList.add('res-item','rounded', 'border', 'border-secondary', 'my-5', 'border-opacity-25')
-            res_div.id = res.id
+            // res_div.id = res.id
             res_div.innerHTML = `<img class="img-fluid rounded-top" src="${res.room_img_url}"><br>
             <h5 class="card-title mt-4">${res.room_title}</h5>
             <p class="mb-4">
@@ -236,12 +240,13 @@ async function my_reservations() {
             ${res.checkin} - ${res.checkout}<br>
             <strong>\$${res.total}</strong> for ${res.duration} nights<br>
             </p>`
+            res_div.addEventListener('click', () => select_res(res))
             document.querySelector('#my_reservations-div').append(res_div)
         }
     })
-    document.querySelectorAll('.res-item').forEach( res => {
-        res.addEventListener('click', () => {select_res(res)})
-    })
+    // document.querySelectorAll('.res-item').forEach( res => {
+    //     res.addEventListener('click', () => {select_res(res)})
+    // })
     document.querySelector('footer').style.display = 'block'
 }
 
@@ -259,7 +264,7 @@ async function select_res(res) {
         // Create div
         let sel_res_div = document.createElement('div')
         sel_res_div.classList.add('sel-res-item','rounded', 'border', 'border-secondary', 'my-3', 'border-opacity-25')
-        sel_res_div.id = res.id
+        // sel_res_div.id = res.id
         sel_res_div.innerHTML = `<img class="img-fluid rounded-top" src="${res.room_img_url}"><br>
         <h5 class="card-title mt-4">${res.room_title}</h5>Beds: ${res.room_bed_num}<br>
         ${res.checkin} - ${res.checkout}<br>
@@ -268,7 +273,7 @@ async function select_res(res) {
         document.querySelector('#select_res-div').append(sel_res_div)
         // Create btn
         let cancel_btn = document.createElement('button')
-        cancel_btn.id = 'cancel-' + res.id
+        // cancel_btn.id = 'cancel-' + res.id
         cancel_btn.classList.add('btn', 'btn-warning', 'my-5')
         cancel_btn.innerHTML = 'Cancel Reservation'
         document.querySelector('#select_res-div').append(cancel_btn)

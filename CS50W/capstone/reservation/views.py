@@ -12,11 +12,6 @@ from .models import User, Reservation, Room
 from .forms import SearchForm
 
 
-def show_error(request, message):
-    return render(request, 'reservation/error.html', {
-        'message': message
-    })
-
 def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login'))
@@ -93,40 +88,40 @@ def room(request, room_id):
 @csrf_exempt
 @login_required()
 def reserve(request, room_id):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        # Convert str to date objects
-        chin = datetime.strptime(data['chin'], '%Y-%m-%d').date()
-        chout = datetime.strptime(data['chout'], '%Y-%m-%d').date()
-        # Check if checkin is in the past
-        if chin < datetime.now().date():
-            print('Checkin date can not be in the past')
-            return JsonResponse({'message': 'Checkin date can not be in the past'}, safe=False)
-        # Check requested period and room for availability
-        requested_room = Room.objects.get(pk=room_id)
-        for reservation in requested_room.reservations.all():
-            if (chin >= reservation.checkin and chin < reservation.checkout or
-                chout > reservation.checkin and chout <= reservation.checkout or
-                chin < reservation.checkin and chout > reservation.checkout):
-                print('These dates are not available')
-                return JsonResponse({'message': 'These dates are not available'}, safe=False)
-                # return show_error(request, 'These dates are not available')
-            else: print('No dates conflict')
-        # Check if room has enough beds
-        if data['pers_num'] > requested_room.bed_num:
-            print('Requested room does not have enough beds')
-            return JsonResponse('Requested room does not have enough beds', safe=False)
-        # Create Reservation, add it to room and user
-        duration = (chout - chin).days
-        total = round(requested_room.price * duration, 2)
-        user = request.user
-        reservation = Reservation(guest=user, room=requested_room, checkin=chin, 
-                                  checkout=chout, duration=duration, total=total)
-        reservation.save()
-        requested_room.reservations.add(reservation)
-        user.reservations.add(reservation)     
-        return JsonResponse({'message': 'Reservation Successful'})
-    else: return HttpResponseRedirect(reverse('index'))
+    if request.method != 'POST':
+        return HttpResponseRedirect(reverse('index'))
+    data = json.loads(request.body)
+    # Convert str to date objects
+    chin = datetime.strptime(data['chin'], '%Y-%m-%d').date()
+    chout = datetime.strptime(data['chout'], '%Y-%m-%d').date()
+    # Check if checkin is in the past
+    if chin < datetime.now().date() or chout < datetime.now().date():
+        print('Checkin or Checkout date can not be in the past')
+        return JsonResponse({'message': 'Checkin or Checkout date can not be in the past'}, safe=False)
+    # Check requested period and room for availability
+    requested_room = Room.objects.get(pk=room_id)
+    for reservation in requested_room.reservations.all():
+        if (chin >= reservation.checkin and chin < reservation.checkout or
+            chout > reservation.checkin and chout <= reservation.checkout or
+            chin < reservation.checkin and chout > reservation.checkout):
+            print('These dates are not available')
+            return JsonResponse({'message': 'These dates are not available'}, safe=False)
+        else: print('No dates conflict')
+    # Check if room has enough beds
+    if data['pers_num'] > requested_room.bed_num:
+        print('Requested room does not have enough beds')
+        return JsonResponse('Requested room does not have enough beds', safe=False)
+    # Create Reservation, add it to room and user
+    duration = (chout - chin).days
+    total = round(requested_room.price * duration, 2)
+    user = request.user
+    reservation = Reservation(guest=user, room=requested_room, checkin=chin, 
+                              checkout=chout, duration=duration, total=total)
+    reservation.save()
+    requested_room.reservations.add(reservation)
+    user.reservations.add(reservation)     
+    return JsonResponse({'message': 'Reservation Successful'})
+
 
 
 @login_required()
@@ -134,10 +129,12 @@ def my_reservations(request):
     reservations = Reservation.objects.filter(guest=request.user)
     return JsonResponse([res.serialize() for res in reservations], safe=False)
 
+
 @login_required()
 def select_res(request, res_id):
     res = Reservation.objects.get(pk=res_id)
     return JsonResponse(res.serialize(), safe=False)
+
 
 @csrf_exempt
 @login_required()
@@ -158,28 +155,20 @@ def cancel_res(request, res_id):
     return JsonResponse('Reservation Canceled', safe=False)
 
 
-# login, logout, register
-
-
 def login_view(request):
-    if request.method == "POST":
-
-        # Attempt to sign user in
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
-
-        # Check if authentication successful
-        if user is not None:
-            login(request, user)
-            return HttpResponseRedirect(reverse("index"))
-        else:
-            return render(request, "reservation/login.html", {
-                "message": "Invalid username and/or password."
-            })
-    else:
+    if request.method != "POST":
         return render(request, "reservation/login.html")
-
+    username = request.POST["username"]
+    password = request.POST["password"]
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return HttpResponseRedirect(reverse("index"))
+    else:
+        return render(request, "reservation/login.html", {
+            "message": "Invalid username and/or password."
+        })
+        
 
 def logout_view(request):
     logout(request)
@@ -187,27 +176,24 @@ def logout_view(request):
 
 
 def register(request):
-    if request.method == "POST":
-        username = request.POST["username"]
-        email = request.POST["email"]
-
-        # Ensure password matches confirmation
-        password = request.POST["password"]
-        confirmation = request.POST["confirmation"]
-        if password != confirmation:
-            return render(request, "reservation/register.html", {
-                "message": "Passwords must match."
-            })
-
-        # Attempt to create new user
-        try:
-            user = User.objects.create_user(username, email, password)
-            user.save()
-        except IntegrityError:
-            return render(request, "reservation/register.html", {
-                "message": "Username already taken."
-            })
-        login(request, user)
-        return HttpResponseRedirect(reverse("index"))
-    else:
+    if request.method != "POST":
         return render(request, "reservation/register.html")
+    username = request.POST["username"]
+    email = request.POST["email"]
+    password = request.POST["password"]
+    confirmation = request.POST["confirmation"]
+    if password != confirmation:
+        return render(request, "reservation/register.html", {
+            "message": "Passwords must match."
+        })
+    try:
+        user = User.objects.create_user(username, email, password)
+        user.save()
+    except IntegrityError:
+        return render(request, "reservation/register.html", {
+            "message": "Username already taken."
+        })
+    login(request, user)
+    return HttpResponseRedirect(reverse("index"))
+
+        
