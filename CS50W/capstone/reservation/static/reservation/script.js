@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     })
-    // Query db on change in form only if 3 main inputs hava value
+    // Reset search on change in form
     document.querySelectorAll('input, select').forEach(input => {
         input.onchange = search
     })
@@ -135,10 +135,6 @@ async function results() {
         div.style.display = 'none'
     })
     document.querySelector('#results-div').style.display = 'block'
-    document.querySelector('#results-div').style.animationPlayState = 'none'
-    document.querySelector('#results-div').offsetHeight;
-    document.querySelector('#results-div').style.animation = null;
-    document.querySelector('#results-div').style.animationPlayState = 'running'
     if (document.querySelector('#checkout').value &&
     document.querySelector('#checkin').value && 
     document.querySelector('#pers_num').value) {
@@ -158,6 +154,7 @@ async function select_room(room_id) {
     let title = document.createElement('h2')
     title.classList.add('display-6', 'my-3')
     title.innerHTML = 'Your Selection'
+    title.id = 'your-selection'
     document.querySelector('#room-div').prepend(title)
 
     // Grab dates from the form
@@ -178,6 +175,7 @@ async function select_room(room_id) {
         // Attach 'reserve' function
         reserve_btn.addEventListener('click', () => {reserve(room)}) 
     })
+    document.querySelector('#your-selection').scrollIntoView(true)
 }
 
 
@@ -211,14 +209,15 @@ async function rooms() {
 
 async function my_reservations() {
     // Show my_reservations
+    document.querySelector('footer').style.display = 'none'
     document.querySelector('#my_reservations-div').style.display = 'block'
     document.querySelectorAll('#search-div, #results-div, #rooms-div, #room-div, #select_res-div').forEach(div => {
         div.style.display = 'none'
     })
-    remove_reservations()
-    remove_res()
     remove_room()
     remove_results()
+    remove_reservations()
+    remove_res()
     await fetch('my_reservations')
     .then(response => response.json())
     .then(reservations => {
@@ -243,6 +242,7 @@ async function my_reservations() {
     document.querySelectorAll('.res-item').forEach( res => {
         res.addEventListener('click', () => {select_res(res)})
     })
+    document.querySelector('footer').style.display = 'block'
 }
 
 
@@ -274,6 +274,7 @@ async function select_res(res) {
         // Attach 'cancel' function
         cancel_btn.addEventListener('click', () => {cancel_res(res)})
     })
+    document.querySelector('.sel-res-item').scrollIntoView(true)
 }
 
 

@@ -143,8 +143,8 @@ def cancel_res(request, res_id):
     reservation = Reservation.objects.get(pk=data['id'])
     user = request.user
     room = Room.objects.get(pk=data['room_id'])
-    # Check if this user is the res creator or admin
-    if reservation.guest != user or reservation.guest != User.objects.get(pk=1):
+    # Check if this user is the res creator
+    if reservation.guest != user:
         print('You are not authorized to cancel this reservation')
         return JsonResponse('You are not authorized to cancel this reservation', safe=False)
     user.reservations.remove(reservation)

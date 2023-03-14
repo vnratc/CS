@@ -2,7 +2,7 @@
     background-color: rgba(255, 255, 255, 0.498);
 }
 
-.room-item, .res-item {
+#results-div > .room-item, .res-item {
     cursor: pointer;
 }
 
@@ -45,7 +45,7 @@ body {
     }
 }
 
-#search-div, #results-div, #room-div, #rooms-div, #my_reservations-div, #select_res-div {
+#search-div, #results-div, #room-div, #rooms-div, #my_reservations-div, #select_res-div, footer {
     animation-name: appear;
     animation-duration: 500ms;
 }
