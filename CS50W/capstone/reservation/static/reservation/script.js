@@ -56,11 +56,13 @@ function create_room_div(room) {
     total = (room.price * room.duration).toFixed(2)
     room_div.innerHTML = `<img class="img-fluid rounded-top" src="${room.img_url}"><br>
     <h5 class="card-title mt-4">${room.title}.</h5><br>
+    <p class="mb-3">
     ${document.querySelector('#checkin').value} - ${document.querySelector('#checkout').value}<br>
     Total price for ${room.duration} nights: <strong>\$${total}</strong><br>
     Price per night: \$${room.price.toFixed(2)}.<br>
-    Beds: ${room.bed_num}.<br>
-    <p class='p-4'>${room.description.replaceAll('\n', '<br>')}</p>`
+    Beds: ${room.bed_num}.
+    </p>
+    <p class='px-4 descr'>${room.description.replaceAll('\n', '<br>')}</p>`
     return room_div
 }
 
@@ -141,6 +143,7 @@ async function results() {
     document.querySelector('#checkin').value && 
     document.querySelector('#pers_num').value) {
         await query_db()
+        document.querySelectorAll('.descr').forEach(descr => descr.style.display = 'none')
         document.querySelector('#available-rooms').scrollIntoView(true)
     } else (console.log('Fill the search form'))
 }
@@ -228,10 +231,12 @@ async function my_reservations() {
             res_div.classList.add('res-item','rounded', 'border', 'border-secondary', 'my-5', 'border-opacity-25')
             res_div.id = res.id
             res_div.innerHTML = `<img class="img-fluid rounded-top" src="${res.room_img_url}"><br>
-            <h5 class="card-title mt-4">${res.room_title}</h5>Beds: ${res.room_bed_num}<br>
+            <h5 class="card-title mt-4">${res.room_title}</h5>
+            <p class="mb-4">
+            Beds: ${res.room_bed_num}<br>
             ${res.checkin} - ${res.checkout}<br>
             <strong>\$${res.total}</strong> for ${res.duration} nights<br>
-            <p class='p-4'>${res.room_description.replaceAll('\n', '<br>')}</p>`
+            </p>`
             document.querySelector('#my_reservations-div').append(res_div)
         }
     })
