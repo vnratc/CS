@@ -247,6 +247,7 @@ async function my_reservations() {
 
 
 async function select_res(res) {
+    document.querySelector('footer').style.display = 'none'
     document.querySelectorAll('#search-div, #results-div, #rooms-div, #room-div, #my_reservations-div').forEach(div => {
         div.style.display = 'none'
     })
@@ -275,6 +276,7 @@ async function select_res(res) {
         cancel_btn.addEventListener('click', () => {cancel_res(res)})
     })
     document.querySelector('.sel-res-item').scrollIntoView(true)
+    document.querySelector('footer').style.display = 'block'
 }
 
 

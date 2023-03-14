@@ -4,7 +4,7 @@
 {% block body %}
 
 
-    <button class="btn btn-dark m-2" id="search">Search</button>
+    <button class="btn btn-dark m-2" id="search">Find Stay</button>
     <button class="btn btn-dark m-2" id="rooms">All Rooms</button>
     {% if user.is_authenticated %}
         <button class="btn btn-dark m-2" id="my_reservations" aria-current="User">My Reservations</button>
@@ -43,8 +43,7 @@
             <h1 class="display-6 my-3">All Rooms</h1>
             <div class="row row-cols-1 row-cols-lg-2 g-4">
                 {% for room in all_rooms %}
-                    <div class="col d-flex align-items-evenly justify-content-center">
-
+                    <div class="col d-flex align-items-evenly justify-content-center" id="">
                         <div class="card mb-3">
                             <img src="{{ room.img_url  }}" class="card-img-top" alt="...">
                             <div class="card-body">
@@ -54,7 +53,6 @@
                                 <p class="card-text"><small class="text-muted"><button id="select-{{ room.id }}" class="search-title my-1 btn btn-success">Search Available Dates</button></small></p>
                             </div>
                         </div>
-                    
                     </div>
                 {% endfor %}
             </div>
