@@ -109,7 +109,7 @@ async function query_db() {
                 let room_div = create_room_div(r)
                 document.querySelector('#results-div').append(room_div)
             }
-        } else {title.innerHTML = 'No Rooms Available with selected parameters'}
+        } else {title.innerHTML = 'No Rooms Available with Selected Parameters'}
     })
     console.log('Results Updated')
 }

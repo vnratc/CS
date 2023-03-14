@@ -10,7 +10,7 @@ After practicing with TextFields, IntegerFields and BooleanFields in this course
 ### Complexity
 
 #### Server
-As for server-side complexity, smart filtering is applied to every user's search request. The search form values are processed and only available rooms are presented to the user, i.e. already booked rooms for selected dates and rooms with not enough beds for requested number of guests will not be shown. Similar logic is applied when a user clicks the "Reserve" button. Server refuses to create a reservation if its checkin/checkout dates overlap with dates of another one. Another server-side check protects against canceling reservations not belonging to the logged in user. Thus, even by exploiting exposed url paths in html forms and javascript code potential adversaries will not be able to delete someone else's bookings. Server also will not accept past checkin/checkout dates.
+As for server-side complexity, smart filtering is applied to every user's search request. The search form values are processed and only available rooms are presented to the user, i.e. already booked rooms for selected dates and rooms with not enough beds for requested number of guests will not be shown. Similar logic is applied when a user clicks the "Reserve" button. Server refuses to create a reservation if its checkin/checkout dates overlap with dates of another one. Another server-side check protects against canceling reservations not belonging to the logged in user. Thus, even by exploiting exposed url paths in javascript code potential adversaries will not be able to delete someone else's bookings. Server also will not accept past checkin/checkout dates.
 
 #### Client
 As for the client side, database security is improved by not assigning real, database ids to divs and buttons. Thus it is harder to send malicious POST requests. In addition to the date picker inputs, 4 buttons were implemented for a quick increase/decrease of dates. These buttons will not change "Checkin" to earlier than today and "Checkout" earlier than tomorrow. After initial loading of the app the "Checkin" and "Checkout" search form inputs are automatically filled with today's and tomorrow's dates. Changing any search parameters removes all search results. While browsing through all hotel rooms a user has the ability to click the "Search Available Dates" button. After clicking on it the user is taken to the Find Stay view with the preferred room already selected in the form. When a user clicks on the "Search" button the screen automatically scrolls down to the search results. The same feature is implemented for clicking on a particular search result or reservation. Smooth animation using css opacity property is added for switching between app views. 
@@ -18,6 +18,7 @@ As for the client side, database security is improved by not assigning real, dat
 ### Created Files:
 
 - reservation/static/reservation/script.js - this file contains all javascript code for the project. It's responsible for features described in the "Client" paragraph.
+- reservation/static/reservation/shore_blurred.jpg - background image for the app
 - reservation/static/reservation/styles.css - this file contains css properties for different elements, ids and classes
 - reservation/templates/reservation/index.html - the main page of the application
 - reservation/templates/reservation/layout.html - this is the base template for other html files
@@ -36,6 +37,6 @@ In your browser go to the url suggested by the terminal . You will be brought to
 
 ### Additional Information
 
-Please test the search algorithm by creating some reservations and then searching again for the same or conflicting dates for the same room. You are also welcome to test if a reservation can be canceled by sending fetch POST request using the console with an altered reservation id, which is tiresome to obtain. The same technique may tried used to reserve rooms for unavailable dates.
+You are welcome to test the search algorithm by creating some reservations and then searching again for the same or conflicting dates for the same room. You are also welcome to test if a reservation can be canceled by sending fetch POST request using the console with an altered reservation id, which is tiresome to obtain. The same technique may tried used to reserve rooms for unavailable dates.
 
 After finishing the project I discovered that JavaScript also supports Date objects. Using them would have shortened some of my code responsible for handling dates in the search form with neighboring buttons.
