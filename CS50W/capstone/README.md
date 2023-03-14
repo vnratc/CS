@@ -31,6 +31,8 @@ As for the client side, database security is improved by not assigning real, dat
 
 ### How to run the application
 
+Before running the app install Pillow by running the following command in the terminal:
+    python -m pip install Pillow
 To run the app in your terminal navigate to the project's main directory and run the following command to start server:
     python manage.py runserver
 In your browser go to the url suggested by the terminal . You will be brought to the login screen.

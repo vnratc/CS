@@ -25,7 +25,7 @@ class Reservation(models.Model):
             'room_title': self.room.title,
             'room_description': self.room.description,
             'room_bed_num': self.room.bed_num,
-            'room_img_url': self.room.img_url,
+            'room_img': str(self.room.img),
             'checkin': self.checkin,
             'checkout': self.checkout,
             'duration': self.duration,
@@ -39,7 +39,7 @@ class Room(models.Model):
     description = models.TextField(blank=True)
     bed_num = models.PositiveSmallIntegerField()
     price = models.FloatField(null=True)
-    img_url = models.URLField(default='')
+    img = models.ImageField(upload_to='images', null=True)
 
     def __str__(self):
         return f'{self.title}'
@@ -51,7 +51,7 @@ class Room(models.Model):
             'description': self.description,
             'bed_num': self.bed_num,
             'price': self.price,
-            'img_url': self.img_url
+            'img': str(self.img)
         }
 
     

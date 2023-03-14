@@ -45,7 +45,7 @@
                 {% for room in all_rooms %}
                     <div class="col d-flex align-items-evenly justify-content-center" id="">
                         <div class="card mb-3">
-                            <img src="{{ room.img_url  }}" class="card-img-top" alt="...">
+                            <img src="{{ room.img.url }}" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <h5 class="card-title">{{ room.title }}</h5>
                                 <p class="card-text">Price per night: ${{ room.price }}. Beds: {{ room.bed_num }}</p>

@@ -50,10 +50,11 @@ document.addEventListener('DOMContentLoaded', function () {
 // Helper functions
 
 function create_room_div(room) {
+    console.log(room.img)
     let room_div = document.createElement('div')
     room_div.classList.add('room-item','rounded', 'border', 'border-secondary', 'my-5', 'border-opacity-25')
     total = (room.price * room.duration).toFixed(2)
-    room_div.innerHTML = `<img class="img-fluid rounded-top" src="${room.img_url}"><br>
+    room_div.innerHTML = `<img class="img-fluid rounded-top" src="media/${room.img}"><br>
     <h5 class="card-title mt-4">${room.title}</h5><br>
     <p class="mb-3">
     ${document.querySelector('#checkin').value} - ${document.querySelector('#checkout').value}<br>
@@ -225,7 +226,7 @@ async function my_reservations() {
         for (res of reservations) {
             let res_div = document.createElement('div')
             res_div.classList.add('res-item','rounded', 'border', 'border-secondary', 'my-5', 'border-opacity-25')
-            res_div.innerHTML = `<img class="img-fluid rounded-top" src="${res.room_img_url}"><br>
+            res_div.innerHTML = `<img class="img-fluid rounded-top" src="media/${res.room_img}"><br>
             <h5 class="card-title mt-4">${res.room_title}</h5>
             <p class="mb-4">
             Beds: ${res.room_bed_num}<br>
@@ -253,7 +254,7 @@ async function select_res(res) {
         // Create div
         let sel_res_div = document.createElement('div')
         sel_res_div.classList.add('sel-res-item','rounded', 'border', 'border-secondary', 'my-3', 'border-opacity-25')
-        sel_res_div.innerHTML = `<img class="img-fluid rounded-top" src="${res.room_img_url}"><br>
+        sel_res_div.innerHTML = `<img class="img-fluid rounded-top" src="media/${res.room_img}"><br>
         <h5 class="card-title mt-4">${res.room_title}</h5>Beds: ${res.room_bed_num}<br>
         ${res.checkin} - ${res.checkout}<br>
         <strong>\$${res.total}</strong> for ${res.duration} nights<br>
