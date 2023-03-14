@@ -93,6 +93,10 @@ def reserve(request, room_id):
         # Convert str to date objects
         chin = datetime.strptime(data['chin'], '%Y-%m-%d').date()
         chout = datetime.strptime(data['chout'], '%Y-%m-%d').date()
+        # Check if checkin is in the past
+        if chin < datetime.now().date():
+            print('Checkin date can not be in the past')
+            return JsonResponse({'message': 'Checkin date can not be in the past'}, safe=False)
         # Check requested period and room for availability
         requested_room = Room.objects.get(pk=room_id)
         for reservation in requested_room.reservations.all():
@@ -100,11 +104,15 @@ def reserve(request, room_id):
                 chout > reservation.checkin and chout <= reservation.checkout or
                 chin < reservation.checkin and chout > reservation.checkout):
                 print('These dates are not available')
-                return show_error(request, 'These dates are not available')
-                return JsonResponse({'message': 'These dates are not available'})
+                return JsonResponse({'message': 'These dates are not available'}, safe=False)
+                # return show_error(request, 'These dates are not available')
             else: print('No dates conflict')
+        # Check if room has enough beds
+        if data['pers_num'] > requested_room.bed_num:
+            print('Requested room does not have enough beds')
+            return JsonResponse('Requested room does not have enough beds', safe=False)
         # Create Reservation, add it to room and user
-        duration = chout.day - chin.day
+        duration = (chout - chin).days
         total = round(requested_room.price * duration, 2)
         user = request.user
         reservation = Reservation(guest=user, room=requested_room, checkin=chin, 

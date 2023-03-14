@@ -22,7 +22,7 @@
                     </h1>
                     {% if user.is_authenticated %}
                     <div class="fs-4 my-2">
-                        Username: {{ user }}
+                        User: {{ user }}
                         <a class="mx-4" href="{% url 'logout' %}" aria-current="Log out">Log Out</a>
                     </div>
                     {% endif %}
