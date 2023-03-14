@@ -55,12 +55,12 @@ function create_room_div(room) {
     room_div.id = room.id
     total = (room.price * room.duration).toFixed(2)
     room_div.innerHTML = `<img class="img-fluid rounded-top" src="${room.img_url}"><br>
-    <h5 class="card-title mt-4">${room.title}.</h5><br>
+    <h5 class="card-title mt-4">${room.title}</h5><br>
     <p class="mb-3">
     ${document.querySelector('#checkin').value} - ${document.querySelector('#checkout').value}<br>
     Total price for ${room.duration} nights: <strong>\$${total}</strong><br>
-    Price per night: \$${room.price.toFixed(2)}.<br>
-    Beds: ${room.bed_num}.
+    Price per night: \$${room.price.toFixed(2)}<br>
+    Beds: ${room.bed_num}
     </p>
     <p class='px-4 descr'>${room.description.replaceAll('\n', '<br>')}</p>`
     return room_div
