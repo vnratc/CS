@@ -32,9 +32,14 @@ def change_date(request):
     form_chout = datetime.strptime(request.GET['chout'], '%Y-%m-%d').date()
     duration = (form_chout - form_chin).days
     day = timedelta(days=1)
-    if btn == 'chin-': new_date = (form_chin - day).strftime('%Y-%m-%d')
+    today = datetime.now().date()
+    day = timedelta(days=1)
+    tomorow = (datetime.now().date() + day)
+    if btn == 'chin-' and form_chin > today: new_date = (form_chin - day).strftime('%Y-%m-%d')
+    elif btn == 'chin-': new_date = today.strftime('%Y-%m-%d')
     elif btn == 'chin': new_date = (form_chin + day).strftime('%Y-%m-%d')
-    elif btn == 'chout-': new_date = (form_chout - day).strftime('%Y-%m-%d')
+    elif btn == 'chout-' and form_chout > tomorow: new_date = (form_chout - day).strftime('%Y-%m-%d')
+    elif btn == 'chout-': new_date = tomorow.strftime('%Y-%m-%d')
     elif btn == 'chout': new_date = (form_chout + day).strftime('%Y-%m-%d')
     return JsonResponse({'new_date': new_date, 'duration': duration}, safe=False)
 
