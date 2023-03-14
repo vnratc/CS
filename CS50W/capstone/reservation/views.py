@@ -48,7 +48,7 @@ def search(request):
     if not request.GET['chout']: return JsonResponse({'message': 'Select Checkout date.'})
     else: req_chout = datetime.strptime(request.GET['chout'], '%Y-%m-%d').date()
     # Get duration
-    duration = req_chout.day - req_chin.day
+    duration = (req_chout - req_chin).days
     if not request.GET['pers_num']: return JsonResponse({'message': 'Enter number of guests.'})
     else: pers_num: pers_num = int(request.GET['pers_num'])
     req_room = request.GET['req_room']
@@ -79,7 +79,7 @@ def room(request, room_id):
     room = Room.objects.get(pk=room_id)
     req_chin = datetime.strptime(request.GET['chin'], '%Y-%m-%d').date() 
     req_chout = datetime.strptime(request.GET['chout'], '%Y-%m-%d').date()
-    duration = req_chout.day - req_chin.day
+    duration = (req_chout - req_chin).days
     room = room.serialize()
     room.update({'duration': duration})
     return JsonResponse(room, safe=False)

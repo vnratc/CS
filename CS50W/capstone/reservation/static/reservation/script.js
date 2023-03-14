@@ -14,30 +14,30 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     // By default show 'search'
     search()
-    // Query db on change in form only if 3 main inputs hava value
-    document.querySelectorAll('input, select').forEach(input => {
-        input.onchange = () => {
+
+    // Change dates with buttons and remove results if clicked
+    document.querySelectorAll('.change-date').forEach(btn => {
+        btn.onclick = async function() {
             if (document.querySelector('#checkout').value &&
             document.querySelector('#checkin').value && 
             document.querySelector('#pers_num').value) {
-                query_db()
+                let chin = document.querySelector('#checkin').value
+                let chout = document.querySelector('#checkout').value
+                await fetch(`change_date?btn=${btn.id}&chin=${chin}&chout=${chout}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (btn.id.slice(0, 4) === 'chin') {document.querySelector('#checkin').value = data['new_date']}
+                    else if (btn.id.slice(0, 5) === 'chout') {document.querySelector('#checkout').value = data['new_date']}
+                })   
+                search()
             }
-        } 
-    })
-    // Change dates with buttons
-    document.querySelectorAll('.change-date').forEach(btn => {
-        btn.onclick = async function() {
-            let chin = document.querySelector('#checkin').value
-            let chout = document.querySelector('#checkout').value
-            await fetch(`change_date?btn=${btn.id}&chin=${chin}&chout=${chout}`)
-            .then(response => response.json())
-            .then(data => {
-                if (btn.id.slice(0, 4) === 'chin') {document.querySelector('#checkin').value = data['new_date']}
-                else if (btn.id.slice(0, 5) === 'chout') {document.querySelector('#checkout').value = data['new_date']}
-            })
-            query_db()
         }
     })
+    // Query db on change in form only if 3 main inputs hava value
+    document.querySelectorAll('input, select').forEach(input => {
+        input.onchange = search
+    })
+
     // Search available dates for a selected room
     document.querySelectorAll('.search-title').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -92,6 +92,7 @@ async function query_db() {
     let title = document.createElement('h2')
     title.classList.add('display-6', 'my-3')
     title.innerHTML = 'Available Rooms:'
+    title.id = 'available-rooms'
     document.querySelector('#results-div').prepend(title)
     // Fetch search request
     let chin = document.querySelector('#checkin').value
@@ -136,7 +137,12 @@ async function results() {
     document.querySelector('#results-div').offsetHeight;
     document.querySelector('#results-div').style.animation = null;
     document.querySelector('#results-div').style.animationPlayState = 'running'
-    query_db()
+    if (document.querySelector('#checkout').value &&
+    document.querySelector('#checkin').value && 
+    document.querySelector('#pers_num').value) {
+        await query_db()
+        document.querySelector('#available-rooms').scrollIntoView(true)
+    } else (console.log('Fill the search form'))
 }
 
 
