@@ -22,6 +22,9 @@ def index(request):
     })
 
 def change_date(request):
+    if not request.GET:
+        print(f'{request.GET} is empty, redirecting to index')
+        return HttpResponseRedirect(reverse("index"))
     btn = request.GET['btn']
     form_chin = datetime.strptime(request.GET['chin'], '%Y-%m-%d').date()
     form_chout = datetime.strptime(request.GET['chout'], '%Y-%m-%d').date()
@@ -41,6 +44,9 @@ def change_date(request):
 
 @csrf_exempt
 def search(request):
+    if not request.GET:
+        print(f'{request.GET} is empty, redirecting to index')
+        return HttpResponseRedirect(reverse("index"))
     # Extract and check data from search form
     if not request.GET['chin']: return JsonResponse({'message': 'Select Checkin date.'})
     else: req_chin = datetime.strptime(request.GET['chin'], '%Y-%m-%d').date()
@@ -76,6 +82,10 @@ def search(request):
 
 
 def room(request, room_id):
+    if not request.GET:
+        print(f'{request.GET} is empty, redirecting to index')
+        return HttpResponseRedirect(reverse("index"))
+    print(request.GET)
     room = Room.objects.get(pk=room_id)
     req_chin = datetime.strptime(request.GET['chin'], '%Y-%m-%d').date() 
     req_chout = datetime.strptime(request.GET['chout'], '%Y-%m-%d').date()
@@ -156,19 +166,22 @@ def cancel_res(request, res_id):
 
 
 def login_view(request):
-    if request.method != "POST":
-        return render(request, "reservation/login.html")
-    username = request.POST["username"]
-    password = request.POST["password"]
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            return render(request, "reservation/login.html", {
+                "message": "Invalid username and/or password."
+            })
     else:
-        return render(request, "reservation/login.html", {
-            "message": "Invalid username and/or password."
-        })
-        
+        if request.user.is_authenticated:
+            logout(request)
+        return render(request, "reservation/login.html")
+
 
 def logout_view(request):
     logout(request)
@@ -176,24 +189,25 @@ def logout_view(request):
 
 
 def register(request):
-    if request.method != "POST":
+    if request.method == "POST":
+        username = request.POST["username"]
+        email = request.POST["email"]
+        password = request.POST["password"]
+        confirmation = request.POST["confirmation"]
+        if password != confirmation:
+            return render(request, "reservation/register.html", {
+                "message": "Passwords must match."
+            })
+        try:
+            user = User.objects.create_user(username, email, password)
+            user.save()
+        except IntegrityError:
+            return render(request, "reservation/register.html", {
+                "message": "Username already taken."
+            })
+        login(request, user)
+        return HttpResponseRedirect(reverse("index"))
+    else:
+        if request.user.is_authenticated:
+            logout(request)
         return render(request, "reservation/register.html")
-    username = request.POST["username"]
-    email = request.POST["email"]
-    password = request.POST["password"]
-    confirmation = request.POST["confirmation"]
-    if password != confirmation:
-        return render(request, "reservation/register.html", {
-            "message": "Passwords must match."
-        })
-    try:
-        user = User.objects.create_user(username, email, password)
-        user.save()
-    except IntegrityError:
-        return render(request, "reservation/register.html", {
-            "message": "Username already taken."
-        })
-    login(request, user)
-    return HttpResponseRedirect(reverse("index"))
-
-        

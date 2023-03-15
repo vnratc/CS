@@ -5,7 +5,7 @@
 "Reservation" is a single-page hotel booking app that allows users to browse through various room options, search, make and cancel reservations. At the top of the index page there are 3 main navigation buttons: Find Stay, All Rooms and My Reservations. "Find Stay" view contains a form for submitting requests and search results. Clicking on a search result opens a description for the selected room and a button to make a reservation. "All Rooms" section presents all rooms in a hotel with a button for search dates for a preferred room. "My Reservations" view lists all reservations made by the logged in user. Clicking a reservation shows room description and a button to cancel. Clicking on the "Reservation" page title reloads the page and resets the search form.
 
 ### Distinctiveness
-After practicing with TextFields, IntegerFields and BooleanFields in this course's projects I decided to take a closer look at DateTimeField, which we touched only briefly by using the auto_now_add=True argument. Thus, Django's DateField field and Python's datetime module became the focus of my final project and hotel booking was chosen as the project's theme, which is different from other course's exercises. Among distinct features are the logic for converting strings to date objects and vice versa, comparing date objects, use of timedelta to calculate total duration of stay and display total reservation price. In addition, I used ImageField in my "Room" model as opposed to URLField in project2 for better local page loading times. I also decided to practice fetching using url's query string and utilizing the Query Dict on the server side. I tried my best to create an appealing design to make my work stand out.
+After practicing with TextFields, IntegerFields and BooleanFields in this course's projects I decided to take a closer look at DateTimeField, which we touched only briefly by using the auto_now_add=True argument. Thus, Django's DateField field and Python's datetime module became the focus of my final project and hotel booking was chosen as the project's theme, which is different from other course's exercises. Among distinct features are the logic for converting strings to date objects and vice versa, comparing date objects, use of timedelta to calculate total duration of stay and display total reservation price. In addition, I used ImageField in my "Room" model instead of URLField and learned how to serialize it with str(). I also decided to practice fetching using url's query string and utilizing the Query Dict on the server side. I tried my best to create an appealing design to make my work stand out.
 
 ### Complexity
 
@@ -17,11 +17,15 @@ As for the client side, database security is improved by not assigning real, dat
 
 ### Created Files:
 
+- media/images/Beach_Front_Villa.jpg - a photo for Room's ImageField
+- media/images/Garden_View_Bungalow.jpg - a photo for Room's ImageField
+- media/images/Suite_with_Pool_View.jpg - a photo for Room's ImageField
+- media/images/Villa_with_Private_Pool.jpg - a photo for Room's ImageField
 - reservation/static/reservation/script.js - this file contains all javascript code for the project. It's responsible for features described in the "Client" paragraph.
 - reservation/static/reservation/shore_blurred.jpg - background image for the app
 - reservation/static/reservation/styles.css - this file contains css properties for different elements, ids and classes
 - reservation/templates/reservation/index.html - the main page of the application
-- reservation/templates/reservation/layout.html - this is the base template for other html files
+- reservation/templates/reservation/layout.html - this is the base template for all html files
 - reservation/templates/reservation/login.html - page for loggin in
 - reservation/templates/reservation/register.html - page for registering new users
 - reservation/forms.py - this file contains the search form used on the index.html page
@@ -39,6 +43,5 @@ In your browser go to the url suggested by the terminal . You will be brought to
 
 ### Additional Information
 
-You are welcome to test the search algorithm by creating some reservations and then searching again for the same or conflicting dates for the same room. You are also welcome to test if a reservation can be canceled by sending fetch POST request using the console with an altered reservation id, which is tiresome to obtain. The same technique may tried used to reserve rooms for unavailable dates.
+You are welcome to test the search algorithm by creating some reservations and then searching again for the same or other conflicting dates for the same room. You are also welcome to test if a reservation can be canceled by sending fetch POST request using the console with an altered reservation id. The same technique may tried used to reserve rooms for unavailable dates.
 
-After finishing the project I discovered that JavaScript also supports Date objects. Using them would have shortened some of my code responsible for handling dates in the search form with neighboring buttons.
