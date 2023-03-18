@@ -26,3 +26,15 @@ img.square {
 .tocnumber {
     color: black;
 }
+
+h1 {
+    color: olive
+}
+
+.purple {
+    color: purple;
+}
+
+.border {
+    border: red 1px solid;
+}
