@@ -1,3 +1,102 @@
+const form = document.querySelector('#score-form')
+const p1Span = document.querySelector('#p1-score')
+const p2Span = document.querySelector('#p2-score')
+const max = document.querySelector('#max')
+const pButtons = document.querySelectorAll('#one, #two')
+
+let p1 = 0
+let p2 = 0
+
+form.addEventListener('submit', e => {
+    e.preventDefault()
+})
+
+form.addEventListener('click', e => {
+    switch (e.target.name) {
+        case 'one': 
+            p1 += 1
+            if (p1 === parseInt(max.value)) {
+                p1Span.style.color = 'green'
+                p2Span.style.color = 'red'
+                pButtons.forEach(b => b.disabled = true)
+            }
+            break
+        case 'two': 
+            p2 += 1
+            if (p2 === parseInt(max.value)) {
+                p2Span.style.color = 'green'
+                p1Span.style.color = 'red'
+                pButtons.forEach(b => b.disabled = true)
+            }
+            break
+        case 'reset':
+            reset()
+            break
+        }
+        inner()
+})
+
+max.addEventListener('change', reset)
+
+function reset() {
+    p1 = 0
+    p2 = 0
+    p1Span.style.color = 'black'
+    p2Span.style.color = 'black'
+    pButtons.forEach(b => b.disabled = false)
+    inner()
+}
+
+function inner(){
+    p1Span.innerText = p1
+    p2Span.innerText = p2
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // const p1 = {
 //     score: 0,
 //     button: document.querySelector('#p1Button'),
