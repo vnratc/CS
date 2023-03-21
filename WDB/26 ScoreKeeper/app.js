@@ -12,7 +12,7 @@ form.addEventListener('submit', e => {
 })
 
 form.addEventListener('click', e => {
-    switch (e.target.name) {
+    switch (e.target.id) {
         case 'one': 
             p1 += 1
             if (p1 === parseInt(max.value)) {
