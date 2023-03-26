@@ -36,4 +36,31 @@ const getSWPeople = async (id) => {
     
 }
 
-getSWPeople(prompt())
+// getSWPeople(4)
+
+
+const getDadJoke = async () => {
+    try {
+        const config = {headers: {Accept: "application/json"}}
+        const res = await axios.get("https://icanhazdadjoke.com/", config)
+        return res.data.joke
+    } catch (e) {
+        console.log(e)
+        return "No jokes available"
+    }
+}
+
+
+const appendNewJoke = async () => {
+    const ul = document.querySelector("ul")
+    if (ul.childElementCount > 2) {
+        document.querySelectorAll("ul > *").forEach(e => e.remove())
+    }
+    let li = document.createElement("li")
+    li.innerText = await getDadJoke()
+    ul.append(li)
+}
+
+
+const button = document.querySelector("button")
+button.addEventListener("click", appendNewJoke)
