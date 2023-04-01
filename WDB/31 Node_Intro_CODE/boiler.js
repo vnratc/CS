@@ -14,7 +14,7 @@ try {
     mkdirSync(folderName);
     writeFileSync(`${folderName}/index.html`, "");
     writeFileSync(`${folderName}/script.js`, "");
-    writeFileSync(`${folderName}/styles.css`, "");
+    writeFileSync(`${folderName}/styles.css`, "body {\n    background-color: red\n}");
 } catch(e) {
     console.log("Error\n", e)
 }
