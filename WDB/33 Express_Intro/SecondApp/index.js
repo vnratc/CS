@@ -2,6 +2,7 @@ const express = require("express")
 const app = express()
 // console.dir(app)
 
+// ALWAYS RUNS WITH EVERY REQUEST regardless of path or request type
 // app.use((req, res) => {
 //     console.log("Request received.")
 //     // console.dir(req)
