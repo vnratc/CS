@@ -46,6 +46,7 @@ const productSchema = new mongoose.Schema({
     }
 })
 
+// INSTANCE METHODS
 
 // productSchema.methods.greet = function() {
 //     console.log("Hello! Hi! Howdy!")
@@ -65,6 +66,13 @@ productSchema.methods.addCategory = function(newCat) {
 }
 
 
+// MODEL (CLASS) METHODS, aka static methods
+
+productSchema.statics.fireSale = function() {
+    return this.updateMany({}, {onSale: true, price: 0})
+}
+
+
 const Product = mongoose.model("Product", productSchema)
 
 
@@ -79,7 +87,11 @@ const findProduct = async function() {
 }
 
 
-findProduct()
+Product.fireSale()
+    .then(resp => console.log(resp))
+
+
+// findProduct()
 
 
 // items not in schema will be ignored, like color: "red"
