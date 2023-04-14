@@ -3,9 +3,20 @@
 *.DS_Store
 *.DS_Store?
 
+
 # Logs and databases #
 ######################
 *.log
 *.sql
 *.sqlite
 *.sqlite3
+
+
+# Folders
+WDB/40 Middleware_Intro/vnratc/node_modules
+WDB/38 Mongoose_With_Express_CODE/vnratc/node_modules
+WDB/37 MongooseBasics/mongoose/node_modules
+WDB/35 RESTful_Routes_CODE/requests/node_modules
+WDB/34 Express_Templating_CODE/boot_templ/node_modules
+WDB/34 Express_Templating_CODE/templating/node_modules
+WDB/33 Express_Intro/SecondApp/node_modules
