@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Error</title>
+    <script>
+        let timer = 60
+        setTimeout(() => {
+            document.location.href = "http://127.0.0.1:3000/products"
+        }, timer*1000)
+        setInterval(() => {
+            timer -= 1
+            document.querySelector("#timer").innerHTML = timer
+        }, 1000)
+    </script>
+</head>
+<body>
+    <h1>Error</h1>
+    <p><%= e %></p>
+    <h6>Redirecting to All Products in <span id="timer"></span> seconds</h6>
+    <a href="/products">Back to all products</a>
+</body>
+</html>

@@ -6,8 +6,10 @@ const methodOverride = require("method-override")
 
 
 app.use(methodOverride("_method"))
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-app.use(express.json())   // for parsing application/json
+// for parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true })) 
+// for parsing application/json
+app.use(express.json())   
 app.set("view engine", "ejs")
 app.set("views", path.join(__dirname, "views"))
 
