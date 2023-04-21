@@ -13,6 +13,8 @@
 
 
 # Folders
+WDB/50_Auth_From_Scratch_CODE/vnratc/bcrypt/node_modules
+WDB/48_Session_And_Flash/vnratc/session/node_modules
 WDB/47_Router_and_Cookies/vnratc/cookies/node_modules
 WDB/47_Router_and_Cookies/vnratc/router/node_modules
 WDB/38_42_45_Mongoose_With_Express_CODE/vnratc/node_modules
