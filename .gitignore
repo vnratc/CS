@@ -13,6 +13,7 @@
 
 
 # Folders
+WDB/50_Auth_From_Scratch_CODE/vnratc/auth/node_modules
 WDB/50_Auth_From_Scratch_CODE/vnratc/bcrypt/node_modules
 WDB/48_Session_And_Flash/vnratc/session/node_modules
 WDB/47_Router_and_Cookies/vnratc/cookies/node_modules
