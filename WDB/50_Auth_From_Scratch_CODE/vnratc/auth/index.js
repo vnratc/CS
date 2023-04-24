@@ -3,6 +3,7 @@ const app = express()
 const User = require("./models/user")
 const mongoose = require("mongoose")
 const bcrypt = require("bcrypt")
+const session = require("express-session")
 
 
 main()
@@ -18,6 +19,19 @@ app.set("views", "views")
 
 
 app.use(express.urlencoded({ extended: true }))
+app.use(session({
+    secret: "notagoodsecret",
+    resave: false,
+    saveUninitialized: false
+}))
+
+
+const requireLogin = (req, res, next) => {
+    if (!req.session.user_id) {
+        return res.redirect("/login")
+    }
+    next()
+}
 
 
 app.get("/", (req, res) => {
@@ -28,9 +42,10 @@ app.get("/register", (req, res) => {
 })
 app.post("/register", async (req, res) => {
     const { username, password } = req.body
-    const hash = await bcrypt.hash(password, 12)
-    const user = new User({ username, password: hash })
+    const user = new User({ username, password })
+    // Hashing was moved to model middleware .pre("save")
     await user.save()
+    req.session.user_id = user._id
     res.redirect("/")
 })
 
@@ -40,16 +55,28 @@ app.get("/login", (req, res) => {
 })
 app.post("/login", async (req, res) => {
     const { username, password } = req.body
-    const user = await User.findOne({ username })
-    const validPassword = await bcrypt.compare(password, user.password)
-    if (validPassword) {
-        res.send("Welcome")
-    } else {res.send("Try again")}
+    // Validation was moved to model method
+    const foundUser = await User.findAndValidate(username, password)
+    if (foundUser) {
+        req.session.user_id = foundUser._id
+        res.redirect("/secret")
+    } else {res.redirect("/login")}
 })
 
 
-app.get("/secret", (req, res) => {
-    res.send("THIS IS SECRET! YOU CAN NOT SEE ME UNLESS YOU ARE LOGGED IN!")
+app.post("/logout", (req, res) => {
+    req.session.user_id = null
+    // req.session.destroy() // another way to reset session
+    res.redirect("/login")
+})
+
+
+app.get("/topsecret", requireLogin, (req, res) => {
+    res.send("TOP SECRET!")
+})
+
+app.get("/secret", requireLogin, (req, res) => {
+    res.render("secret")
 })
 
 
