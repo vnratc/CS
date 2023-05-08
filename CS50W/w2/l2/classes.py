@@ -25,7 +25,7 @@ class Flight():
 
 flight = Flight(3)
 
-people = ["Harry", "Ron", "Hermione", "Ginny"]
+people = ["Harry", "Ron", "Hermione", "Ginny", "Vlad", "Sasha"]
 for person in people:
   if flight.add_passenger(person): # Equal to saying: if flight.add_passenger(person) != 0:
     print(f"Added {person} to flight successfully.")

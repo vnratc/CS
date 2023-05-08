@@ -24,9 +24,9 @@ def filter_cats():
     return categories
 
 def categories(request):
-    categories = filter_cats()
+    # categories = filter_cats()
     return render(request, "auctions/categories.html", {
-        "categories": categories
+        "categories": filter_cats()
     })
 
 def active_in_cat(request, category):
@@ -122,6 +122,8 @@ def new(request):
             user = User.objects.get(pk=request.user.id)
             user.created_listings.add(listing)
             return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+        else:
+            return show_error(request, "Invalid From Data")
     else:
         return render(request, "auctions/new.html", {
             "form": LForm
@@ -234,10 +236,7 @@ def close(request, listing_id):
             # filter User with last Bid for this listing
             highest_bidder = User.objects.filter(bids=last_bid)[0]
             highest_bidder.won_listings.add(listing)
-            return HttpResponseRedirect(reverse("closed_listings"))
-        # If no bids
-        else:
-            return HttpResponseRedirect(reverse("closed_listings"))
+        return HttpResponseRedirect(reverse("closed_listings"))
     else:
         return show_error(request, "\"GET\" method is not allowed")
     

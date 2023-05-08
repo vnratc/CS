@@ -13,4 +13,14 @@ people = [
 
 people.sort(key=lambda person: person["name"])  #... we can just create it right here for single use
 
-print(people)
+# print(people)
+
+
+# FROM W3SCHOOLS: A function that returns the length of the value:
+def myFunc(e):
+  return len(e)
+
+cars = ['Ford', 'Mitsubishi', 'BMW', 'VW']
+
+cars.sort(key=myFunc)
+print(cars)

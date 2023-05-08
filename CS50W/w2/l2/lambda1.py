@@ -26,7 +26,7 @@ for k in people:
 #     return person[sort]   # function output
 
 # lambda is like function() in JavaScript, anonymous function
-people.sort(key=lambda person: person[sort])
+people.sort(key=lambda person: person[sort])  # "person" is the argument, the function begins after the colon, "return" is ommitted
                        #input  #output
 for i in people:
   print(i[sort])

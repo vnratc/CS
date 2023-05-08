@@ -7,7 +7,7 @@ except ValueError:
   print("Error: Invalid input")
   sys.exit(1)
 
-try:  # Try doing below...
+try:  # Try doing indented below...
   result = x / y
 except ZeroDivisionError: #...except encounter this error
   print("Error: Cannot devide by 0.") # Print a custom comprehensible message
