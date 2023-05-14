@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import './App.css'
 
+import React from "react";
+
 function App() {
   const [todosByUser, setTodosByUser] = useState([])
   const [loading, setLoading] = useState({ btnDisabled: false, preloader: "" })
@@ -11,6 +13,7 @@ function App() {
     await fetch("https://jsonplaceholder.typicode.com/todos")
       .then(res => res.json())
       .then(data => {
+        // Group all data by userId
         const groupedByUser = data.reduce((groupedUsers, obj) => {
           const userId = obj.userId
           if (!groupedUsers[userId]) groupedUsers[userId] = []
@@ -18,48 +21,45 @@ function App() {
           return groupedUsers
         }, []).slice(1)
 
-        // console.log(groupedByUser)
-
+        // Create obj with "array of users" and "completed" count
         const groupedWithCompleted = groupedByUser.map(user => {
           const completed = user.filter(todo => todo.completed).length
           const notCompleted = user.filter(todo => !todo.completed).length
-          // console.log(completed, notCompleted)
-          return {data: [...user], ratio: { completed, notCompleted }}
+          return {data: [...user], completed, notCompleted }
         });
 
-        console.log(groupedWithCompleted)
-
-        setTodosByUser(groupedWithCompleted)
+        // Sort users
+        const sorted = groupedWithCompleted.toSorted((a, b) => {
+          return b.completed - a.completed
+        })
+        // console.log(groupedWithCompleted)
+        // console.log("sorted", sorted)
+        setTodosByUser(sorted)
       })
     setLoading({ btnDisabled: false, preloader: "" })
   }
 
 
   let todoItems = []
-  const userItems = todosByUser.map((user, index) => {
-    // console.log(user)
-    return (
-    <li key={`user${user.data[index].userId}`}>
-      User {user.data[index].userId}, {user.ratio.completed} / {user.ratio.notCompleted}
-      <ul>{todoItems = user.data.map(todo => {
-        return (
+  const userItems = todosByUser.map((user, index) =>  
+    <div className='box' key={`user${user.data[index].userId}`}>
+      User {user.data[index].userId} <span id='completed'>{user.completed}</span> / <span id='notCompleted'>{user.notCompleted}</span>
+      <ul>{todoItems = user.data.map(todo =>
           <li key={todo.id}>
-            {todo.title}, {String(todo.completed)}
+            {todo.title}
           </li>
-        )
-      })}</ul>
-    </li>
-    )})
-
+      )}</ul>
+    </div>
+    )
 
   return (
     <>
-      <form onSubmit={fetchItems}>
+      <form id='form' onSubmit={fetchItems}>
         <button disabled={loading.btnDisabled} id="btn">Send Request</button>
         <div className={loading.preloader}></div>
       </form>
 
-      <ul>{userItems}</ul>
+      <div id='container'>{userItems}</div>
     </>
   )
 }
